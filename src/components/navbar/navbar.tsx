@@ -3,17 +3,17 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Link, useLocation } from 'react-router-dom'
 
 const navigation = [
-  { name: 'Homepage', path: '/' },
-  { name: 'About', path: '/about' },
-  { name: 'Settings', path: '/settings' },
-  { name: 'User', path: '/user' },
+  { name: 'Inicio', path: '/' },
+  { name: 'Acerca de', path: '/about' },
+  { name: 'Configuraciones', path: '/settings' },
+  { name: 'Perfil', path: '/user' },
 ]
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Example() {
+export default function Navbar() {
   const location = useLocation() // 👈 obtenemos la ruta actual
 
   return (
