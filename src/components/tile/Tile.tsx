@@ -1,13 +1,34 @@
-import type { ITile } from '../../types/ITile';
-import type { FC } from 'react';
+import { useDraggable } from "@dnd-kit/core";
+import { CSS } from "@dnd-kit/utilities";
 
-const Tile: FC<ITile> = ({ value , points }) => {
-  return (
-    <div className="tile">
-      <span>{value}</span>
-      <span>{points}</span>
-    </div>
-  )
+interface TileProps {
+  id: string;
+  value: string | number;
+  points: number;
+  bgColor: string;
 }
 
-export default Tile
+const Tile = ({ id, value, points, bgColor }: TileProps) => {
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({ id });
+
+  const style = {
+    transform: CSS.Translate.toString(transform),
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...listeners}
+      {...attributes}
+      className={`relative m-2 cursor-pointer font-bold text-3xl flex items-center justify-center rounded-lg shadow-md h-16 w-16 ${bgColor}`}
+    >
+      <span className="text-gray-800">{value}</span>
+      <span className="text-gray-800 text-lg absolute bottom-1 right-2">
+        {points}
+      </span>
+    </div>
+  );
+};
+
+export default Tile;
