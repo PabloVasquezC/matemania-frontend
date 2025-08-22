@@ -6,7 +6,6 @@ import Homepage from './pages/homepage/homepage';
 import AboutPage from './pages/aboutpage/aboutpage';
 import SettingsPage from './pages/settingspage/settingspage';
 import UserPage from './pages/userpage/userpage';
-import Board from './components/board/Board';
 import Gamepage from './pages/gamepage/Gamepage';
 import Footer from './components/footer/Footer';
 

@@ -1,5 +1,4 @@
 // src/pages/SettingsPage.js
-import React from 'react';
 
 function SettingsPage() {
   return (
