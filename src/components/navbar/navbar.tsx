@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom'
 
 const navigation = [
   { name: 'Inicio', path: '/' },
+  { name: 'Jugar', path: '/game' },
   { name: 'Acerca de', path: '/about' },
   { name: 'Configuraciones', path: '/settings' },
   { name: 'Perfil', path: '/user' },
@@ -19,7 +20,7 @@ export default function Navbar() {
   return (
     <Disclosure
       as="nav"
-      className="relative bg-gray-800/50 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10"
+      className="shadow-xl fixed w-full bg-gray-900 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10"
     >
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">

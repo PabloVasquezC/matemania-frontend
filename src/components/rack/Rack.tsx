@@ -1,17 +1,35 @@
-import { DndContext } from '@dnd-kit/core'
-import Tile from '../tile/Tile'
+import Tile from "../tile/Tile";
 
-const Rack = () => {
-  return (
-    <>
-      <DndContext>
-      <Tile />
-    </DndContext>
-    <DndContext>
-      <Tile />
-    </DndContext>
-    </>
-  )
+
+interface RackProps {
+  tiles: Array<{
+    id: string;
+    value: string | number;
+    points: number;
+    bgColor: string;
+  }>;
+  tileLocations: Record<string, string>;
 }
 
-export default Rack
+const Rack = (props: RackProps) => {
+  const { tiles } = props;
+
+  interface TileProps {
+    id: string;
+    value: string | number;
+    points: number;
+    bgColor: string;
+  }
+
+  return (
+    <div className="rack bg-green-600 p-4 flex rounded-2xl shadow-lg shadow-black">
+      {tiles
+        .filter((t: TileProps) => props.tileLocations[t.id] === "pool")
+        .map((tile: TileProps) => (
+          <Tile key={tile.id} {...tile} />
+        ))}
+    </div>
+  );
+};
+
+export default Rack;
