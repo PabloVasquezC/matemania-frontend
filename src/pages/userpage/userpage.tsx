@@ -1,5 +1,4 @@
 // src/pages/Userpage.js
-import React from 'react';
 
 function Userpage() {
   const user = {
