@@ -1,12 +1,12 @@
 
 import './App.css'
-import Tile from './components/tile/Tile'
+import Rack from './components/rack/Rack'
 
 function App() {
 
   return (
     <>
-      <Tile />  
+      <Rack /> 
     </>
   )
 }
