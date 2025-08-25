@@ -1,4 +1,4 @@
-import { DndContext } from "@dnd-kit/core";
+import { DndContext, MouseSensor, TouchSensor, useSensor, useSensors } from "@dnd-kit/core";
 import Rack from "../../components/rack/Rack";
 import Board from "../../components/board/Board";
 import { useState } from "react";
@@ -71,11 +71,22 @@ function Gamepage() {
     }
   };
 
+  // ⭐️ ¡Aquí está la solución! Configuración de los sensores para móvil y escritorio.
+  const sensors = useSensors(
+    useSensor(MouseSensor),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 250, 
+        tolerance: 5,
+      },
+    })
+  );
+
   console.log(play_validations(tiles));
 
   return (
-    
-    <DndContext onDragEnd={handleDragEnd}>
+    // ⭐️ Pasamos los sensores al DndContext
+    <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
       
       {/* Contenedor principal con flexbox para centrar y organizar los componentes */}
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
