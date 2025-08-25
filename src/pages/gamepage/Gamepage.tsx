@@ -3,6 +3,7 @@ import Rack from "../../components/rack/Rack";
 import Board from "../../components/board/Board";
 import { useState } from "react";
 import { OPERATORS, TILES_COLORS, TILES_POINTS } from "../../constants/constants";
+import play_validations from "../../utils/play_validations";
 
 function Gamepage() {
   const [tiles] = useState([
@@ -36,6 +37,18 @@ function Gamepage() {
       points: TILES_POINTS[3],
       bgColor: TILES_COLORS.NUMBER,
     },
+    {
+      id: "tile-6",
+      value: OPERATORS.EQUALS,
+      points: TILES_POINTS["="] ?? 0,
+      bgColor: TILES_COLORS.EQUAL,
+    },
+    {
+      id: "tile-7",
+      value: 9,
+      points: TILES_POINTS[9],
+      bgColor: TILES_COLORS.NUMBER,
+    }
   ]);
 
   // ubicación de cada tile: "pool" o el id del BoardSquare
@@ -58,8 +71,12 @@ function Gamepage() {
     }
   };
 
+  console.log(play_validations(tiles));
+
   return (
+    
     <DndContext onDragEnd={handleDragEnd}>
+      
       {/* Contenedor principal con flexbox para centrar y organizar los componentes */}
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
         {/* Aquí puedes agregar un título o cabecera si lo deseas */}

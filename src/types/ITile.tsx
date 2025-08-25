@@ -1,10 +1,9 @@
 // import type { OPERATORS } from '../constants/constants';
 
 export interface ITile {
-    value: number; //OPERATORS;
-    points: number;
-
-    // isOnDrag: boolean;
-    // isSelected: boolean;
+  id: string;
+  value: string | number;
+  points: number;
+  bgColor: string;
 }
 
