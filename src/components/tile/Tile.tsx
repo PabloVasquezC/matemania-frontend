@@ -1,14 +1,14 @@
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 
-interface TileProps {
+interface ITile {
   id: string;
   value: string | number;
   points: number;
   bgColor: string;
 }
 
-const Tile = ({ id, value, points, bgColor }: TileProps) => {
+const Tile = ({ id, value, points, bgColor }: ITile) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({ id });
 
   const style = {

@@ -1,31 +1,20 @@
+import type { ITile } from "../../types/ITile";
 import Tile from "../tile/Tile";
 
 
 interface RackProps {
-  tiles: Array<{
-    id: string;
-    value: string | number;
-    points: number;
-    bgColor: string;
-  }>;
+  tiles: ITile[];
   tileLocations: Record<string, string>;
 }
 
 const Rack = (props: RackProps) => {
   const { tiles } = props;
 
-  interface TileProps {
-    id: string;
-    value: string | number;
-    points: number;
-    bgColor: string;
-  }
-
   return (
     <div className="rack bg-green-600 p-4 flex rounded-2xl shadow-lg shadow-black">
       {tiles
-        .filter((t: TileProps) => props.tileLocations[t.id] === "pool")
-        .map((tile: TileProps) => (
+        .filter((tile: ITile) => props.tileLocations[tile.id] === "pool")
+        .map((tile: ITile) => (
           <Tile key={tile.id} {...tile} />
         ))}
     </div>
