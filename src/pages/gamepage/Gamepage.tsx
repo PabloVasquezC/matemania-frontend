@@ -109,7 +109,7 @@ function Gamepage() {
     <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
       
       {/* Contenedor principal con flexbox para centrar y organizar los componentes */}
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 ">
+      <div className="flex flex-col items-center justify-center h-screen bg-gray-100 ">
         {/* Aquí puedes agregar un título o cabecera si lo deseas */}
         <h1 className="text-4xl text-center font-bold text-blue-800">Juego de Scrabble Matemático</h1>
         
