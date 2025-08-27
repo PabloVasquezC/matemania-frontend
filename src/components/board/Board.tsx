@@ -12,8 +12,8 @@ interface BoardProps {
 }
 
 export default function Board(props: BoardProps) {
-  const rows = 5;
-  const cols = 5;
+  const rows = 10;
+  const cols = 10;
 
   const renderSquares = () => {
     const squares = [];
@@ -36,13 +36,10 @@ export default function Board(props: BoardProps) {
 
   return (
     <div
+      className="grid w-full h-auto max-w-xl aspect-square border-2 border-black mx-auto"
       style={{
-        display: 'grid',
         gridTemplateColumns: `repeat(${cols}, 1fr)`,
         gridTemplateRows: `repeat(${rows}, 1fr)`,
-        width: '500px', 
-        height: '500px', 
-        border: '1px solid black'
       }}
     >
       {renderSquares()}
