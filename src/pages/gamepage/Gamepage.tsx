@@ -69,7 +69,6 @@ function Gamepage() {
     },
   ]);
 
-  // ubicación de cada tile: "pool" o el id del BoardSquare
   const [tileLocations, setTileLocations] = useState<Record<string, string>>({
     "tile-1": "pool",
     "tile-2": "pool",
@@ -110,9 +109,9 @@ function Gamepage() {
     <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
       
       {/* Contenedor principal con flexbox para centrar y organizar los componentes */}
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 ">
         {/* Aquí puedes agregar un título o cabecera si lo deseas */}
-        <h1 className="text-4xl text-center font-bold text-blue-800 mb-8">Juego de Scrabble Matemático</h1>
+        <h1 className="text-4xl text-center font-bold text-blue-800">Juego de Scrabble Matemático</h1>
         
         {/* Contenedor del tablero */}
         <div className="mb-8">
