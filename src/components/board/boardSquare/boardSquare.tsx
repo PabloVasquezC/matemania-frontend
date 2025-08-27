@@ -17,7 +17,7 @@ function BoardSquare({ id, children }: BoardSquareProps) {
     <div
       ref={setNodeRef}
       style={style}
-      className="border-2 border-gray-400 h-10 w-10 flex items-center justify-center"
+      className="border-2 border-gray-400 h-12 w-12 flex items-center justify-center"
     >
       {children}
     </div>
