@@ -48,7 +48,25 @@ function Gamepage() {
       value: 9,
       points: TILES_POINTS[9],
       bgColor: TILES_COLORS.NUMBER,
-    }
+    },
+    {
+      id: "tile-8",
+      value: 1,
+      points: TILES_POINTS[1],
+      bgColor: TILES_COLORS.NUMBER,
+    },
+    {
+      id: "tile-9",
+      value: 4,
+      points: TILES_POINTS[4],
+      bgColor: TILES_COLORS.NUMBER,
+    },
+    {
+      id: "tile-10",
+      value: 6,
+      points: TILES_POINTS[6],
+      bgColor: TILES_COLORS.NUMBER,
+    },
   ]);
 
   // ubicación de cada tile: "pool" o el id del BoardSquare
@@ -58,6 +76,11 @@ function Gamepage() {
     "tile-3": "pool",
     "tile-4": "pool",
     "tile-5": "pool",
+    "tile-6": "pool",
+    "tile-7": "pool",
+    "tile-8": "pool",
+    "tile-9": "pool",
+    "tile-10": "pool",
   });
 
   const handleDragEnd = (event: unknown) => {
