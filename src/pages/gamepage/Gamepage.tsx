@@ -67,6 +67,30 @@ function Gamepage() {
       points: TILES_POINTS[6],
       bgColor: TILES_COLORS.NUMBER,
     },
+    {
+      id: "tile-11",
+      value: 2,
+      points: TILES_POINTS[2],
+      bgColor: TILES_COLORS.NUMBER,
+    },
+    {
+      id: "tile-12",
+      value: 8,
+      points: TILES_POINTS[8],
+      bgColor: TILES_COLORS.NUMBER,
+    },
+    {
+      id: "tile-13",
+      value: OPERATORS.MULTIPLY,
+      points: TILES_POINTS["*"] ?? 0,
+      bgColor: TILES_COLORS.OPERATOR,
+    },
+    {
+      id: "tile-14",
+      value: OPERATORS.DIVIDE,
+      points: TILES_POINTS["/"] ?? 0,
+      bgColor: TILES_COLORS.OPERATOR,
+    },
   ]);
 
   const [tileLocations, setTileLocations] = useState<Record<string, string>>({
@@ -77,6 +101,13 @@ function Gamepage() {
     "tile-5": "pool",
     "tile-6": "pool",
     "tile-7": "pool",
+    "tile-8": "pool",
+    "tile-9": "pool",
+    "tile-10": "pool",
+    "tile-11": "pool",
+    "tile-12": "pool",
+    "tile-13": "pool",
+    "tile-14": "pool",
     
   });
 
@@ -109,7 +140,7 @@ function Gamepage() {
     <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
       
       {/* Contenedor principal con flexbox para centrar y organizar los componentes */}
-      <div className="flex flex-col items-center justify-center h-screen bg-gray-100 ">
+      <div className="flex flex-col items-center  justify-center h-screen bg-gray-100 ">
         {/* Aquí puedes agregar un título o cabecera si lo deseas */}
         <h1 className="text-4xl text-center font-bold text-blue-800">Juego de Scrabble Matemático</h1>
         
