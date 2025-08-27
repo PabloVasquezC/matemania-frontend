@@ -21,10 +21,10 @@ const Tile = ({ id, value, points, bgColor }: ITile) => {
       style={style}
       {...listeners}
       {...attributes}
-      className={`relative m-2 cursor-pointer font-bold text-3xl flex items-center justify-center rounded-lg shadow-md h-16 w-16 ${bgColor}`}
+      className={`relative m-2 cursor-pointer font-bold text-3xl flex items-center justify-center rounded-lg shadow-md h-8 w-8 ${bgColor}`}
     >
-      <span className="text-gray-800">{value}</span>
-      <span className="text-gray-800 text-lg absolute bottom-1 right-2">
+      <span className="text-gray-700 ">{value}</span>
+      <span className="text-gray-800 text-xs absolute bottom-0.5 right-0.5">
         {points}
       </span>
     </div>
