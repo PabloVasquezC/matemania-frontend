@@ -1,19 +1,19 @@
 
 import { Route, Routes } from 'react-router'
 import './App.css'
-import Navbar from './components/navbar/navbar'
+import Navbar from './layout/navbar/navbar'
 import Homepage from './pages/homepage/homepage';
 import AboutPage from './pages/aboutpage/aboutpage';
 import SettingsPage from './pages/settingspage/settingspage';
 import UserPage from './pages/userpage/userpage';
 import Gamepage from './pages/gamepage/Gamepage';
-import Footer from './components/footer/Footer';
+import Footer from './layout/footer/Footer';
 
 
 function App() {
 
   return (
-    <>
+    <div className="App h-screen flex flex-col justify-between">
       <Navbar />
       <Routes>
         <Route path="/" element={<Homepage />} />
@@ -25,7 +25,7 @@ function App() {
         {/* <Route path="*" element={<div>404 Not Found</div>} /> */}
       </Routes>
       <Footer />
-    </>
+    </div>
   )
 }
 
