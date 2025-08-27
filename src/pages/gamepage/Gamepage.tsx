@@ -78,9 +78,7 @@ function Gamepage() {
     "tile-5": "pool",
     "tile-6": "pool",
     "tile-7": "pool",
-    "tile-8": "pool",
-    "tile-9": "pool",
-    "tile-10": "pool",
+    
   });
 
   const handleDragEnd = (event: unknown) => {
@@ -114,7 +112,7 @@ function Gamepage() {
       {/* Contenedor principal con flexbox para centrar y organizar los componentes */}
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
         {/* Aquí puedes agregar un título o cabecera si lo deseas */}
-        <h1 className="text-4xl font-bold text-blue-800 mb-8">Juego de Scrabble Matemático</h1>
+        <h1 className="text-4xl text-center font-bold text-blue-800 mb-8">Juego de Scrabble Matemático</h1>
         
         {/* Contenedor del tablero */}
         <div className="mb-8">
