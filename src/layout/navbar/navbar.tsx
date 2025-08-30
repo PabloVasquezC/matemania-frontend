@@ -2,6 +2,7 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Link, useLocation } from 'react-router-dom'
 import { useState, useRef } from 'react';
+import React from 'react'; // Importamos React
 import logo from '../../assets/logo.png';
 
 const navigation = [
@@ -22,7 +23,7 @@ const TerminalModal = ({ onClose }: { onClose: () => void }) => {
   const [isDragging, setIsDragging] = useState(false);
   const offset = useRef({ x: 0, y: 0 });
 
-  const handleMouseDown = (e ) => {
+  const handleMouseDown = (e: React.MouseEvent) => {
     setIsDragging(true);
     offset.current = {
       x: e.clientX - position.x,
@@ -30,7 +31,7 @@ const TerminalModal = ({ onClose }: { onClose: () => void }) => {
     };
   };
 
-  const handleMouseMove = (e ) => {
+  const handleMouseMove = (e: React.MouseEvent) => {
     if (isDragging) {
       setPosition({
         x: e.clientX - offset.current.x,
@@ -47,7 +48,7 @@ const TerminalModal = ({ onClose }: { onClose: () => void }) => {
     <div
       className="fixed z-50 w-full max-w-xl p-1 bg-gray-900 rounded-lg shadow-2xl overflow-hidden font-mono"
       style={{ top: position.y, left: position.x }}
-      onMouseOver={handleMouseMove}
+      onMouseMove={handleMouseMove} // Cambiado a onMouseMove
       onMouseUp={handleMouseUp}
     >
       <div
