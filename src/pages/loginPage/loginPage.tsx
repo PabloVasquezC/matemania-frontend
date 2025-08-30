@@ -1,8 +1,10 @@
 import { useState } from "react";
 import axios from "axios";
-import type { IRoboHash } from "../../types/IRoboHash"; // Asegúrate de que este tipo sea correcto y esté definido
+import { useNavigate } from "react-router-dom";
+import type { IRoboHash } from "../../types/IRoboHash";
 
 function LoginPage() {
+  const navigate = useNavigate();
   const [isLoginView, setIsLoginView] = useState(true);
   const [formData, setFormData] = useState({
     username: "",
@@ -20,8 +22,6 @@ function LoginPage() {
       [e.target.name]: e.target.value,
     });
   };
-
-  
 
   const handleGenerateRandomRobot = () => {
     const newRobot: IRoboHash = {
@@ -42,13 +42,12 @@ function LoginPage() {
         password: formData.password,
       });
 
-      // Almacena los tokens en el localStorage para su uso futuro
       localStorage.setItem("access_token", response.data.access);
       localStorage.setItem("refresh_token", response.data.refresh);
       setMessage("Login exitoso. ¡Bienvenido!");
+      navigate("/home");
     } catch (err) {
       if (axios.isAxiosError(err) && err.response) {
-        // Asume que Django envía el error de forma detallada
         setError(err.response.data.detail || "Error de login. Verifica tus credenciales.");
       } else {
         setError("Error de conexión. Inténtalo de nuevo más tarde.");
@@ -74,13 +73,10 @@ function LoginPage() {
         email: formData.email,
       });
 
-      // Muestra un mensaje de éxito basado en la respuesta del servidor
       setMessage(response.data.message || "Registro exitoso. ¡Ahora puedes iniciar sesión!");
-      setIsLoginView(true); // Cambia automáticamente a la vista de login
+      setIsLoginView(true);
     } catch (err) {
       if (axios.isAxiosError(err) && err.response) {
-        // Muestra el mensaje de error que envía Django
-        // Esto maneja errores como "El usuario ya existe"
         const serverError = err.response.data.detail || Object.values(err.response.data)[0];
         setError(`Error en el registro: ${serverError}`);
       } else {
@@ -100,10 +96,8 @@ function LoginPage() {
       {error && <div className="text-red-500 mb-4">{error}</div>}
 
       <div className="w-full max-w-2xl bg-gray-800 rounded-xl shadow-2xl p-8 flex flex-col md:flex-row gap-8">
-        {/* Formulario Principal */}
         <div className="flex-1 flex flex-col items-center p-6 bg-gray-700 rounded-lg shadow-inner">
           <form onSubmit={isLoginView ? handleLogin : handleSignUp} className="w-full">
-            {/* Campo de usuario */}
             <label className="block text-lg font-semibold mb-2 text-teal-300">
               Usuario
             </label>
@@ -115,8 +109,6 @@ function LoginPage() {
               placeholder="Ingresa tu nombre de usuario"
               className="w-full p-3 mb-4 rounded-lg bg-gray-600 border border-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-400 placeholder-gray-400"
             />
-
-            {/* Campo de email (solo para registro) */}
             {!isLoginView && (
               <>
                 <label className="block text-lg font-semibold mb-2 text-teal-300">
@@ -132,8 +124,6 @@ function LoginPage() {
                 />
               </>
             )}
-
-            {/* Campos de contraseña */}
             <label className="block text-lg font-semibold mb-2 text-teal-300">
               Contraseña
             </label>
@@ -160,8 +150,6 @@ function LoginPage() {
                 />
               </>
             )}
-
-            {/* Botón de envío */}
             <button
               type="submit"
               className="w-full py-3 mb-4 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg font-bold hover:from-blue-600 hover:to-indigo-700 transition duration-300"
@@ -169,8 +157,6 @@ function LoginPage() {
               {isLoginView ? "Iniciar Sesión" : "Crear Cuenta"}
             </button>
           </form>
-
-          {/* Opciones de cambio de vista */}
           <p className="text-center text-gray-400 mt-4">
             {isLoginView ? "¿No tienes una cuenta? " : "¿Ya tienes una cuenta? "}
             <button
@@ -185,8 +171,6 @@ function LoginPage() {
             </button>
           </p>
         </div>
-
-        {/* Sección del avatar (sin cambios) */}
         <div className="flex-1 flex flex-col items-center p-6 bg-gray-700 rounded-lg shadow-inner">
           <div className="flex flex-col items-center mt-4 text-center">
             <img
