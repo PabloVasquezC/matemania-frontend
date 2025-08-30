@@ -1,37 +1,73 @@
-// src/components/homepage/HomePage.js
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import logo from "../../assets/logo.png";
 
 export default function HomePage() {
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    // Lee el nombre de usuario del localStorage al cargar el componente
+    const storedUsername = localStorage.getItem("username");
+    if (storedUsername) {
+      setUserName(storedUsername);
+    }
+  }, []);
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-gray-800 p-4 font-sans">
-      
-      <header className="mb-10 text-center">
-        <h1 className="text-5xl md:text-6xl font-extrabold text-blue-900 mb-2">
-          Scrabble Matemático
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4 font-sans">
+      <img src={logo} alt="Logo" className="w-100 h-100 mb-4 animate-fadeIn" />
+      <header className="mb-10 text-center animate-fadeIn">
+        <h1 className="text-5xl md:text-6xl font-extrabold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500 animate-pulse">
+          CogniTiles
         </h1>
-        <p className="text-lg md:text-xl text-gray-600">
-          Donde las letras se convierten en números y el ingenio matemático es tu mejor jugada.
-        </p>
+        {userName ? (
+          <p className="text-lg md:text-xl text-gray-400">
+            <span className="font-bold text-teal-300">¡Hola, {userName}!</span> Bienvenido de nuevo.
+          </p>
+        ) : (
+          <p className="text-lg md:text-xl text-gray-400">
+            Donde las letras se convierten en números y el ingenio matemático es tu mejor jugada.
+          </p>
+        )}
       </header>
 
-      <main className="w-full max-w-2xl bg-white rounded-xl shadow-lg p-8 md:p-12 text-center">
+      <main className="w-full max-w-2xl bg-gray-800 rounded-2xl shadow-2xl p-8 md:p-12 text-center transform transition-all duration-500 hover:scale-[1.01]">
         <section className="mb-6">
-          <h2 className="text-3xl md:text-4xl font-bold text-blue-800 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-teal-400 mb-4 animate-slideIn">
             Pon a prueba tu mente
           </h2>
-          <p className="text-base md:text-lg text-gray-700 leading-relaxed">
+          <p className="text-base md:text-lg text-gray-300 leading-relaxed animate-slideIn">
             Bienvenido a una nueva dimensión de Scrabble. En lugar de formar palabras, crearás ecuaciones. 
             Utiliza las fichas numéricas y operadores (+, -, *, /) para construir expresiones matemáticas válidas 
             y obtener la puntuación más alta. Piensa estratégicamente, bloquea a tu oponente y 
             demuestra que eres el maestro de los números.
           </p>
         </section>
-        
-        <button className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
-          ¡Jugar ahora!
-        </button>
-      </main>
 
+        <Link to="/game" className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
+          ¡Jugar ahora!
+        </Link>
+      </main>
       
+      {/* Definiciones de animaciones de Tailwind CSS */}
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(-20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.05); }
+        }
+        @keyframes slideIn {
+          from { opacity: 0; transform: translateX(-20px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+        .animate-fadeIn { animation: fadeIn 1s ease-out; }
+        .animate-pulse { animation: pulse 2s infinite; }
+        .animate-slideIn { animation: slideIn 1s ease-out; }
+      `}</style>
+
     </div>
   );
 }

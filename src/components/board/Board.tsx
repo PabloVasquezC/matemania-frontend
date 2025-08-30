@@ -36,7 +36,7 @@ export default function Board(props: BoardProps) {
 
   return (
     <div
-      className="grid w-auto h-auto max-w-xl aspect-square border-2 border-black mx-auto"
+      className="grid w-auto h-auto max-w-xl aspect-square bg-gray-800 rounded-lg shadow-xl border-4 border-gray-700 mx-auto transition-all duration-300 transform hover:scale-[1.01]"
       style={{
         gridTemplateColumns: `repeat(${cols}, 1fr)`,
         gridTemplateRows: `repeat(${rows}, 1fr)`,
