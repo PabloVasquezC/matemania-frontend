@@ -12,17 +12,17 @@ const navigation = [
   { name: 'Perfil', path: '/profile' },
 ]
 
-function classNames(...classes) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
 // Componente del modal terminal
-const TerminalModal = ({ onClose }) => {
+const TerminalModal = ({ onClose }: { onClose: () => void }) => {
   const [position, setPosition] = useState({ x: 50, y: 50 });
   const [isDragging, setIsDragging] = useState(false);
   const offset = useRef({ x: 0, y: 0 });
 
-  const handleMouseDown = (e) => {
+  const handleMouseDown = (e: MouseEvent) => {
     setIsDragging(true);
     offset.current = {
       x: e.clientX - position.x,
@@ -30,7 +30,7 @@ const TerminalModal = ({ onClose }) => {
     };
   };
 
-  const handleMouseMove = (e) => {
+  const handleMouseMove = (e: MouseEvent) => {
     if (isDragging) {
       setPosition({
         x: e.clientX - offset.current.x,
@@ -47,7 +47,7 @@ const TerminalModal = ({ onClose }) => {
     <div
       className="fixed z-50 w-full max-w-xl p-1 bg-gray-900 rounded-lg shadow-2xl overflow-hidden font-mono"
       style={{ top: position.y, left: position.x }}
-      onMouseMove={handleMouseMove}
+      onMouseOver={handleMouseMove}
       onMouseUp={handleMouseUp}
     >
       <div

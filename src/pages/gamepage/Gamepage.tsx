@@ -5,7 +5,6 @@ import { useState } from "react";
 import { OPERATORS, TILES_COLORS, TILES_POINTS } from "../../constants/constants";
 // Se elimina la importación de play_validations ya que no se utiliza en esta versión
 // import play_validations from "../../utils/play_validations";
-import logo from "../../assets/logo.png";
 
 function Gamepage() {
   const [tiles] = useState([
