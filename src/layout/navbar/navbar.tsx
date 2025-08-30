@@ -22,7 +22,7 @@ const TerminalModal = ({ onClose }: { onClose: () => void }) => {
   const [isDragging, setIsDragging] = useState(false);
   const offset = useRef({ x: 0, y: 0 });
 
-  const handleMouseDown = (e: MouseEvent) => {
+  const handleMouseDown = (e ) => {
     setIsDragging(true);
     offset.current = {
       x: e.clientX - position.x,
@@ -30,7 +30,7 @@ const TerminalModal = ({ onClose }: { onClose: () => void }) => {
     };
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
+  const handleMouseMove = (e ) => {
     if (isDragging) {
       setPosition({
         x: e.clientX - offset.current.x,
