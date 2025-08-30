@@ -3,7 +3,9 @@ import Rack from "../../components/rack/Rack";
 import Board from "../../components/board/Board";
 import { useState } from "react";
 import { OPERATORS, TILES_COLORS, TILES_POINTS } from "../../constants/constants";
-import play_validations from "../../utils/play_validations";
+// Se elimina la importación de play_validations ya que no se utiliza en esta versión
+// import play_validations from "../../utils/play_validations";
+import logo from "../../assets/logo.png";
 
 function Gamepage() {
   const [tiles] = useState([
@@ -93,7 +95,7 @@ function Gamepage() {
     },
   ]);
 
-  const [tileLocations, setTileLocations] = useState<Record<string, string>>({
+  const [tileLocations, setTileLocations] = useState({
     "tile-1": "pool",
     "tile-2": "pool",
     "tile-3": "pool",
@@ -108,11 +110,10 @@ function Gamepage() {
     "tile-12": "pool",
     "tile-13": "pool",
     "tile-14": "pool",
-    
   });
 
-  const handleDragEnd = (event: unknown) => {
-    const { over, active } = event as { over: { id: string }; active: { id: string } };
+  const handleDragEnd = (event) => {
+    const { over, active } = event;
 
     if (over) {
       setTileLocations((prev) => ({
@@ -122,7 +123,6 @@ function Gamepage() {
     }
   };
 
-  // ⭐️ ¡Aquí está la solución! Configuración de los sensores para móvil y escritorio.
   const sensors = useSensors(
     useSensor(MouseSensor),
     useSensor(TouchSensor, {
@@ -133,23 +133,23 @@ function Gamepage() {
     })
   );
 
-  console.log(play_validations(tiles));
-
   return (
-    // ⭐️ Pasamos los sensores al DndContext
     <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
-      
-      {/* Contenedor principal con flexbox para centrar y organizar los componentes */}
-      <div className="flex flex-col items-center  justify-center h-screen bg-gray-100 ">
-        {/* Aquí puedes agregar un título o cabecera si lo deseas */}
+      {/* Contenedor principal con estilo moderno y oscuro */}
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white font-sans p-6">
         
-        {/* Contenedor del tablero */}
-        <div className="mb-8">
+        {/* Título y logo con el mismo estilo que la página 'AboutPage' */}
+        <div className="flex flex-col items-center mb-6">
+         
+        </div>
+        
+        {/* Contenedor del tablero con estilo mejorado */}
+        <div className="mb-8 p-4 md:p-6 bg-gray-800/60 backdrop-blur-md rounded-2xl shadow-2xl border border-gray-700/50">
           <Board tiles={tiles} tileLocations={tileLocations} />
         </div>
 
-        {/* Contenedor del atril */}
-        <div>
+        {/* Contenedor del atril con estilo mejorado */}
+        <div className="p-4 md:p-6 bg-gray-800/60 backdrop-blur-md rounded-2xl shadow-2xl border border-gray-700/50">
           <Rack tiles={tiles} tileLocations={tileLocations} />
         </div>
       </div>

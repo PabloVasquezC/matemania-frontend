@@ -44,6 +44,7 @@ function LoginPage() {
 
       localStorage.setItem("access_token", response.data.access);
       localStorage.setItem("refresh_token", response.data.refresh);
+      localStorage.setItem("username", formData.username); 
       setMessage("Login exitoso. ¡Bienvenido!");
       navigate("/home");
     } catch (err) {
