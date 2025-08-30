@@ -1,4 +1,4 @@
-import { DndContext, MouseSensor, TouchSensor, useSensor, useSensors } from "@dnd-kit/core";
+import { DndContext, MouseSensor, TouchSensor, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core";
 import Rack from "../../components/rack/Rack";
 import Board from "../../components/board/Board";
 import { useState } from "react";
@@ -111,7 +111,7 @@ function Gamepage() {
     "tile-14": "pool",
   });
 
-  const handleDragEnd = (event) => {
+  const handleDragEnd = (event: DragEndEvent) => {
     const { over, active } = event;
 
     if (over) {
