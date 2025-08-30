@@ -21,16 +21,7 @@ function LoginPage() {
     });
   };
 
-  const handleCreateRobotFromForm = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (formData.username.trim() === "") return;
-
-    const newRobot: IRoboHash = {
-      id: formData.username,
-      name: formData.username,
-    };
-    setChosenRobot(newRobot);
-  };
+  
 
   const handleGenerateRandomRobot = () => {
     const newRobot: IRoboHash = {
