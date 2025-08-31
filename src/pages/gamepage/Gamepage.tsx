@@ -82,15 +82,51 @@ function Gamepage() {
     },
     {
       id: "tile-13",
+      value: OPERATORS.EQUALS,
+      points: TILES_POINTS["="] ?? 0,
+      bgColor: TILES_COLORS.EQUAL,
+    },
+    {
+      id: "tile-14",
       value: OPERATORS.MULTIPLY,
       points: TILES_POINTS["*"] ?? 0,
       bgColor: TILES_COLORS.OPERATOR,
     },
     {
-      id: "tile-14",
+      id: "tile-15",
       value: OPERATORS.DIVIDE,
       points: TILES_POINTS["/"] ?? 0,
       bgColor: TILES_COLORS.OPERATOR,
+    },
+    {
+      id: "tile-16",
+      value: OPERATORS.INFINITY,
+      points: TILES_POINTS["∞"] ?? 0,
+      bgColor: TILES_COLORS.OPERATOR  ,
+    },
+    {
+      id: "tile-17",
+      value: OPERATORS.POW,
+      points: TILES_POINTS["^"] ?? 0,
+      bgColor: TILES_COLORS.OPERATOR,
+    },
+    {
+      id: "tile-18",
+      value: OPERATORS.PI,
+      points: TILES_POINTS["π"] ?? 0,
+      bgColor: TILES_COLORS.OPERATOR,
+    },
+    {
+      id: "tile-19",
+      value: OPERATORS.E,
+      points: TILES_POINTS["e"] ?? 0,
+      bgColor: TILES_COLORS.OPERATOR,
+    },
+    {
+      id: "tile-20",
+      value: OPERATORS.EQUALS,
+      points: TILES_POINTS["="] ?? 0,
+      bgColor: TILES_COLORS.EQUAL,
     },
   ]);
 
@@ -109,6 +145,12 @@ function Gamepage() {
     "tile-12": "pool",
     "tile-13": "pool",
     "tile-14": "pool",
+    "tile-15": "pool",
+    "tile-16": "pool",
+    "tile-17": "pool",
+    "tile-18": "pool",
+    "tile-19": "pool",
+    "tile-20": "pool",
   });
 
   const handleDragEnd = (event: DragEndEvent) => {
