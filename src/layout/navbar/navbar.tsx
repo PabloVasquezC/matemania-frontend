@@ -11,6 +11,7 @@ const navigation = [
   { name: 'Acerca de', path: '/about' },
   { name: 'Configuraciones', path: '/settings' },
   { name: 'Perfil', path: '/profile' },
+  { name: 'Ranking', path: '/ranking' },
 ]
 
 function classNames(...classes: string[]) {
@@ -46,9 +47,9 @@ const TerminalModal = ({ onClose }: { onClose: () => void }) => {
 
   return (
     <div
-      className="fixed z-50 w-full max-w-xl p-1 bg-gray-900 rounded-lg shadow-2xl overflow-hidden font-mono"
+      className=" justify-center items-center fixed z-50 w-full max-w-xl p-1 bg-gray-900 rounded-lg shadow-2xl overflow-hidden font-mono"
       style={{ top: position.y, left: position.x }}
-      onMouseMove={handleMouseMove} // Cambiado a onMouseMove
+      onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
     >
       <div
@@ -82,7 +83,7 @@ export default function Navbar() {
         <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
           <div className="relative flex h-16 items-center justify-between">
             {/* Botón menú móvil */}
-            <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
+            <div className="absolute inset-y-0 left-0 flex items-center md:hidden">
               <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-white/5 hover:text-white focus:outline-2 focus:-outline-offset-1 focus:outline-indigo-500">
                 <Bars3Icon aria-hidden="true" className="block size-6 group-data-open:hidden" />
                 <XMarkIcon aria-hidden="true" className="hidden size-6 group-data-open:block" />
@@ -90,9 +91,8 @@ export default function Navbar() {
             </div>
 
             {/* Logo + navegación */}
-            <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+            <div className="flex flex-1 items-center justify-center md:items-stretch md:justify-start">
               <div className="flex shrink-0 items-center">
-                {/* Logo SVG para "CogniTiles" */}
                 <Link to="/">
                   <img
                   className="block h-12 w-auto"
@@ -101,7 +101,7 @@ export default function Navbar() {
                 />
                 </Link>
               </div>
-              <div className="hidden sm:ml-6 sm:block">
+              <div className="hidden md:ml-6 md:flex md:items-center">
                 <div className="flex space-x-4">
                   {navigation.map((item) => {
                     const isActive = location.pathname === item.path
@@ -121,7 +121,6 @@ export default function Navbar() {
                       </Link>
                     )
                   })}
-                  {/* Botón de terminal con el mismo estilo que los links */}
                   <button
                     onClick={() => setShowTerminal(!showTerminal)}
                     className={classNames(
@@ -136,7 +135,7 @@ export default function Navbar() {
             </div>
 
             {/* Botón notificaciones + perfil */}
-            <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+            <div className="absolute inset-y-0 right-0 flex items-center pr-2 md:static md:inset-auto md:ml-6 md:pr-0">
               <button
                 type="button"
                 className="relative rounded-full p-1 text-gray-400 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500 transition-colors duration-200 transform hover:scale-110"
@@ -180,7 +179,7 @@ export default function Navbar() {
         </div>
 
         {/* Mobile menu */}
-        <DisclosurePanel className="sm:hidden bg-gray-800/60 backdrop-blur-md rounded-b-lg border-b border-gray-700/50">
+        <DisclosurePanel className="md:hidden bg-gray-800/60 backdrop-blur-md rounded-b-lg border-b border-gray-700/50">
           <div className="space-y-1 px-2 pt-2 pb-3">
             {navigation.map((item) => {
               const isActive = location.pathname === item.path
