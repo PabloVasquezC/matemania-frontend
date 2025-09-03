@@ -3,6 +3,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import type { IRoboHash } from "../../types/IRoboHash";
 
+// Define la URL de la API usando la variable de entorno
+const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api/";
+
 function LoginPage() {
   const navigate = useNavigate();
   const [isLoginView, setIsLoginView] = useState(true);
@@ -15,6 +18,7 @@ function LoginPage() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [choosenRobot, setChosenRobot] = useState<IRoboHash>({ id: "default", name: "Default Robot" });
+  const [modalMessage, setModalMessage] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -37,7 +41,7 @@ function LoginPage() {
     setMessage("");
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/token/", {
+      const response = await axios.post(`${API_URL}token/`, {
         username: formData.username,
         password: formData.password,
       });
@@ -68,7 +72,7 @@ function LoginPage() {
     }
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/signup/", {
+      const response = await axios.post(`${API_URL}signup/`, {
         username: formData.username,
         password: formData.password,
         email: formData.email,
@@ -184,14 +188,13 @@ function LoginPage() {
             </h3>
             <button
               onClick={handleGenerateRandomRobot}
-              className="w-full py-3 mb-4 bg-gradient-to-r from-purple-500 to-pink-600 rounded-lg font-bold hover:from-purple-600 hover:to-pink-700 transition duration-300"
+              className="w-full py-3 mt-4 bg-gradient-to-r from-purple-500 to-pink-600 rounded-lg font-bold hover:from-purple-600 hover:to-pink-700 transition duration-300"
             >
               Cambiar Avatar
             </button>
             <button
               className="mt-6 px-8 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full font-bold shadow-lg hover:from-blue-600 hover:to-indigo-700 transition duration-300"
-              onClick={() =>
-                alert(`¡Listo para jugar con ${choosenRobot.name}!`)
+              onClick={() => setModalMessage(`¡Listo para jugar con ${choosenRobot.name}!`)
               }
             >
               ¡Elegir y Jugar!
@@ -199,6 +202,19 @@ function LoginPage() {
           </div>
         </div>
       </div>
+      {modalMessage && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+          <div className="bg-gray-800 rounded-xl p-6 shadow-2xl text-center">
+            <h2 className="text-2xl font-bold mb-4">{modalMessage}</h2>
+            <button 
+              onClick={() => setModalMessage(null)}
+              className="mt-4 px-6 py-2 bg-indigo-500 rounded-lg font-bold hover:bg-indigo-600 transition duration-300"
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
