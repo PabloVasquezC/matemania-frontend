@@ -8,6 +8,7 @@ import Gamepage from './pages/gamepage/Gamepage';
 import Footer from './layout/footer/Footer';
 import LoginPage from './pages/loginPage/loginPage';
 import ProfilePage from './pages/profilepage/profilepage';
+import RankingPage from './pages/rankingPage/rankingPage';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
 import type { Variants, Transition } from 'framer-motion';
@@ -19,6 +20,7 @@ const navigation = [
   { name: 'Acerca de', path: '/about' },
   { name: 'Configuraciones', path: '/settings' },
   { name: 'Perfil', path: '/profile' },
+  { name: 'Ranking', path: '/ranking' },
 ];
 
 // Mapea las rutas a un índice para comparar la posición
@@ -148,6 +150,19 @@ function App() {
               <ProfilePage />
             </motion.div>
           } />
+          <Route path="/ranking" element={
+            <motion.div
+              variants={variants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              custom={direction}
+              className="w-full h-full absolute"
+            >
+              <RankingPage />
+            </motion.div>
+          } />
+          <Route path="*" element={<Navigate to="/home" />} />
         </Routes>
       </AnimatePresence>
       {location.pathname !== '/game'  && <Footer />}
