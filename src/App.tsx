@@ -1,16 +1,16 @@
-import { Route, Routes, useLocation } from 'react-router'
-import './App.css'
-import Navbar from './layout/navbar/navbar'
+import { Route, Routes, useLocation, Navigate } from 'react-router-dom';
+import './App.css';
+import Navbar from './layout/navbar/navbar';
 import Homepage from './pages/homepage/homepage';
 import AboutPage from './pages/aboutpage/aboutpage';
 import SettingsPage from './pages/settingspage/settingspage';
 import Gamepage from './pages/gamepage/Gamepage';
 import Footer from './layout/footer/Footer';
 import LoginPage from './pages/loginPage/loginPage';
-import HomePage from './pages/homepage/homepage';
 import ProfilePage from './pages/profilepage/profilepage';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
+import type { Variants, Transition } from 'framer-motion';
 
 // Define el orden de las páginas para la animación direccional
 const navigation = [
@@ -28,9 +28,6 @@ const pathIndexMap: Record<string, number> = navigation.reduce((map, item, index
 }, {} as Record<string, number>);
 
 // Variantes de animación para las transiciones
-// Variantes de animación para las transiciones
-import type { Variants, Transition } from 'framer-motion';
-
 const transition: Transition = {
   type: "tween",
   ease: "anticipate",
@@ -78,18 +75,7 @@ function App() {
       {location.pathname !== '/login'  && <Navbar />}
       <AnimatePresence mode="wait" custom={direction}>
         <Routes key={location.pathname} location={location}>
-          <Route path="/" element={
-            <motion.div
-              variants={variants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              custom={direction}
-              className="w-full h-full absolute"
-            >
-              <HomePage />
-            </motion.div>
-          } />
+          <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/login" element={
             <motion.div
               variants={variants}
