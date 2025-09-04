@@ -5,6 +5,8 @@ import { useState, useRef } from 'react';
 import React from 'react'; // Importamos React
 import logo from '../../assets/logo.png';
 
+
+
 const navigation = [
   { name: 'Inicio', path: '/' },
   { name: 'Jugar', path: '/game' },
@@ -12,6 +14,7 @@ const navigation = [
   { name: 'Configuraciones', path: '/settings' },
   { name: 'Perfil', path: '/profile' },
   { name: 'Ranking', path: '/ranking' },
+  { name: 'Notificaciones', path: '/notifications' },
 ]
 
 function classNames(...classes: string[]) {
@@ -140,12 +143,12 @@ export default function Navbar() {
                 type="button"
                 className="relative rounded-full p-1 text-gray-400 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500 transition-colors duration-200 transform hover:scale-110"
               >
-                <BellIcon aria-hidden="true" className="size-6" />
+                <BellIcon aria-hidden="true" className="size-6 cursor-pointer" />
               </button>
               {/* dropdown usuario */}
               <Menu as="div" className="relative ml-3">
                 <MenuButton className="relative flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 transition-transform duration-200 transform hover:scale-110">
-                  <img src={`https://robohash.org/${localStorage.getItem('userAvatar')}.png`} alt="User Avatar" className="h-8 w-8 rounded-full border border-gray-600" />
+                  <img src={`https://robohash.org/${localStorage.getItem('userAvatar')}.png`} alt="User Avatar" className="h-10 w-10 rounded-full border border-gray-600  cursor-pointer" />
                 </MenuButton>
                 <MenuItems className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-gray-800 py-1 outline -outline-offset-1 outline-white/10">
                   <MenuItem>
@@ -170,6 +173,14 @@ export default function Navbar() {
                       className="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5"
                     >
                       Sign out
+                    </Link>
+                  </MenuItem>
+                  <MenuItem>
+                    <Link
+                      to="/notifications"
+                      className="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5"
+                    >
+                      Notificaciones
                     </Link>
                   </MenuItem>
                 </MenuItems>

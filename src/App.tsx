@@ -12,6 +12,7 @@ import RankingPage from './pages/rankingPage/rankingPage';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
 import type { Variants, Transition } from 'framer-motion';
+import NotificationsPage from './pages/notificationsPage/NotificationsPages';
 
 // Define el orden de las páginas para la animación direccional
 const navigation = [
@@ -148,6 +149,18 @@ function App() {
               className="w-full h-full absolute"
             >
               <ProfilePage />
+            </motion.div>
+          } />
+          <Route path="/notifications" element={
+            <motion.div
+              variants={variants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              custom={direction}
+              className="w-full h-full absolute"
+            >
+              <NotificationsPage />
             </motion.div>
           } />
           <Route path="/ranking" element={
