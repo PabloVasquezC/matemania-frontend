@@ -1,59 +1,35 @@
-import { useState } from "react";
-import axios from "axios";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import type { IRoboHash } from "../../types/IRoboHash";
-
-// Define la URL de la API usando la variable de entorno
-const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api/";
-
-// Íconos SVG para los mensajes de alerta
-const SuccessIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="h-6 w-6 text-green-400"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-    strokeWidth={2}
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M9 12l2 2m0 0l4-4m-4 4L7 9m9 4a9 9 0 11-18 0 9 9 0 0118 0z"
-    />
-  </svg>
-);
-
-const ErrorIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="h-6 w-6 text-red-400"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-    strokeWidth={2}
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-    />
-  </svg>
-);
+import SuccessIcon from "../../utils/successIcon";
+import ErrorIcon from "../../utils/errorIcon";
+import { API_URL } from "../../constants/constants";
+import handleGenerateRandomRobot from "../../utils/handleGenerateRandomRobots";
+import { login, signup } from "../../services/authService";
 
 function LoginPage() {
+  console.log("API_URL:", API_URL);
+
   const navigate = useNavigate();
   const [isLoginView, setIsLoginView] = useState(true);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  const [choosenRobot, setChosenRobot] = useState<IRoboHash>({ id: "default", name: "Default Robot" });
+  const [modalMessage, setModalMessage] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     username: "",
     password: "",
     email: "",
     confirmPassword: "",
   });
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
-  const [choosenRobot, setChosenRobot] = useState<IRoboHash>({ id: "default", name: "Default Robot" });
-  const [modalMessage, setModalMessage] = useState<string | null>(null);
+
+  const generateNewRobot = useCallback(() => {
+    handleGenerateRandomRobot(setChosenRobot);
+  }, []);
+
+  useEffect(() => {
+    generateNewRobot();
+  }, [generateNewRobot]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -62,36 +38,20 @@ function LoginPage() {
     });
   };
 
-  const handleGenerateRandomRobot = () => {
-    const newRobot: IRoboHash = {
-      id: Date.now().toString(),
-      name: `Robot #${Math.floor(Math.random() * 1000)}`,
-    };
-    setChosenRobot(newRobot);
-  };
-
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
     setMessage("");
 
     try {
-      const response = await axios.post(`${API_URL}token/`, {
-        username: formData.username,
-        password: formData.password,
-      });
-
-      localStorage.setItem("access_token", response.data.access);
-      localStorage.setItem("refresh_token", response.data.refresh);
+      const response = await login(formData);
+      localStorage.setItem("access_token", response.access || "");
+      localStorage.setItem("refresh_token", response.refresh || "");
       localStorage.setItem("username", formData.username);
       setMessage("Login exitoso. ¡Bienvenido!");
       navigate("/home");
     } catch (err) {
-      if (axios.isAxiosError(err) && err.response) {
-        setError(err.response.data.detail || "Error de login. Verifica tus credenciales.");
-      } else {
-        setError("Usuario o contraseña incorrectos. Inténtalo de nuevo.");
-      }
+      setError(err instanceof Error ? err.message : "Error desconocido.");
       console.error(err);
     }
   };
@@ -107,21 +67,11 @@ function LoginPage() {
     }
 
     try {
-      const response = await axios.post(`${API_URL}signup/`, {
-        username: formData.username,
-        password: formData.password,
-        email: formData.email,
-      });
-
-      setMessage(response.data.message || "Registro exitoso. ¡Ahora puedes iniciar sesión!");
+      const response = await signup(formData);
+      setMessage(response.message || "Registro exitoso. ¡Ahora puedes iniciar sesión!");
       setIsLoginView(true);
     } catch (err) {
-      if (axios.isAxiosError(err) && err.response) {
-        const serverError = err.response.data.detail || Object.values(err.response.data)[0];
-        setError(`Error en el registro: ${serverError}`);
-      } else {
-        setError("Error de conexión. Inténtalo de nuevo más tarde.");
-      }
+      setError(err instanceof Error ? err.message : "Error desconocido.");
       console.error(err);
     }
   };
@@ -225,21 +175,32 @@ function LoginPage() {
           </p>
         </div>
         <div className="flex-1 flex flex-col items-center p-6 bg-gray-700 rounded-lg shadow-inner">
-          <div className="flex flex-col items-center mt-4 text-center">
-            <img
-              src={`https://robohash.org/${choosenRobot.id}.png`}
-              alt="Robot Preview"
-              className="w-40 h-40 rounded-full border-4 border-gray-600 shadow-lg transform transition duration-500 hover:scale-110"
-            />
+          <div className="flex flex-col items-center text-center">
+            {/* Contenedor del avatar con las flechas */}
+            <div className="flex items-center justify-center w-full relative">
+              <button
+                onClick={generateNewRobot}
+                className="absolute left-0 p-2 text-gray-400 hover:text-white transition-colors text-3xl font-bold"
+                aria-label="Anterior Robot"
+              >
+                ‹
+              </button>
+              <img
+                src={`https://robohash.org/${choosenRobot.id}.png`}
+                alt="Robot Preview"
+                className="w-40 h-40 rounded-full border-4 border-gray-600 shadow-lg transform transition duration-500 hover:scale-110"
+              />
+              <button
+                onClick={generateNewRobot}
+                className="absolute right-0 p-2 text-gray-400 hover:text-white transition-colors text-3xl font-bold"
+                aria-label="Siguiente Robot"
+              >
+                ›
+              </button>
+            </div>
             <h3 className="text-xl font-semibold mt-4 text-teal-300">
               {choosenRobot.name}
             </h3>
-            <button
-              onClick={handleGenerateRandomRobot}
-              className="w-full py-3 mt-4 bg-gradient-to-r from-purple-500 to-pink-600 rounded-lg font-bold hover:from-purple-600 hover:to-pink-700 transition duration-300"
-            >
-              Cambiar Avatar
-            </button>
             <button
               className="mt-6 px-8 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full font-bold shadow-lg hover:from-blue-600 hover:to-indigo-700 transition duration-300"
               onClick={() => setModalMessage(`¡Listo para jugar con ${choosenRobot.name}!`)
