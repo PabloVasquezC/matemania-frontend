@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import type { IRoboHash } from "../../types/IRoboHash";
-import SuccessIcon from "../../utils/successIcon";
-import ErrorIcon from "../../utils/errorIcon";
-import { API_URL } from "../../constants/constants";
-import handleGenerateRandomRobot from "../../utils/handleGenerateRandomRobots";
-import { login, signup } from "../../services/authService";
+import SuccessIcon from "@utils/successIcon";
+import ErrorIcon from "@utils/errorIcon";
+import { API_URL } from "@constants/constants";
+import handleGenerateRandomRobot from "@utils/handleGenerateRandomRobots";
+import { login, signup } from "@services/authService";
+import logo from "@assets/logo.png";
 
 function LoginPage() {
   console.log("API_URL:", API_URL);
@@ -14,14 +15,16 @@ function LoginPage() {
   const [isLoginView, setIsLoginView] = useState(true);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const [choosenRobot, setChosenRobot] = useState<IRoboHash>({ id: "default", name: "Default Robot" });
-  const [modalMessage, setModalMessage] = useState<string | null>(null);
+  const [choosenRobot, setChosenRobot] = useState<IRoboHash>({id: "", name: ""});
   const [formData, setFormData] = useState({
     username: "",
     password: "",
     email: "",
     confirmPassword: "",
+    avatar: "",
   });
+
+  const [passwordStrength, setPasswordStrength] = useState<"weak" | "medium" | "strong" | "">("");
 
   const generateNewRobot = useCallback(() => {
     handleGenerateRandomRobot(setChosenRobot);
@@ -32,10 +35,26 @@ function LoginPage() {
   }, [generateNewRobot]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    if (name === "password") {
+      evaluatePasswordStrength(value);
+    }
+
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
+  };
+
+  const evaluatePasswordStrength = (password: string) => {
+    if (password.length < 6) {
+      setPasswordStrength("weak");
+    } else if (password.match(/[A-Z]/) && password.match(/[0-9]/) && password.length >= 8) {
+      setPasswordStrength("strong");
+    } else {
+      setPasswordStrength("medium");
+    }
   };
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -49,7 +68,7 @@ function LoginPage() {
       localStorage.setItem("refresh_token", response.refresh || "");
       localStorage.setItem("username", formData.username);
       setMessage("Login exitoso. ¡Bienvenido!");
-      navigate("/home");
+      navigate("/");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido.");
       console.error(err);
@@ -67,7 +86,10 @@ function LoginPage() {
     }
 
     try {
-      const response = await signup(formData);
+      const response = await signup({
+        ...formData,
+        avatar: `https://robohash.org/${choosenRobot?.id}.png`,
+      });
       setMessage(response.message || "Registro exitoso. ¡Ahora puedes iniciar sesión!");
       setIsLoginView(true);
     } catch (err) {
@@ -78,19 +100,20 @@ function LoginPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4">
+      <img src={logo} alt="Logo" className="w-80 h-80 animate-fadeIn " />
+      <h1 className=" text-5xl md:text-6xl font-extrabold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500 animate-pulse">
+          CogniTiles
+      </h1>
       <h1 className="text-5xl md:text-6xl font-extrabold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500 animate-pulse">
         {isLoginView ? "Iniciar Sesión" : "Crear tu Perfil"}
       </h1>
 
-      {/* Alerta de Éxito */}
       {message && (
         <div className="w-full max-w-lg mb-4 p-4 rounded-lg bg-green-900 border border-green-700 flex items-center justify-center space-x-2 shadow-lg">
           <SuccessIcon />
           <span className="text-green-300 font-medium">{message}</span>
         </div>
       )}
-
-      {/* Alerta de Error estilizada */}
       {error && (
         <div className="w-full max-w-lg mb-4 p-4 rounded-lg bg-red-900 border border-red-700 flex items-center justify-center space-x-2 shadow-lg">
           <ErrorIcon />
@@ -98,132 +121,144 @@ function LoginPage() {
         </div>
       )}
 
-      <div className="w-full max-w-2xl bg-gray-800 rounded-xl shadow-2xl p-8 flex flex-col md:flex-row gap-8">
-        <div className="flex-1 flex flex-col items-center p-6 bg-gray-700 rounded-lg shadow-inner">
-          <form onSubmit={isLoginView ? handleLogin : handleSignUp} className="w-full">
-            <label className="block text-lg font-semibold mb-2 text-teal-300">
-              Usuario
-            </label>
-            <input
-              type="text"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              placeholder="Ingresa tu nombre de usuario"
-              className="w-full p-3 mb-4 rounded-lg bg-gray-600 border border-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-400 placeholder-gray-400"
-            />
-            {!isLoginView && (
-              <>
-                <label className="block text-lg font-semibold mb-2 text-teal-300">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="Ingresa tu email"
-                  className="w-full p-3 mb-4 rounded-lg bg-gray-600 border border-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-400 placeholder-gray-400"
-                />
-              </>
-            )}
-            <label className="block text-lg font-semibold mb-2 text-teal-300">
-              Contraseña
-            </label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Ingresa tu contraseña"
-              className="w-full p-3 mb-4 rounded-lg bg-gray-600 border border-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-400 placeholder-gray-400"
-            />
-            {!isLoginView && (
-              <>
-                <label className="block text-lg font-semibold mb-2 text-teal-300">
-                  Confirma la Contraseña
-                </label>
-                <input
-                  type="password"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  placeholder="Confirma tu contraseña"
-                  className="w-full p-3 mb-6 rounded-lg bg-gray-600 border border-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-400 placeholder-gray-400"
-                />
-              </>
-            )}
-            <button
-              type="submit"
-              className="w-full py-3 mb-4 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg font-bold hover:from-blue-600 hover:to-indigo-700 transition duration-300"
-            >
-              {isLoginView ? "Iniciar Sesión" : "Crear Cuenta"}
-            </button>
-          </form>
-          <p className="text-center text-gray-400 mt-4">
-            {isLoginView ? "¿No tienes una cuenta? " : "¿Ya tienes una cuenta? "}
-            <button
-              onClick={() => {
-                setIsLoginView(!isLoginView);
-                setFormData({ username: "", password: "", email: "", confirmPassword: "" });
-                setError("");
-              }}
-              className="text-teal-400 hover:underline font-semibold"
-            >
-              {isLoginView ? "Regístrate" : "Inicia Sesión"}
-            </button>
-          </p>
-        </div>
-        <div className="flex-1 flex flex-col items-center p-6 bg-gray-700 rounded-lg shadow-inner">
-          <div className="flex flex-col items-center text-center">
-            {/* Contenedor del avatar con las flechas */}
-            <div className="flex items-center justify-center w-full relative">
-              <button
-                onClick={generateNewRobot}
-                className="absolute left-0 p-2 text-gray-400 hover:text-white transition-colors text-3xl font-bold"
-                aria-label="Anterior Robot"
-              >
-                ‹
-              </button>
-              <img
-                src={`https://robohash.org/${choosenRobot.id}.png`}
-                alt="Robot Preview"
-                className="w-40 h-40 rounded-full border-4 border-gray-600 shadow-lg transform transition duration-500 hover:scale-110"
+      <div className="w-full max-w-xl bg-gray-800 rounded-xl shadow-2xl p-8">
+        <form onSubmit={isLoginView ? handleLogin : handleSignUp} className="w-full">
+          <label className="block text-lg font-semibold mb-2 text-teal-300">Usuario</label>
+          <input
+            type="text"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+            placeholder="Ingresa tu nombre de usuario"
+            className="w-full p-3 mb-4 rounded-lg bg-gray-600 border border-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-400 placeholder-gray-400"
+          />
+
+          {!isLoginView && (
+            <>
+              <label className="block text-lg font-semibold mb-2 text-teal-300">Email</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Ingresa tu email"
+                className="w-full p-3 mb-4 rounded-lg bg-gray-600 border border-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-400 placeholder-gray-400"
               />
-              <button
-                onClick={generateNewRobot}
-                className="absolute right-0 p-2 text-gray-400 hover:text-white transition-colors text-3xl font-bold"
-                aria-label="Siguiente Robot"
+            </>
+          )}
+
+          <label className="block text-lg font-semibold mb-2 text-teal-300">Contraseña</label>
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Ingresa tu contraseña"
+            className="w-full p-3 mb-2 rounded-lg bg-gray-600 border border-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-400 placeholder-gray-400"
+          />
+          {!isLoginView && passwordStrength && (
+            <div className="mb-4">
+              <div
+                className={`h-2 rounded-lg transition-all ${
+                  passwordStrength === "weak"
+                    ? "bg-red-500 w-1/3"
+                    : passwordStrength === "medium"
+                    ? "bg-yellow-500 w-2/3"
+                    : "bg-green-500 w-full"
+                }`}
+              />
+              <p
+                className={`mt-1 text-sm font-semibold ${
+                  passwordStrength === "weak"
+                    ? "text-red-400"
+                    : passwordStrength === "medium"
+                    ? "text-yellow-400"
+                    : "text-green-400"
+                }`}
               >
-                ›
-              </button>
+                {passwordStrength === "weak"
+                  ? "Contraseña débil"
+                  : passwordStrength === "medium"
+                  ? "Contraseña media"
+                  : "Contraseña fuerte"}
+              </p>
             </div>
-            <h3 className="text-xl font-semibold mt-4 text-teal-300">
-              {choosenRobot.name}
-            </h3>
-            <button
-              className="mt-6 px-8 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full font-bold shadow-lg hover:from-blue-600 hover:to-indigo-700 transition duration-300"
-              onClick={() => setModalMessage(`¡Listo para jugar con ${choosenRobot.name}!`)
-              }
-            >
-              ¡Elegir y Jugar!
-            </button>
-          </div>
-        </div>
+          )}
+
+          {!isLoginView && (
+            <>
+              <label className="block text-lg font-semibold mb-2 text-teal-300">Confirma la Contraseña</label>
+              <input
+                type="password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                placeholder="Confirma tu contraseña"
+                className="w-full p-3 mb-6 rounded-lg bg-gray-600 border border-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-400 placeholder-gray-400"
+              />
+            </>
+          )}
+
+          {!isLoginView && (
+            <div className="mb-6">
+              <label className="block text-lg font-semibold mb-2 text-teal-300">Elige tu Avatar</label>
+              <div className="flex items-center justify-center gap-6">
+                <button
+                  type="button"
+                  onClick={generateNewRobot}
+                  className="p-2 text-gray-400 hover:text-white transition-colors text-3xl font-bold cursor-pointer"
+                  aria-label="Anterior Robot"
+                >
+                  ‹
+                </button>
+
+                <div className="w-24 h-24 flex items-center justify-center">
+                  {!choosenRobot || !choosenRobot.id ? (
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-teal-400"></div>
+                  ) : (
+                    <img
+                      src={`https://robohash.org/${choosenRobot.id}.png`}
+                      alt="Robot Preview"
+                      className="w-24 h-24 rounded-full border-4 border-gray-600 shadow-lg"
+                    />
+                  )}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={generateNewRobot}
+                  className="p-2 text-gray-400 hover:text-white transition-colors text-3xl font-bold cursor-pointer"
+                  aria-label="Siguiente Robot"
+                >
+                  ›
+                </button>
+              </div>
+            </div>
+          )}
+
+          <button
+            type="submit"
+            className="w-full py-3 mb-4 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg font-bold hover:from-blue-600 hover:to-indigo-700 transition duration-300"
+          >
+            {isLoginView ? "Iniciar Sesión" : "Crear Cuenta"}
+          </button>
+        </form>
+
+        <p className="text-center text-gray-400 mt-4">
+          {isLoginView ? "¿No tienes una cuenta? " : "¿Ya tienes una cuenta? "}
+          <button
+            onClick={() => {
+              setIsLoginView(!isLoginView);
+              setFormData({ username: "", password: "", email: "", confirmPassword: "", avatar: "" });
+              setError("");
+              setPasswordStrength("");
+            }}
+            className="text-teal-400 hover:underline font-semibold"
+          >
+            {isLoginView ? "Regístrate" : "Inicia Sesión"}
+          </button>
+        </p>
       </div>
-      {modalMessage && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-          <div className="bg-gray-800 rounded-xl p-6 shadow-2xl text-center">
-            <h2 className="text-2xl font-bold mb-4">{modalMessage}</h2>
-            <button
-              onClick={() => setModalMessage(null)}
-              className="mt-4 px-6 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg font-bold hover:from-blue-600 hover:to-indigo-700 transition duration-300"
-            >
-              Cerrar
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

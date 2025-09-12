@@ -14,6 +14,7 @@ import { useState, useRef, useEffect } from 'react';
 import type { Variants, Transition } from 'framer-motion';
 import NotificationsPage from './pages/notificationsPage/NotificationsPages';
 
+
 // Define el orden de las páginas para la animación direccional
 const navigation = [
   { name: 'Inicio', path: '/' },
@@ -22,6 +23,7 @@ const navigation = [
   { name: 'Configuraciones', path: '/settings' },
   { name: 'Perfil', path: '/profile' },
   { name: 'Ranking', path: '/ranking' },
+  { name: 'Notificaciones', path: '/notifications' },
 ];
 
 // Mapea las rutas a un índice para comparar la posición
@@ -78,7 +80,19 @@ function App() {
       {location.pathname !== '/login'  && <Navbar />}
       <AnimatePresence mode="wait" custom={direction}>
         <Routes key={location.pathname} location={location}>
-          <Route path="/" element={<Navigate to="/login" />} />
+          {/* El cambio principal está aquí: la ruta "/" ahora renderiza directamente el login */}
+          <Route path="/" element={
+            <motion.div
+              variants={variants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              custom={direction}
+              className="w-full h-full absolute"
+            >
+              <Homepage />
+            </motion.div>
+          } />
           <Route path="/login" element={
             <motion.div
               variants={variants}
@@ -89,18 +103,6 @@ function App() {
               className="w-full h-full absolute"
             >
               <LoginPage />
-            </motion.div>
-          } />
-          <Route path="/home" element={
-            <motion.div
-              variants={variants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              custom={direction}
-              className="w-full h-full absolute"
-            >
-              <Homepage />
             </motion.div>
           } />
           <Route path="/game" element={
@@ -175,10 +177,11 @@ function App() {
               <RankingPage />
             </motion.div>
           } />
-          <Route path="*" element={<Navigate to="/home" />} />
+          {/* El comodín "*" ahora redirige al login en lugar del home */}
+          <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
       </AnimatePresence>
-      {location.pathname !== '/game'  && <Footer />}
+      {location.pathname !== '/login' && <Footer />}
     </div>
   )
 }

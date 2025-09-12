@@ -1,22 +1,10 @@
 import axios from "axios";
 import { API_URL } from "../constants/constants";
-
+import type { LoginData } from "../types/ILoginData";
+import type { SignUpData } from "../types/ISignUpData";
+import type { AuthResponse } from "../types/IAuthResponse";
 // Definimos los tipos de datos para las funciones
-interface LoginData {
-  username: string;
-  password: string;
-}
 
-interface SignUpData extends LoginData {
-  email: string;
-}
-
-interface AuthResponse {
-  access?: string;
-  refresh?: string;
-  message?: string;
-  detail?: string;
-}
 
 /**
  * Función que maneja el inicio de sesión del usuario.
@@ -50,6 +38,7 @@ export const signup = async (data: SignUpData): Promise<AuthResponse> => {
       username: data.username,
       password: data.password,
       email: data.email,
+      avatar: data.avatar,
     });
     return response.data;
   } catch (err) {

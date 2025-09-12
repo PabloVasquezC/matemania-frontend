@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import SuccessIcon from "../../utils/successIcon";
-import ErrorIcon from "../../utils/errorIcon";
+import SuccessIcon from "@utils/successIcon";
+import ErrorIcon from "@utils/errorIcon";
 
 // Define una interfaz para el tipo de datos de las notificaciones.
 // Esto es una buena práctica en TypeScript para asegurar la consistencia.
