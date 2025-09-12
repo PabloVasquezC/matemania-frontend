@@ -1,11 +1,9 @@
+import type { RackProps } from "../../types/IRackProps";
 import type { ITile } from "../../types/ITile";
 import Tile from "../tile/Tile";
 
 
-interface RackProps {
-  tiles: ITile[];
-  tileLocations: Record<string, string>;
-}
+
 
 const Rack = (props: RackProps) => {
   const { tiles } = props;
