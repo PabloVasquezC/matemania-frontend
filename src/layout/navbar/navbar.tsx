@@ -72,7 +72,7 @@ export default function Navbar( ) {
     <>
       <Disclosure
         as="nav"
-        className="shadow-xl fixed w-full bg-gray-800/60 backdrop-blur-md rounded-b-lg border-b border-gray-700/50 z-20 transition-all duration-300"
+        className="shadow-md fixed w-full bg-gray-800/60 backdrop-blur-md rounded-b-lg border-b border-gray-700/50 z-20 transition-all duration-300"
       >
         <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
           <div className="relative flex h-16 items-center justify-between">
