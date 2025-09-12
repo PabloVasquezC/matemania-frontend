@@ -5,17 +5,33 @@ import type { BoardProps } from "../../types/IBoardProps";
 
 
 export default function Board(props: BoardProps) {
-  const rows = 8;
-  const cols = 8;
+  const rows = 9;
+  const cols = 9;
+
+  // Nueva función para obtener la clase de la cruz
+  const getCrossClassNames = (centerRow: number, centerCol: number, currentRow: number, currentCol: number) => {
+    if (currentRow === centerRow || currentCol === centerCol) {
+      return "bg-lime-500/20";
+    }
+    return "";
+  };
 
   const renderSquares = () => {
     const squares = [];
+    // Define las coordenadas del centro de la cruz. Aquí, el centro es (4, 4) para un tablero de 9x9.
+    const centerRow = 4;
+    const centerCol = 4;
+
     for (let i = 0; i < rows * cols; i++) {
       const row = Math.floor(i / cols);
       const col = i % cols;
       const squareId = `square-${row}-${col}`;
+
+      // Obtiene la clase de la cruz para el cuadro actual
+      const crossClass = getCrossClassNames(centerRow, centerCol, row, col);
+
       squares.push(
-        <BoardSquare key={squareId} id={squareId}>
+        <BoardSquare key={squareId} id={squareId} extraClassNames={crossClass}>
           {props.tiles
             .filter((t) => props.tileLocations[t.id] === squareId)
             .map((tile) => (
@@ -26,6 +42,8 @@ export default function Board(props: BoardProps) {
     }
     return squares;
   };
+
+  
 
   return (
     <div
