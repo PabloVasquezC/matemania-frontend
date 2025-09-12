@@ -1,17 +1,19 @@
 import { useDroppable } from "@dnd-kit/core";
 import type { ReactNode } from "react";
+import './boardSquare.css';
 
 interface BoardSquareProps {
   id: string;
   children?: ReactNode;
+  extraClassNames?: string;
 }
 
-function BoardSquare({ id, children }: BoardSquareProps) {
+function BoardSquare({ id, children, extraClassNames }: BoardSquareProps) {
   const { isOver, setNodeRef } = useDroppable({ id });
 
   const style = {
     // Si la casilla está encima de una ficha, aplica un degradado de acento
-    background: isOver ? "linear-gradient(to right, rgba(59, 130, 246, 0.4), rgba(99, 102, 241, 0.4))" : "transparent",
+    background: isOver ? `${extraClassNames} linear-gradient(to right, rgba(59, 130, 246, 0.4), rgba(99, 102, 241, 0.4))` : "transparent",
   };
 
   return (
