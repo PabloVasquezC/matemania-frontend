@@ -29,7 +29,7 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Navbar() {
+export default function Navbar( ) {
 
 
   console.log("Token en Navbar:", localStorage.getItem("access_token")); // Verifica si el token está presente
@@ -39,11 +39,11 @@ export default function Navbar() {
     null
   );
   const [isLoading, setIsLoading] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn] = useState(false);
 
-  function handleIsLoggedInChange(loggedIn: boolean) {
-    setIsLoggedIn(!loggedIn);
-  }
+  // function handleIsLoggedInChange(loggedIn: boolean) {
+  //   setIsLoggedIn(!loggedIn);
+  // }
 
   useEffect(() => {
     const fetchProfile = async () => {
