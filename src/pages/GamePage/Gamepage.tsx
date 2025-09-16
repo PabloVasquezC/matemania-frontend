@@ -6,8 +6,8 @@ import {
   useSensors,
   type DragEndEvent,
 } from "@dnd-kit/core";
-import Rack from "../../components/rack/Rack";
-import Board from "../../components/board/Board";
+import Rack from "../../components/Rack/Rack";
+import Board from "../../components/Board/Board";
 import { useState, useEffect } from "react";
 
 import type { ITile } from "../../types/ITile";
@@ -35,7 +35,7 @@ function Gamepage() {
 
   // Genera las fichas iniciales
   useEffect(() => {
-    const initialTiles = generateRandomTiles(7);
+    const initialTiles = generateRandomTiles(10);
     setTiles(initialTiles);
 
     const initialLocations: Record<string, string> = {};
@@ -89,7 +89,7 @@ function Gamepage() {
     <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white font-sans p-6">
         {/* Tablero */}
-        <div className="mb-8 p-4 md:p-6 bg-gray-800/60 backdrop-blur-md rounded-2xl shadow-2xl border border-gray-700/50">
+        <div className="mt-20 mb-20 bg-gradient-to-r from-blue-800 to-teal-400 p-2 md:p-6  backdrop-blur-md rounded-2xl shadow-2xl border border-gray-700/50">
           <Board tiles={tiles} tileLocations={tileLocations} />
         </div>
 

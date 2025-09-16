@@ -3,19 +3,17 @@ import { useNavigate } from "react-router-dom";
 import type { IRoboHash } from "../../types/IRoboHash";
 import SuccessIcon from "@utils/successIcon";
 import ErrorIcon from "@utils/errorIcon";
-import { API_URL } from "@constants/constants";
 import handleGenerateRandomRobot from "@utils/handleGenerateRandomRobots";
 import { login, signup } from "@services/authService";
 import logo from "@assets/logo.png";
+import { loginSuccessSound } from "../../soundsManager";
 
 function LoginPage() {
-  console.log("API_URL:", API_URL);
-
   const navigate = useNavigate();
   const [isLoginView, setIsLoginView] = useState(true);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const [choosenRobot, setChosenRobot] = useState<IRoboHash>({id: "", name: ""});
+  const [choosenRobot, setChosenRobot] = useState<IRoboHash>({ id: "", name: "" });
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -23,7 +21,6 @@ function LoginPage() {
     confirmPassword: "",
     avatar: "",
   });
-
   const [passwordStrength, setPasswordStrength] = useState<"weak" | "medium" | "strong" | "">("");
 
   const generateNewRobot = useCallback(() => {
@@ -36,25 +33,23 @@ function LoginPage() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
-    if (name === "password") {
-      evaluatePasswordStrength(value);
-    }
-
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    if (name === "password") evaluatePasswordStrength(value);
+    setFormData({ ...formData, [name]: value });
   };
 
   const evaluatePasswordStrength = (password: string) => {
-    if (password.length < 6) {
-      setPasswordStrength("weak");
-    } else if (password.match(/[A-Z]/) && password.match(/[0-9]/) && password.length >= 8) {
+    if (password.length < 6) setPasswordStrength("weak");
+    else if (password.match(/[A-Z]/) && password.match(/[0-9]/) && password.length >= 8)
       setPasswordStrength("strong");
-    } else {
-      setPasswordStrength("medium");
-    }
+    else setPasswordStrength("medium");
+  };
+
+  const playLoginSuccess = () => {
+    loginSuccessSound.play();
+    loginSuccessSound.once("playerror", () => {
+      console.error("Error reproduciendo audio. Reintentando...");
+      loginSuccessSound.play();
+    });
   };
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -68,7 +63,12 @@ function LoginPage() {
       localStorage.setItem("refresh_token", response.refresh || "");
       localStorage.setItem("username", formData.username);
       setMessage("Login exitoso. ¡Bienvenido!");
-      navigate("/");
+
+      // 🔹 reproducir sonido antes de navegar
+      playLoginSuccess();
+
+      // 🔹 cambiar de página con pequeño delay para que suene
+      setTimeout(() => navigate("/"), 150);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido.");
       console.error(err);
@@ -100,9 +100,9 @@ function LoginPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4">
-      <img src={logo} alt="Logo" className="w-80 h-80 animate-fadeIn " />
-      <h1 className=" text-5xl md:text-6xl font-extrabold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500 animate-pulse">
-          CogniTiles
+      <img src={logo} alt="Logo" className="w-80 h-80 animate-fadeIn" />
+      <h1 className="text-5xl md:text-6xl font-extrabold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500 animate-pulse">
+        CogniTiles
       </h1>
       <h1 className="text-5xl md:text-6xl font-extrabold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500 animate-pulse">
         {isLoginView ? "Iniciar Sesión" : "Crear tu Perfil"}
@@ -114,6 +114,7 @@ function LoginPage() {
           <span className="text-green-300 font-medium">{message}</span>
         </div>
       )}
+
       {error && (
         <div className="w-full max-w-lg mb-4 p-4 rounded-lg bg-red-900 border border-red-700 flex items-center justify-center space-x-2 shadow-lg">
           <ErrorIcon />
@@ -156,6 +157,7 @@ function LoginPage() {
             placeholder="Ingresa tu contraseña"
             className="w-full p-3 mb-2 rounded-lg bg-gray-600 border border-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-400 placeholder-gray-400"
           />
+
           {!isLoginView && passwordStrength && (
             <div className="mb-4">
               <div
@@ -252,6 +254,7 @@ function LoginPage() {
               setFormData({ username: "", password: "", email: "", confirmPassword: "", avatar: "" });
               setError("");
               setPasswordStrength("");
+              loginSuccessSound.play(); // sonido directo en click
             }}
             className="text-teal-400 hover:underline font-semibold"
           >

@@ -44,6 +44,16 @@ export const TILES_POINTS = {
     '9': 1,
 };
 
+export const navigation = [
+    { name: 'Inicio', path: '/' },
+    { name: 'Jugar', path: '/game' },
+    { name: 'Acerca de', path: '/about' },
+    { name: 'Configuraciones', path: '/settings' },
+    { name: 'Perfil', path: '/profile' },
+    { name: 'Ranking', path: '/ranking' },
+    { name: 'Notificaciones', path: '/notifications' },
+];
+
 
 export const TILES: ITile[] =[
     {

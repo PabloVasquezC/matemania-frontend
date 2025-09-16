@@ -17,6 +17,7 @@ export const login = async (data: LoginData): Promise<AuthResponse> => {
       username: data.username,
       password: data.password,
     });
+    
     return response.data;
   } catch (err) {
     if (axios.isAxiosError(err) && err.response) {

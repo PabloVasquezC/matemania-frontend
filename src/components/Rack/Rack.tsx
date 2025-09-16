@@ -1,6 +1,6 @@
 import type { RackProps } from "../../types/IRackProps";
 import type { ITile } from "../../types/ITile";
-import Tile from "../tile/Tile";
+import Tile from "../Tile/Tile";
 
 
 

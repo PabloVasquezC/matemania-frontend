@@ -1,6 +1,6 @@
-import type { LoginData } from "./ILoginData";
+import type { ILoginData} from "./ILoginData";
 
-export interface SignUpData extends LoginData {
+export interface SignUpData extends ILoginData {
   email: string;
   avatar?: string; // URL del avatar, opcional
 }
