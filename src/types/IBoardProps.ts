@@ -1,6 +1,6 @@
 import type { ITile } from "./ITile";
 
-export interface BoardProps {
+export interface IBoardProps {
   tiles: ITile[];
   tileLocations: Record<string, string>;
 }

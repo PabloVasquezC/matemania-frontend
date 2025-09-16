@@ -13,7 +13,7 @@ import { useState, useEffect } from "react";
 import logo from "../../assets/logo.png";
 import { getMyProfile } from "@services/profileService";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
-import { Terminal } from "@components/terminal/Terminal";
+import { Terminal } from "@components/Terminal/Terminal";
 
 const navigation = [
   { name: "Inicio", path: "/" },

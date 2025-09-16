@@ -1,12 +1,12 @@
 import BoardSquare from "./boardSquare/boardSquare";
-import Tile from "../tile/Tile";
-import type { BoardProps } from "../../types/IBoardProps";
+import Tile from "../Tile/Tile";
+import type { IBoardProps } from "../../types/IBoardProps";
 
 
 
-export default function Board(props: BoardProps) {
-  const rows = 8;
-  const cols = 8;
+export default function Board(props: IBoardProps) {
+  const rows = 11;
+  const cols = 11;
 
   const renderSquares = () => {
     const squares = [];
@@ -29,7 +29,16 @@ export default function Board(props: BoardProps) {
 
   return (
     <div
-      className="grid w-auto h-auto max-w-xl aspect-square bg-gray-800 rounded-lg shadow-xl border-4 border-gray-700 mx-auto "
+      className="
+        grid  
+        aspect-square 
+        bg-gray-800 
+        rounded-lg 
+        shadow-xl 
+        border-4 
+        border-gray-700 
+        mx-auto
+        "
       style={{
         gridTemplateColumns: `repeat(${cols}, 1fr)`,
         gridTemplateRows: `repeat(${rows}, 1fr)`,

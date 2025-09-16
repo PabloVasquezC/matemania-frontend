@@ -1,30 +1,21 @@
 import { Route, Routes, useLocation, Navigate } from 'react-router-dom';
 import './App.css';
 import Navbar from './layout/navbar/navbar';
-import Homepage from './pages/homepage/homepage';
-import AboutPage from './pages/aboutpage/aboutpage';
-import SettingsPage from './pages/settingspage/settingspage';
-import Gamepage from './pages/gamepage/Gamepage';
+import Homepage from './pages/HomePage/HomePage';
+import AboutPage from './pages/AboutPage/aboutpage';
+import SettingsPage from './pages/SettingsPage/SettingsPage';
+import Gamepage from './pages/GamePage/Gamepage';
 import Footer from './layout/footer/Footer';
-import LoginPage from './pages/loginPage/loginPage';
-import ProfilePage from './pages/profilepage/profilepage';
-import RankingPage from './pages/rankingPage/rankingPage';
+import LoginPage from './pages/LoginPage/LoginPage';
+import ProfilePage from './pages/ProfilePage/profilepage';
+import RankingPage from './pages/RankingPage/rankingPage';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
-import type { Variants, Transition } from 'framer-motion';
-import NotificationsPage from './pages/notificationsPage/NotificationsPages';
-
-
+import NotificationsPage from './pages/NotifiationPage/NotificationsPages';
+import { navigation } from './constants/constants';
+import { variants } from './utils/framer-motion-utils';
 // Define el orden de las páginas para la animación direccional
-const navigation = [
-  { name: 'Inicio', path: '/' },
-  { name: 'Jugar', path: '/game' },
-  { name: 'Acerca de', path: '/about' },
-  { name: 'Configuraciones', path: '/settings' },
-  { name: 'Perfil', path: '/profile' },
-  { name: 'Ranking', path: '/ranking' },
-  { name: 'Notificaciones', path: '/notifications' },
-];
+
 
 // Mapea las rutas a un índice para comparar la posición
 const pathIndexMap: Record<string, number> = navigation.reduce((map, item, index) => {
@@ -32,30 +23,7 @@ const pathIndexMap: Record<string, number> = navigation.reduce((map, item, index
   return map;
 }, {} as Record<string, number>);
 
-// Variantes de animación para las transiciones
-const transition: Transition = {
-  type: "tween",
-  ease: "anticipate",
-  duration: 0.5
-};
 
-const variants: Variants = {
-  enter: (direction: number) => ({
-    x: direction > 0 ? "100%" : "-100%",
-    opacity: 0,
-    transition
-  }),
-  center: {
-    x: 0,
-    opacity: 1,
-    transition
-  },
-  exit: (direction: number) => ({
-    x: direction < 0 ? "100%" : "-100%",
-    opacity: 0,
-    transition
-  }),
-};
 
 function App() {
   const location = useLocation();

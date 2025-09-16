@@ -7,5 +7,5 @@ export interface IUser {
     updatedAt: Date;
     isActive: boolean;
     role: 'user' | 'admin';
-    profilePicture?: string; // Optional field for user profile picture
+    profilePicture?: string; 
 }

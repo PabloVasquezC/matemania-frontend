@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import logo from "@assets/logo.png";
+import "./home-page.css";
 
 export default function HomePage() {
   const [userName, setUserName] = useState("");
@@ -31,9 +32,29 @@ export default function HomePage() {
         )}
       </header>
 
-      <main className="w-full max-w-2xl bg-gray-800 rounded-2xl shadow-2xl p-8 md:p-12 text-center transform transition-all duration-500 hover:scale-[1.01]">
+      <main 
+        className="
+          w-full 
+          max-w-2xl 
+          bg-gray-800 
+          rounded-2xl 
+          shadow-2xl 
+          p-8 md:p-12 
+          text-center 
+          transform 
+          transition-all 
+          duration-500 
+          hover:scale-[1.01]
+          "
+        >
         <section className="mb-6">
-          <h2 className="text-3xl md:text-4xl font-bold text-teal-400 mb-4 animate-slideIn">
+          <h2 className="
+            text-3xl 
+            md:text-4xl 
+            font-bold 
+            text-teal-400 
+            mb-4 
+            animate-slideIn">
             Pon a prueba tu mente
           </h2>
           <p className="text-base md:text-lg text-gray-300 leading-relaxed animate-slideIn">
@@ -48,25 +69,6 @@ export default function HomePage() {
           ¡Jugar ahora!
         </Link>
       </main>
-      
-      {/* Definiciones de animaciones de Tailwind CSS */}
-      <style>{`
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(-20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes pulse {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.05); }
-        }
-        @keyframes slideIn {
-          from { opacity: 0; transform: translateX(-20px); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-        .animate-fadeIn { animation: fadeIn 1s ease-out; }
-        .animate-pulse { animation: pulse 2s infinite; }
-        .animate-slideIn { animation: slideIn 1s ease-out; }
-      `}</style>
 
     </div>
   );
