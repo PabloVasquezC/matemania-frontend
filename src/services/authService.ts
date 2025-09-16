@@ -1,8 +1,8 @@
 import axios from "axios";
 import { API_URL } from "../constants/constants";
-import type { LoginData } from "../types/ILoginData";
 import type { SignUpData } from "../types/ISignUpData";
-import type { AuthResponse } from "../types/IAuthResponse";
+import type { ILoginData } from "../types/ILoginData";
+import type { IAuthResponse } from "../types/IAuthResponse";
 // Definimos los tipos de datos para las funciones
 
 
@@ -11,7 +11,7 @@ import type { AuthResponse } from "../types/IAuthResponse";
  * @param data Los datos de inicio de sesión (usuario y contraseña).
  * @returns Una promesa con la respuesta de la API.
  */
-export const login = async (data: LoginData): Promise<AuthResponse> => {
+export const login = async (data: ILoginData): Promise<IAuthResponse> => {
   try {
     const response = await axios.post(`${API_URL}token/`, {
       username: data.username,
@@ -33,7 +33,7 @@ export const login = async (data: LoginData): Promise<AuthResponse> => {
  * @param data Los datos de registro (usuario, email y contraseñas).
  * @returns Una promesa con la respuesta de la API.
  */
-export const signup = async (data: SignUpData): Promise<AuthResponse> => {
+export const signup = async (data: SignUpData): Promise<IAuthResponse> => {
   try {
     const response = await axios.post(`${API_URL}signup/`, {
       username: data.username,

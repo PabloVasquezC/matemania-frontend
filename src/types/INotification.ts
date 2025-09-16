@@ -4,5 +4,5 @@ export interface INotification {
   title: string;
   message: string;
   timestamp: string;
-  ead: boolean;
+  read: boolean;
 }

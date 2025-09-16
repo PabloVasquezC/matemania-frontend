@@ -1,5 +1,6 @@
+import type { IPlayer } from "../../types/IPlayer"
 
-function PlayerRack({player}) {
+function PlayerRack({player}: {player: IPlayer}) {
   return (
     <div>
         <h2>{player.name}'s Rack</h2>
