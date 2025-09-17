@@ -7,11 +7,17 @@ const Tile = ({ id, value, points, bgColor }: ITile) => {
     attributes, 
     listeners, 
     setNodeRef, 
-    transform 
+    transform, 
+    isDragging
   } = useDraggable({ id });
 
   const style = {
     transform: transform ? CSS.Translate.toString(transform) : undefined,
+    // Aplica una sombra suave y azulada cuando está en drag
+    boxShadow: isDragging
+      ? "0px 6px 15px rgba(0, 150, 255, 0.7)" // Sombra de arrastre
+      : "0px 1px 2px rgba(0, 0, 0, 0.1)", // Sombra por defecto, si la tienes
+    zIndex: isDragging ? 9999 : 1, // Asegura que quede encima
   };
 
   return (
@@ -21,9 +27,9 @@ const Tile = ({ id, value, points, bgColor }: ITile) => {
       {...listeners}
       {...attributes}
       className={`
-        hover:shadow-xl 
         relative 
-        cursor-pointer 
+        cursor-grab
+        active:cursor-grabbing
         font-bold 
         text-2xl
         md:text-3xl 
@@ -31,11 +37,13 @@ const Tile = ({ id, value, points, bgColor }: ITile) => {
         items-center 
         justify-center 
         rounded-sm 
-        shadow-black 
-        shadow-sm 
         w-10
         h-10
-        ${bgColor}`}
+        m-1
+        transition-shadow 
+        duration-200
+        ${bgColor}
+      `}
     >
       <span className="text-gray-700">{value}</span>
       <span className="text-gray-800 text-xs absolute bottom-0.5 right-0.5">
