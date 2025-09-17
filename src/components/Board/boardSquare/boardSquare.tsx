@@ -1,37 +1,47 @@
 import { useDroppable } from "@dnd-kit/core";
 import type { IBoardSquareProps } from "../../../types/IBoardSquareProps";
 
-
-
-function BoardSquare({ id, children}: IBoardSquareProps) {
-
+function BoardSquare({ id, children, isInCross }: IBoardSquareProps) {
   const { isOver, setNodeRef } = useDroppable({ id });
 
+  const baseClasses = `
+    border 
+    border-gray-700 
+    shadow-inner 
+    h-8 
+    w-8 
+    md:w-14 
+    md:h-14 
+    flex 
+    items-center 
+    justify-center 
+    transition-colors 
+    duration-200 
+  `;
 
-  const style = {
-    // Si la casilla está encima de una ficha, aplica un degradado de acento
-    background: isOver ? "linear-gradient(to right, rgba(59, 130, 246, 0.4), rgba(99, 102, 241, 0.4))" : "transparent",
-  };
+  const crossClasses = `
+    bg-gradient-to-br from-purple-500/30 to-rose-500/30 
+    border-purple-600 
+    hover:bg-gradient-to-br hover:from-purple-500/50 hover:to-rose-500/50
+  `;
+
+  const normalClasses = `
+    bg-gray-800/20 
+    hover:bg-gray-700/30
+  `;
+
+  const overClasses = `
+    bg-gradient-to-r from-blue-500/40 to-indigo-500/40
+  `;
 
   return (
     <div
       ref={setNodeRef}
-      style={style}
-      className="
-        border 
-        border-gray-700 
-        h-8 
-        w-8 
-        md:w-14 
-        md:h-14 
-        
-        flex 
-        items-center 
-        justify-center 
-        transition-colors 
-        duration-200 
-        hover:bg-gray-700/30
-        "
+      className={`
+        ${baseClasses}
+        ${isInCross ? crossClasses : normalClasses}
+        ${isOver ? overClasses : ''}
+      `}
     >
       {children}
     </div>
