@@ -22,20 +22,19 @@ const Tile = ({ id, value, points, bgColor }: ITile) => {
       {...attributes}
       className={`
         hover:shadow-xl 
-        relative m-2 
+        relative 
         cursor-pointer 
         font-bold 
-        text-3xl 
+        text-2xl
+        md:text-3xl 
         flex 
         items-center 
         justify-center 
         rounded-sm 
         shadow-black 
         shadow-sm 
-        h-6 
-        w-6
-        md:w-12 
-        md:h-12 
+        w-10
+        h-10
         ${bgColor}`}
     >
       <span className="text-gray-700">{value}</span>
