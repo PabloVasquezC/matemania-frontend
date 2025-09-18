@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation, Navigate } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import './App.css';
 import Navbar from './layout/navbar/navbar';
 import Homepage from './pages/HomePage/HomePage';
@@ -14,16 +14,13 @@ import { useState, useRef, useEffect } from 'react';
 import NotificationsPage from './pages/NotifiationPage/NotificationsPages';
 import { navigation } from './constants/constants';
 import { variants } from './utils/framer-motion-utils';
-// Define el orden de las páginas para la animación direccional
-
+import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 
 // Mapea las rutas a un índice para comparar la posición
 const pathIndexMap: Record<string, number> = navigation.reduce((map, item, index) => {
   map[item.path] = index;
   return map;
 }, {} as Record<string, number>);
-
-
 
 function App() {
   const location = useLocation();
@@ -34,21 +31,17 @@ function App() {
     const prevIndex = pathIndexMap[prevPathRef.current] || 0;
     const currentIndex = pathIndexMap[location.pathname] || 0;
     
-    // 1 si la nueva página está "a la derecha" (avanzando)
-    // -1 si la nueva página está "a la izquierda" (retrocediendo)
     const newDirection = currentIndex - prevIndex;
     setDirection(newDirection);
 
-    // Actualiza la referencia para la próxima navegación
     prevPathRef.current = location.pathname;
   }, [location]);
 
   return (
     <div className="App h-screen flex flex-col justify-between bg-gray-900 text-white overflow-hidden">
-      {location.pathname !== '/login'  && <Navbar />}
+      {location.pathname !== '/login' && <Navbar />}
       <AnimatePresence mode="wait" custom={direction}>
         <Routes key={location.pathname} location={location}>
-          {/* El cambio principal está aquí: la ruta "/" ahora renderiza directamente el login */}
           <Route path="/" element={
             <motion.div
               variants={variants}
@@ -145,8 +138,19 @@ function App() {
               <RankingPage />
             </motion.div>
           } />
-          {/* El comodín "*" ahora redirige al login en lugar del home */}
-          <Route path="*" element={<Navigate to="/login" />} />
+          {/* Aquí va la página 404 */}
+          <Route path="*" element={
+            <motion.div
+              variants={variants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              custom={direction}
+              className="w-full h-full absolute"
+            >
+              <NotFoundPage />
+            </motion.div>
+          } />
         </Routes>
       </AnimatePresence>
       {location.pathname !== '/login' && <Footer />}
