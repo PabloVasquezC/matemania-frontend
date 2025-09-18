@@ -41,9 +41,10 @@ function App() {
     <div className="App h-screen flex flex-col justify-between bg-gray-900 text-white overflow-hidden">
       {location.pathname !== '/login' && <Navbar />}
       <AnimatePresence mode="wait" custom={direction}>
-        <Routes key={location.pathname} location={location}>
+        <Routes location={location}>
           <Route path="/" element={
             <motion.div
+              key={location.pathname}
               variants={variants}
               initial="enter"
               animate="center"
@@ -56,6 +57,7 @@ function App() {
           } />
           <Route path="/login" element={
             <motion.div
+              key={location.pathname}
               variants={variants}
               initial="enter"
               animate="center"
@@ -68,6 +70,7 @@ function App() {
           } />
           <Route path="/game" element={
             <motion.div
+              key={location.pathname}
               variants={variants}
               initial="enter"
               animate="center"
@@ -80,6 +83,7 @@ function App() {
           } />
           <Route path="/about" element={
             <motion.div
+              key={location.pathname}
               variants={variants}
               initial="enter"
               animate="center"
@@ -92,6 +96,7 @@ function App() {
           } />
           <Route path="/settings" element={
             <motion.div
+              key={location.pathname}
               variants={variants}
               initial="enter"
               animate="center"
@@ -104,6 +109,7 @@ function App() {
           } />
           <Route path="/profile" element={
             <motion.div
+              key={location.pathname}
               variants={variants}
               initial="enter"
               animate="center"
@@ -116,6 +122,7 @@ function App() {
           } />
           <Route path="/notifications" element={
             <motion.div
+              key={location.pathname}
               variants={variants}
               initial="enter"
               animate="center"
@@ -128,6 +135,7 @@ function App() {
           } />
           <Route path="/ranking" element={
             <motion.div
+              key={location.pathname}
               variants={variants}
               initial="enter"
               animate="center"
@@ -138,9 +146,9 @@ function App() {
               <RankingPage />
             </motion.div>
           } />
-          {/* Aquí va la página 404 */}
           <Route path="*" element={
             <motion.div
+              key={location.pathname}
               variants={variants}
               initial="enter"
               animate="center"
