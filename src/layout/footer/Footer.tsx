@@ -6,7 +6,7 @@ function Footer() {
       <div className="container mx-auto text-center">
         <p className="text-sm flex items-center justify-center">
           <span>
-            CogniTiles fue Hecho con ❤️ & ☕ por Pablo Vásquez.
+            <em className="bg-gradient-to-br from-purple-500 to-rose-500 text-transparent bg-clip-text">CogniTiles</em> fue hecho con ❤️ & ☕ por Pablo Vásquez.
           </span>
           <a
             href="https://github.com/PabloVazquez"
