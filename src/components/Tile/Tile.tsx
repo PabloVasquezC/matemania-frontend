@@ -3,13 +3,8 @@ import { CSS } from "@dnd-kit/utilities";
 import type { ITile } from "../../types/ITile";
 
 const Tile = ({ id, value, points, bgColor }: ITile) => {
-  const { 
-    attributes, 
-    listeners, 
-    setNodeRef, 
-    transform, 
-    isDragging
-  } = useDraggable({ id });
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useDraggable({ id });
 
   const style = {
     transform: transform ? CSS.Translate.toString(transform) : undefined,
@@ -31,21 +26,28 @@ const Tile = ({ id, value, points, bgColor }: ITile) => {
         cursor-grab
         active:cursor-grabbing
         font-bold 
-        text-2xl
+        text-xl
+          sm:text-2xl
         md:text-3xl 
         flex 
         items-center 
         justify-center 
         rounded-sm 
-        w-10
-        h-10
+        h-6 
+        w-6 
+        sm:h-10 
+        sm:w-10 
+        lg:h-12 
+        lg:w-12 
+        md:w-14 
+        md:h-14 
         m-1
         transition-shadow 
         duration-200
         ${bgColor}
       `}
     >
-      <span className="text-gray-700">{value}</span>
+      <span className="text-black">{value}</span>
       <span className="text-gray-800 text-xs absolute bottom-0.5 right-0.5">
         {points}
       </span>
