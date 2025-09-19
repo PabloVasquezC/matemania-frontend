@@ -1,16 +1,18 @@
+import type { IUserState } from "../types/IUserState";
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
 
-export const useUserStore = create(
+
+export const useUserStore = create<IUserState>()(
   persist(
     (set) => ({
-      user: null, // El estado inicial ahora es null, ya que el middleware lo cargará
+      user: null,
       setUser: (user) => set({ user }),
       clearUser: () => set({ user: null }),
     }),
     {
-      name: "user-storage", // Nombre de la clave en localStorage
-      getStorage: () => localStorage, // (Opcional) Especifica el almacenamiento a usar
+      name: "user-storage",
+      storage: createJSONStorage(() => localStorage),
     }
   )
 );

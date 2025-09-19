@@ -14,6 +14,7 @@ import logo from "../../assets/logo.png";
 
 import { Terminal } from "@components/Terminal/Terminal";
 import { useUserStore } from "store/useUserStore";
+import type { IUserState } from "../../types/IUserState";
 
 
 const navigation = [
@@ -32,7 +33,7 @@ function classNames(...classes: string[]) {
 
 export default function Navbar( ) {
 
-  const user = useUserStore((state) => state.user);
+  const user = useUserStore((state: IUserState) => state.user);
   // console.log("Token en Navbar:", localStorage.getItem("access_token")); // Verifica si el token está presente
   const location = useLocation();
   const [showTerminal, setShowTerminal] = useState(false);
@@ -79,7 +80,7 @@ export default function Navbar( ) {
                   
                     <div className=" rounded-full h-10 w-10 border-t-2 border-b-2 border-teal-400">
                     <img
-                      src={user.avatar}
+                      src={user?.avatar}
                       alt="User Avatar"
                       className=" h-10 w-10 rounded-full border border-gray-600 cursor-pointer"
                     />

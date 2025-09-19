@@ -2,10 +2,11 @@ import { Link } from "react-router-dom";
 import logo from "@assets/logo.png";
 import "./home-page.css";
 import { useUserStore } from "store/useUserStore";
+import type { IUserState } from "../../types/IUserState";
 
 export default function HomePage() {
-  
-    const user = useUserStore((state) => state.user);
+
+    const user = useUserStore((state: IUserState) => state.user);
 
 
   // console.log("Usuario en HomePage:", useUserStore.getState().user); // Verifica si el usuario está presente
