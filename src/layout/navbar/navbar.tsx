@@ -7,15 +7,20 @@ import {
   MenuItem,
   MenuItems,
 } from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import {
+  Bars3Icon,
+  BellIcon,
+  UserIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import { Link, useLocation } from "react-router-dom";
-import {  useState } from "react";
+import { useState } from "react";
 import logo from "../../assets/logo.png";
 
 import { Terminal } from "@components/Terminal/Terminal";
 import { useUserStore } from "store/useUserStore";
 import type { IUserState } from "../../types/IUserState";
-
+import LogoutButton from "./LogoutButton";
 
 const navigation = [
   { name: "Inicio", path: "/" },
@@ -31,20 +36,16 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Navbar( ) {
-
+export default function Navbar() {
   const user = useUserStore((state: IUserState) => state.user);
+
   // console.log("Token en Navbar:", localStorage.getItem("access_token")); // Verifica si el token está presente
   const location = useLocation();
   const [showTerminal, setShowTerminal] = useState(false);
-  
-  const [isLoggedIn] = useState(false);
 
   // function handleIsLoggedInChange(loggedIn: boolean) {
   //   setIsLoggedIn(!loggedIn);
   // }
-
-  
 
   return (
     <>
@@ -77,13 +78,18 @@ export default function Navbar( ) {
               </button>
               <Menu as="div" className=" relative ml-3">
                 <MenuButton className=" relative flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 transition-transform duration-200 transform hover:scale-110">
-                  
-                    <div className=" rounded-full h-10 w-10 border-t-2 border-b-2 border-teal-400">
-                    <img
-                      src={user?.avatar}
-                      alt="User Avatar"
-                      className=" h-10 w-10 rounded-full border border-gray-600 cursor-pointer"
-                    />
+                  <div className=" rounded-full h-10 w-10 border-t-2 border-b-2 border-teal-400">
+                    {user && user.avatar ? (
+                      <img
+                        className="h-10 w-10 rounded-full object-cover"
+                        src={user.avatar}
+                        alt="User Avatar"
+                      />
+                    ) : (
+                      <div className="h-10 w-10 rounded-full bg-gray-600 flex items-center justify-center">
+                        <UserIcon className="h-6 w-6 text-white" />
+                      </div>
+                    )}
                   </div>
                 </MenuButton>
                 <MenuItems className=" absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-gray-800 py-1 outline -outline-offset-1 outline-white/10">
@@ -104,12 +110,16 @@ export default function Navbar( ) {
                     </Link>
                   </MenuItem>
                   <MenuItem>
-                    <Link
-                      to={isLoggedIn ? "/logout" : "/login"}
-                      className="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5"
-                    >
-                      {isLoggedIn ? "Cerrar Sesión" : "Iniciar Sesión"}
-                    </Link>
+                    {user ? (
+                      <LogoutButton />
+                    ) : (
+                      <Link
+                        to="/login"
+                        className="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5"
+                      >
+                        Iniciar Sesión
+                      </Link>
+                    )}
                   </MenuItem>
                 </MenuItems>
               </Menu>

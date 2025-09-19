@@ -22,7 +22,7 @@ export default function HomePage() {
         </h1>
         {user ? (
   <p className="text-lg md:text-xl text-gray-400">
-    <span className="font-bold text-teal-300">¡Hola, {user.username}!</span> Bienvenido a CogniTiles,
+    <span className="font-bold text-teal-300">¡Hola {user.username}!</span> Bienvenido a CogniTiles,
   </p>
 ) : (
   <p className="text-lg md:text-xl text-gray-400">
