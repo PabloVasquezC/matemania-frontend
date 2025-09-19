@@ -1,35 +1,33 @@
-import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import logo from "@assets/logo.png";
 import "./home-page.css";
+import { useUserStore } from "store/useUserStore";
 
 export default function HomePage() {
-  const [userName, setUserName] = useState("");
+  
+    const user = useUserStore((state) => state.user);
 
-  useEffect(() => {
-    // Lee el nombre de usuario del localStorage al cargar el componente
-    const storedUsername = localStorage.getItem("username");
-    if (storedUsername) {
-      setUserName(storedUsername);
-    }
-  }, []);
+
+  // console.log("Usuario en HomePage:", useUserStore.getState().user); // Verifica si el usuario está presente
+ 
 
   return (
+    console.log("Usuario en HomePage:", user), // Verifica si el usuario está presente
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4 font-sans">
       <img src={logo} alt="Logo" className="w-100 h-100 mb-4 animate-fadeIn" />
       <header className="mb-10 text-center animate-fadeIn">
         <h1 className="text-5xl md:text-6xl font-extrabold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500 animate-pulse">
           CogniTiles
         </h1>
-        {userName ? (
-          <p className="text-lg md:text-xl text-gray-400">
-            <span className="font-bold text-teal-300">¡Hola, {userName}!</span> Bienvenido de nuevo.
-          </p>
-        ) : (
-          <p className="text-lg md:text-xl text-gray-400">
-            Donde las letras se convierten en números y el ingenio matemático es tu mejor jugada.
-          </p>
-        )}
+        {user ? (
+  <p className="text-lg md:text-xl text-gray-400">
+    <span className="font-bold text-teal-300">¡Hola, {user.username}!</span> Bienvenido a CogniTiles,
+  </p>
+) : (
+  <p className="text-lg md:text-xl text-gray-400">
+    Donde las letras se convierten en números y el ingenio matemático es tu mejor jugada.
+  </p>
+)}
       </header>
 
       <main 
@@ -65,7 +63,7 @@ export default function HomePage() {
           </p>
         </section>
 
-        <Link to="/game" className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
+        <Link to="/gamemenu" className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
           ¡Jugar ahora!
         </Link>
       </main>

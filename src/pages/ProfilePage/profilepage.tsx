@@ -1,14 +1,15 @@
-function Profilepage() {
-  const user = {
-    username: localStorage.getItem('username') || 'Invitado',
-    avatarUrl: `https://robohash.org/${localStorage.getItem('userAvatar')}.png`,
-    gamesPlayed: 42,
-    wins: 25,
-    rank: 12,
-    bestEquation: "7 + 5 * 3 = 22",
-  };
+import { useUserStore } from "store/useUserStore";
 
-  const winRate = user.gamesPlayed > 0 ? ((user.wins / user.gamesPlayed) * 100).toFixed(1) : 0;
+function Profilepage() {
+  const user = useUserStore((state) => state.user);
+
+    // gamesPlayed: 42,
+    // wins: 25,
+    // rank: 12,
+    // bestEquation: "7 + 5 * 3 = 22",
+  // };
+
+  // const winRate = user.gamesPlayed > 0 ? ((user.wins / user.gamesPlayed) * 100).toFixed(1) : 0;
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-gray-200 p-6 font-sans">
@@ -17,7 +18,7 @@ function Profilepage() {
         {/* Sección de perfil */}
         <div className="flex flex-col items-center mb-8">
           <img 
-            src={user.avatarUrl} 
+            src={useUserStore.getState().user.avatar} 
             alt="Avatar del usuario" 
             className="w-28 h-28 rounded-full border-4 border-indigo-500 shadow-lg mb-4 transform transition-transform duration-300 hover:scale-110"
           />
@@ -36,7 +37,7 @@ function Profilepage() {
             <p className="text-gray-400 mt-1">Victorias</p>
           </div>
           <div className="flex flex-col items-center p-4 bg-gray-700/30 rounded-lg shadow-md">
-            <span className="text-4xl font-extrabold text-indigo-400">{winRate}%</span>
+            {/* <span className="text-4xl font-extrabold text-indigo-400">{winRate}%</span> */}
             <p className="text-gray-400 mt-1">Tasa de Victoria</p>
           </div>
         </div>
