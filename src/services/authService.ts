@@ -78,5 +78,29 @@ export const getProfile = async (): Promise<IUser> => {
   }
 };
 
+export const logout = async () => {
+  const refresh = localStorage.getItem("refresh_token");
+
+  if (!refresh) {
+    return { message: "No hay token para invalidar" };
+  }
+
+  const response = await fetch("http://localhost:8000/api/logout/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+    },
+    body: JSON.stringify({ refresh }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Error cerrando sesión");
+  }
+
+  return await response.json();
+};
+
+
 
 
