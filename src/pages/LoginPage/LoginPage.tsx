@@ -7,6 +7,9 @@ import handleGenerateRandomRobot from "@utils/handleGenerateRandomRobots";
 import { login, signup } from "@services/authService";
 import logo from "@assets/logo.png";
 import { loginSuccessSound } from "../../soundsManager";
+import { useUserStore } from "store/useUserStore";
+import { getProfile } from '@services/authService';
+
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -52,6 +55,8 @@ function LoginPage() {
     });
   };
 
+  const { setUser } = useUserStore();
+
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
@@ -61,13 +66,12 @@ function LoginPage() {
       const response = await login(formData);
       localStorage.setItem("access_token", response.access || "");
       localStorage.setItem("refresh_token", response.refresh || "");
-      localStorage.setItem("username", formData.username);
+      
+      const userProfile = await getProfile();
+      setUser(userProfile);
+
       setMessage("Login exitoso. ¡Bienvenido!");
-
-      // 🔹 reproducir sonido antes de navegar
       playLoginSuccess();
-
-      // 🔹 cambiar de página con pequeño delay para que suene
       setTimeout(() => navigate("/"), 150);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido.");
