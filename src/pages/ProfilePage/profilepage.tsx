@@ -23,7 +23,7 @@ function Profilepage() {
             className="w-28 h-28 rounded-full border-4 border-indigo-500 shadow-lg mb-4 transform transition-transform duration-300 hover:scale-110"
           />
           <h1 className="text-3xl md:text-4xl font-extrabold text-white">{user?.username}</h1>
-          <p className="text-gray-400 mt-1">Rango: <span className="text-indigo-400 font-bold">{user?.rank}</span></p>
+          {/* <p className="text-gray-400 mt-1">Rango: <span className="text-indigo-400 font-bold">{user?.rank}</span></p> */}
         </div>
 
         {/* Sección de estadísticas */}
