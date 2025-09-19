@@ -3,6 +3,7 @@ import { API_URL } from "../constants/constants";
 import type { SignUpData } from "../types/ISignUpData";
 import type { ILoginData } from "../types/ILoginData";
 import type { IAuthResponse } from "../types/IAuthResponse";
+import type { IUser } from "types/IUser";
 // Definimos los tipos de datos para las funciones
 
 
@@ -11,13 +12,12 @@ import type { IAuthResponse } from "../types/IAuthResponse";
  * @param data Los datos de inicio de sesión (usuario y contraseña).
  * @returns Una promesa con la respuesta de la API.
  */
-export const login = async (data: ILoginData): Promise<IAuthResponse> => {
+export const login: (data: ILoginData) => Promise<IAuthResponse> = async (data: ILoginData): Promise<IAuthResponse> => {
   try {
     const response = await axios.post(`${API_URL}token/`, {
       username: data.username,
       password: data.password,
     });
-    
     return response.data;
   } catch (err) {
     if (axios.isAxiosError(err) && err.response) {
@@ -50,4 +50,33 @@ export const signup = async (data: SignUpData): Promise<IAuthResponse> => {
       throw new Error("Error de conexión. Inténtalo de nuevo más tarde.");
     }
   }
+
 };
+
+export const getProfile = async (): Promise<IUser> => {
+  // Obtén el token de acceso del localStorage
+  const accessToken = localStorage.getItem("access_token");
+
+  if (!accessToken) {
+    throw new Error("No se encontró el token de acceso.");
+  }
+
+  try {
+    const response = await axios.get(`${API_URL}profile/`, {
+      headers: {
+        // Incluye el token de acceso en el encabezado de autorización
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    if (axios.isAxiosError(err) && err.response) {
+      throw new Error(err.response.data.detail || "Error al cargar el perfil.");
+    } else {
+      throw new Error("Error de conexión. Inténtalo de nuevo.");
+    }
+  }
+};
+
+
+

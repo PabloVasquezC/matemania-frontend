@@ -8,4 +8,5 @@ export interface IUser {
     isActive: boolean;
     role: 'user' | 'admin';
     profilePicture?: string; 
+    avatar?: string;
 }

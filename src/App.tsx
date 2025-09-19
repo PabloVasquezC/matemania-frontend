@@ -15,6 +15,7 @@ import NotificationsPage from './pages/NotifiationPage/NotificationsPages';
 import { navigation } from './constants/constants';
 import { variants } from './utils/framer-motion-utils';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
+import GameMenu from 'menus/GameMenu';
 
 // Mapea las rutas a un índice para comparar la posición
 const pathIndexMap: Record<string, number> = navigation.reduce((map, item, index) => {
@@ -66,6 +67,19 @@ function App() {
               className="w-full h-full absolute"
             >
               <LoginPage />
+            </motion.div>
+          } />
+          <Route path="/gamemenu" element={
+            <motion.div
+              key={location.pathname}
+              variants={variants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              custom={direction}
+              className="w-full h-full absolute"
+            >
+              <GameMenu />
             </motion.div>
           } />
           <Route path="/game" element={

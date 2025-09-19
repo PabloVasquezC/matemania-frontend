@@ -9,15 +9,17 @@ import {
 } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
+import {  useState } from "react";
 import logo from "../../assets/logo.png";
-import { getMyProfile } from "@services/profileService";
-import { UserCircleIcon } from "@heroicons/react/24/solid";
+
 import { Terminal } from "@components/Terminal/Terminal";
+import { useUserStore } from "store/useUserStore";
+import type { IUserState } from "../../types/IUserState";
+
 
 const navigation = [
   { name: "Inicio", path: "/" },
-  { name: "Jugar", path: "/game" },
+  { name: "Jugar", path: "/gamemenu" },
   { name: "Acerca de", path: "/about" },
   { name: "Configuraciones", path: "/settings" },
   { name: "Perfil", path: "/profile" },
@@ -31,42 +33,18 @@ function classNames(...classes: string[]) {
 
 export default function Navbar( ) {
 
-
-  console.log("Token en Navbar:", localStorage.getItem("access_token")); // Verifica si el token está presente
+  const user = useUserStore((state: IUserState) => state.user);
+  // console.log("Token en Navbar:", localStorage.getItem("access_token")); // Verifica si el token está presente
   const location = useLocation();
   const [showTerminal, setShowTerminal] = useState(false);
-  const [userProfile, setUserProfile] = useState<{ avatar: string } | null>(
-    null
-  );
-  const [isLoading, setIsLoading] = useState(true);
+  
   const [isLoggedIn] = useState(false);
 
   // function handleIsLoggedInChange(loggedIn: boolean) {
   //   setIsLoggedIn(!loggedIn);
   // }
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      // **Verificación de token antes de la llamada**
-      const access_token = localStorage.getItem("access_token");
-      if (!access_token) {
-        setIsLoading(false); // No hay token, no hay carga
-        return;
-      }
-
-      try {
-        const profileData = await getMyProfile();
-        setUserProfile(profileData);
-      } catch (error) {
-        console.error("Error al obtener el perfil del usuario:", error);
-        setUserProfile(null);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchProfile();
-  }, []);
+  
 
   return (
     <>
@@ -99,17 +77,14 @@ export default function Navbar( ) {
               </button>
               <Menu as="div" className=" relative ml-3">
                 <MenuButton className=" relative flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 transition-transform duration-200 transform hover:scale-110">
-                  {isLoading ? (
-                    <div className=" animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-teal-400"></div>
-                  ) : userProfile && userProfile.avatar ? (
+                  
+                    <div className=" rounded-full h-10 w-10 border-t-2 border-b-2 border-teal-400">
                     <img
-                      src={userProfile.avatar}
+                      src={user?.avatar}
                       alt="User Avatar"
                       className=" h-10 w-10 rounded-full border border-gray-600 cursor-pointer"
                     />
-                  ) : (
-                    <UserCircleIcon className=" h-10 w-10 text-gray-400" />
-                  )}
+                  </div>
                 </MenuButton>
                 <MenuItems className=" absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-gray-800 py-1 outline -outline-offset-1 outline-white/10">
                   <MenuItem>

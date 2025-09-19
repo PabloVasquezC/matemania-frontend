@@ -38,7 +38,7 @@ function PlayerRack({
             bg-gray-900"
         />
         <h2 className="text-xl md:text-2xl font-bold text-gray-200 mt-2">
-          {player.name}
+          {}
         </h2>
       </div>
 
