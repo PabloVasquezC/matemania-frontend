@@ -6,10 +6,10 @@ function Footer() {
       <div className="container mx-auto text-center">
         <p className="text-sm flex items-center justify-center">
           <span>
-            <em className="bg-gradient-to-r from-teal-400 to-blue-500 text-transparent bg-clip-text">CogniTiles</em> fue hecho con ❤️ & ☕ por Pablo Vásquez.
+            <em className="bg-gradient-to-r from-teal-400 to-blue-500 text-transparent bg-clip-text">Matemanía</em> fue hecho con ❤️ & ☕ por Pablo Vásquez.
           </span>
           <a
-            href="https://github.com/PabloVazquez"
+            href="https://github.com/PabloVasquezC"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 hover:text-gray-400 transition-colors duration-200"

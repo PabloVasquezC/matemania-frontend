@@ -12,12 +12,12 @@ function AboutPage() {
           <img src={logo} alt="CogniTiles Logo" className="h-80 w-auto text-indigo-400 animate-pulse-slow" />
 
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mt-4 tracking-wide leading-tight">
-            Sobre <span className="text-indigo-400">CogniTiles</span>
+            Sobre <span className="text-indigo-400">Matemanía</span>
           </h1>
         </div>
 
         <p className="text-lg md:text-xl text-gray-400 leading-relaxed mb-6 font-light">
-          CogniTiles nació de la idea de fusionar el clásico juego de palabras con el fascinante mundo de los números. Es un desafío para la mente que combina estrategia, lógica y un poco de suerte.
+          Matemanía nació de la idea de fusionar el clásico juego de palabras con el fascinante mundo de los números. Es un desafío para la mente que combina estrategia, lógica y un poco de suerte.
         </p>
         
         <p className="text-base md:text-lg text-gray-400 leading-relaxed mb-8">

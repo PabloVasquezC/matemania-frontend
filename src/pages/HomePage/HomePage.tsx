@@ -18,11 +18,11 @@ export default function HomePage() {
       <img src={logo} alt="Logo" className="w-100 h-100 mb-4 animate-fadeIn" />
       <header className="mb-10 text-center animate-fadeIn">
         <h1 className="text-5xl md:text-6xl font-extrabold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500 animate-pulse">
-          CogniTiles
+          Matemanía
         </h1>
         {user ? (
   <p className="text-lg md:text-xl text-gray-400">
-    <span className="font-bold text-teal-300">¡Hola {user.username}!</span> Bienvenido a CogniTiles,
+    <span className="font-bold text-teal-300">¡Hola {user.username}!</span> Bienvenido a Matemania,
   </p>
 ) : (
   <p className="text-lg md:text-xl text-gray-400">
