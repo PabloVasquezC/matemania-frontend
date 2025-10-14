@@ -85,7 +85,7 @@ export const logout = async () => {
     return { message: "No hay token para invalidar" };
   }
 
-  const response = await fetch("http://localhost:8000/api/logout/", {
+  const response = await fetch(`${API_URL}logout/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
