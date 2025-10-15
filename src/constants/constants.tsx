@@ -179,5 +179,5 @@ export const TILES: ITile[] =[
     },
 ]
 
-const API_URL = import.meta.env.VITE_API_URL || "https://matemania/api/";
-export { API_URL };
+const API_URL = "/api/"; 
+export { API_URL }; 
