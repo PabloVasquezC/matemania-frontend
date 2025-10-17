@@ -1,9 +1,8 @@
-
 {
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "//matemania.cl/api/$1" 
-  }
+      "destination": "https://138.201.186.199/api/$1"
+    }
   ]
 }
