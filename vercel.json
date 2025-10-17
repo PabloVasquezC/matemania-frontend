@@ -3,9 +3,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://matemania.cl/$1" 
-    }
+      "destination": "//matemania.cl/api/$1" 
+  }
   ]
 }
-
-
