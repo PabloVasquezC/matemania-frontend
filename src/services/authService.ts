@@ -45,7 +45,10 @@ export const signup = async (data: SignUpData): Promise<IAuthResponse> => {
   } catch (err) {
     if (axios.isAxiosError(err) && err.response) {
       const serverError = err.response.data.detail || Object.values(err.response.data)[0];
+      console.log("Estructura de error:", err.response.data);
       throw new Error(`Error en el registro: ${serverError}`);
+      //eso me esta devolviendo un array y no se por que
+      // Podrías intentar hacer un console.log para ver la estructura de error
     } else {
       throw new Error("Error de conexión. Inténtalo de nuevo más tarde.");
     }
