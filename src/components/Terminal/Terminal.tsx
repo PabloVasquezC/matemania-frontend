@@ -45,7 +45,7 @@ export const Terminal = ({ onClose }: { onClose: () => void }) => {
         </button>
       </div>
       <div className="p-4 h-64 overflow-y-auto text-sm text-gray-200 bg-gray-950 rounded-b-lg border-t border-gray-800">
-        <p className="text-lime-400">$ Bienvenido a la terminal de CogniTiles...</p>
+        <p className="text-lime-400">$ Bienvenido a la terminal de Matemanía...</p>
         <p className="text-gray-400">Escribe 'ayuda' para ver los comandos disponibles.</p>
         <p className="mt-2 text-lime-400">$</p>
       </div>

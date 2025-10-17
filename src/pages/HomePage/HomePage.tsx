@@ -10,7 +10,7 @@ export default function HomePage() {
 
 
   console.log("Usuario en HomePage:", useUserStore.getState().user); // Verifica si el usuario está presente
- 
+
 
   return (
     console.log("Usuario en HomePage:", user), // Verifica si el usuario está presente

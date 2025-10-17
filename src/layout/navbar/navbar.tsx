@@ -61,7 +61,7 @@ export default function Navbar() {
                 <img
                   className="block h-12 w-auto"
                   src={logo}
-                  alt="CogniTiles Logo"
+                  alt="Matemanía Logo"
                 />
               </Link>
             </div>

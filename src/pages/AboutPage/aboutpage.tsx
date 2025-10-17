@@ -9,7 +9,7 @@ function AboutPage() {
         {/* Contenedor del logo y título */}
         <div className="flex flex-col items-center mb-6">
           {/* Logo SVG */}
-          <img src={logo} alt="CogniTiles Logo" className="h-80 w-auto text-indigo-400 animate-pulse-slow" />
+          <img src={logo} alt="Matemanía Logo" className="h-80 w-auto text-indigo-400 animate-pulse-slow" />
 
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mt-4 tracking-wide leading-tight">
             Sobre <span className="text-indigo-400">Matemanía</span>
