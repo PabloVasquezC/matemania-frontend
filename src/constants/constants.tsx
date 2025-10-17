@@ -178,5 +178,5 @@ export const TILES: ITile[] = [
   },
 ];
 
-const API_URL = "/api/";
+const API_URL = "https://matemania.cl/api/";
 export { API_URL };
