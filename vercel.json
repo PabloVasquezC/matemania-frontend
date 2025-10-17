@@ -1,8 +1,11 @@
+
 {
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://matemania.cl/api/$1"
+      "destination": "https://matemania.cl/$1" 
     }
   ]
 }
+
+
