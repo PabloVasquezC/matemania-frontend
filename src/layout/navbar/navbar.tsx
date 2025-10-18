@@ -16,6 +16,7 @@ import {
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import logo from "../../assets/logo.png";
+import "./navbar.css";
 
 import { Terminal } from "@components/Terminal/Terminal";
 import { useUserStore } from "store/useUserStore";
@@ -173,6 +174,7 @@ export default function Navbar() {
             </div>
           </div>
         </DisclosurePanel>
+        <div id="progress" className="bg-gradient-to-r from-teal-400 to-blue-500"></div>
       </Disclosure>
 
       {showTerminal && <Terminal onClose={() => setShowTerminal(false)} />}
