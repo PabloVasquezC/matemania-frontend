@@ -1,0 +1,18 @@
+#progress {
+    position: fixed;
+    border-radius: 10px;
+    top: 0; 
+    width: 0%;
+    height: 3px;
+    animation: progress-grow auto linear;
+    animation-timeline: scroll(root);
+}
+
+@keyframes progress-grow {
+    0% {
+        width: 0%;
+    }
+    100% {
+        width: 100%;
+    }
+}

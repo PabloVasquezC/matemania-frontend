@@ -106,7 +106,7 @@ function LoginPage() {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4">
       <img src={logo} alt="Logo" className="w-80 h-80 animate-fadeIn" />
       <h1 className="text-5xl md:text-6xl font-extrabold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500 animate-pulse">
-        CogniTiles
+        Matemanía
       </h1>
       <h1 className="text-5xl md:text-6xl font-extrabold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500 animate-pulse">
         {isLoginView ? "Iniciar Sesión" : "Crear tu Perfil"}

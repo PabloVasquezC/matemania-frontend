@@ -29,7 +29,7 @@ export default function GameMenu() {
 
       <header className="mb-10 text-center animate-fadeIn">
         <h1 className="text-5xl md:text-6xl font-extrabold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500 animate-pulse">
-          CogniTiles
+          Matemanía
         </h1>
         <p className="text-lg md:text-xl text-gray-400">
           {userName ? (
