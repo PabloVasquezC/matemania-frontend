@@ -15,6 +15,8 @@ const Tile = ({ id, value, points, bgColor }: ITile) => {
     zIndex: isDragging ? 9999 : 1, // Asegura que quede encima
   };
 
+  
+
   return (
     <div
       ref={setNodeRef}

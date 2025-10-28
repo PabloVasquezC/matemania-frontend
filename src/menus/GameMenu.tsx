@@ -5,7 +5,8 @@ import logo from "@assets/logo.png";
 export default function GameMenu() {
   const [userName, setUserName] = useState("");
   const [difficulty, setDifficulty] = useState("medium");
-  const [mode, setMode] = useState("solo");
+  // Inicializamos con "matematico" (el valor por defecto)
+  const [mode, setMode] = useState("matematico"); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -13,10 +14,15 @@ export default function GameMenu() {
     if (storedUsername) {
       setUserName(storedUsername);
     }
+    // Opcional: Cargar el último modo/dificultad usado
+    const storedMode = localStorage.getItem("mode");
+    if (storedMode) {
+      setMode(storedMode);
+    }
   }, []);
 
   const handleStartGame = () => {
-    // Guardar configuraciones si es necesario
+    // ⭐️ GUARDAMOS EL MODO EN localStorage
     localStorage.setItem("difficulty", difficulty);
     localStorage.setItem("mode", mode);
 
@@ -60,7 +66,24 @@ export default function GameMenu() {
             Configuración de Juego
           </h2>
 
-          {/* Nivel de dificultad */}
+          {/* Tipo de juego */}
+          <div className="mb-6 text-left">
+            <label className="block mb-2 font-semibold text-gray-300">
+              Tipo de juego
+            </label>
+            <select
+              value={mode}
+              onChange={(e) => setMode(e.target.value)}
+              className="w-full p-3 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            >
+              <option value="matematico">matemático 🎓</option>
+              <option value="cientifico">científico 🧪</option>
+              <option value="visual">visual (Color) 👁️</option>
+              <option value="sonoro">sonoro (BETA) 🎵</option>
+            </select>
+          </div>
+
+          {/* Nivel de dificultad agregar iconos */}
           <div className="mb-6 text-left">
             <label className="block mb-2 font-semibold text-gray-300">
               Nivel de dificultad
@@ -70,26 +93,12 @@ export default function GameMenu() {
               onChange={(e) => setDifficulty(e.target.value)}
               className="w-full p-3 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-teal-400"
             >
-              <option value="easy">Fácil</option>
-              <option value="medium">Medio</option>
-              <option value="hard">Difícil</option>
+              <option value="easy">Fácil 🎉</option>
+              <option value="medium">Medio 🎯</option>
+              <option value="hard">Difícil 🚀</option>
             </select>
           </div>
 
-          {/* Modo de juego */}
-          <div className="mb-6 text-left">
-            <label className="block mb-2 font-semibold text-gray-300">
-              Modo de juego
-            </label>
-            <select
-              value={mode}
-              onChange={(e) => setMode(e.target.value)}
-              className="w-full p-3 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
-            >
-              <option value="solo">Un jugador</option>
-              <option value="multiplayer">Multijugador</option>
-            </select>
-          </div>
         </section>
 
         <button
