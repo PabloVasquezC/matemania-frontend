@@ -57,7 +57,7 @@ function PlayerRack({
 
       <div className="w-full">
         <h3 className="text-3xl font-extrabold text-white">
-          Score: <span className="text-purple-400">{player.score}</span>
+          Puntuación: <span className="text-purple-400">{player.score}</span>
         </h3>
       </div>
 
@@ -71,7 +71,7 @@ function PlayerRack({
                            active:shadow-inner active:shadow-gray-950
                            focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
-          Play
+          Jugar
         </button>
         {/* Botón de "Pass": Gris Pizarra */}
         <button
@@ -82,7 +82,7 @@ function PlayerRack({
                            active:shadow-inner active:shadow-gray-950
                            focus:outline-none focus:ring-2 focus:ring-gray-500"
         >
-          Pass
+          Pasar
         </button>
         {/* Botón de "Sort": Tono Dorado/Bronce */}
         <button
@@ -93,17 +93,17 @@ function PlayerRack({
                            active:shadow-inner active:shadow-gray-950
                            focus:outline-none focus:ring-2 focus:ring-amber-500"
         >
-          Sort
+          Ordenar
         </button>
       </div>
 
       <div className="w-full text-center mt-4">
         {player.isActive ? (
           <p className="text-yellow-400 font-semibold text-lg animate-pulse">
-            Your turn!
+            ¡Tu turno!
           </p>
         ) : (
-          <p className="text-gray-400 text-sm">Waiting...</p>
+          <p className="text-gray-400 text-sm">Esperando...</p>
         )}
       </div>
     </div>

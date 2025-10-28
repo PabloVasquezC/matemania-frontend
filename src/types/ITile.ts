@@ -2,7 +2,7 @@
 
 export interface ITile {
   id: string;
-  value: string | number;
+  value: string | number | null;
   points: number;
   bgColor: string;
 }
