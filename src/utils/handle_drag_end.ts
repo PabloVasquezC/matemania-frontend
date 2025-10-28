@@ -5,7 +5,7 @@ import type { ITile } from "types/ITile";
 // --- CONFIGURACIÓN DEL JUEGO ---
 const CENTER_SQUARE_ID = 'square-5-5'; // Casilla central para un tablero 11x11
 
-// --- INTERFACES (Correctas) ---
+// --- INTERFACES (Correctas: Mantenemos todas las props disponibles) ---
 interface HandleDragEndProps {
   tileLocations: Record<string, string>;
   setTiles: React.Dispatch<React.SetStateAction<ITile[]>>;
@@ -17,13 +17,11 @@ interface HandleDragEndProps {
   setCurrentPlayTiles: React.Dispatch<React.SetStateAction<string[]>>; 
 }
 
-// --- FUNCIÓN PRINCIPAL ---
+// --- FUNCIÓN PRINCIPAL CORREGIDA ---
 const createHandleDragEnd = ({
   tileLocations,
-  setTiles, // Necesario si permitieras reponer fichas al droppear, pero no lo haremos aquí.
+  // ❌ ELIMINADAS: setTiles, tiles, y updateScore ya no se usan aquí.
   setTileLocations,
-  tiles,
-  updateScore, // No usado aquí
   setCurrentPlayTiles
 }: HandleDragEndProps) => {
 
@@ -85,7 +83,6 @@ const createHandleDragEnd = ({
         return prev;
     });
     
-    // 🛑 IMPORTANTE: SE ELIMINÓ TODO EL CÓDIGO DE VALIDACIÓN Y REVERSIÓN.
     // La validación ahora ocurre en el botón 'Terminar Turno'.
   };
 };
