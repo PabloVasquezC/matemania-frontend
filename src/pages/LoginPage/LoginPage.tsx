@@ -6,7 +6,7 @@ import ErrorIcon from "@utils/errorIcon";
 import handleGenerateRandomRobot from "@utils/handleGenerateRandomRobots";
 import { login, signup } from "@services/authService";
 import logo from "@assets/logo.png";
-import { loginSuccessSound } from "../../soundsManager";
+import { loginSuccessSound, errorSound } from "../../soundsManager"; // <-- 1. Importar errorSound
 import { useUserStore } from "store/useUserStore";
 import { getProfile } from '@services/authService';
 
@@ -47,11 +47,21 @@ function LoginPage() {
     else setPasswordStrength("medium");
   };
 
+  // Función para reproducir el sonido de éxito
   const playLoginSuccess = () => {
     loginSuccessSound.play();
     loginSuccessSound.once("playerror", () => {
       console.error("Error reproduciendo audio. Reintentando...");
       loginSuccessSound.play();
+    });
+  };
+
+  // Función para reproducir el sonido de error
+  const playErrorSound = () => {
+    errorSound.play();
+    errorSound.once("playerror", () => {
+      console.error("Error reproduciendo audio de error. Reintentando...");
+      errorSound.play();
     });
   };
 
@@ -71,10 +81,11 @@ function LoginPage() {
       setUser(userProfile);
 
       setMessage("Login exitoso. ¡Bienvenido!");
-      playLoginSuccess();
+      playLoginSuccess(); // <-- Sonido de éxito aquí
       setTimeout(() => navigate("/"), 150);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido.");
+      playErrorSound(); // <-- Sonido de error aquí
       console.error(err);
     }
   };
@@ -86,6 +97,7 @@ function LoginPage() {
 
     if (formData.password !== formData.confirmPassword) {
       setError("Las contraseñas no coinciden.");
+      playErrorSound(); // <-- Sonido de error aquí
       return;
     }
 
@@ -95,9 +107,11 @@ function LoginPage() {
         avatar: `https://robohash.org/${choosenRobot?.id}.png`,
       });
       setMessage(response.message || "Registro exitoso. ¡Ahora puedes iniciar sesión!");
+      playLoginSuccess(); // <-- Sonido de éxito para registro exitoso
       setIsLoginView(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido.");
+      playErrorSound(); // <-- Sonido de error aquí
       console.error(err);
     }
   };
@@ -258,7 +272,7 @@ function LoginPage() {
               setFormData({ username: "", password: "", email: "", confirmPassword: "", avatar: "" });
               setError("");
               setPasswordStrength("");
-              loginSuccessSound.play(); // sonido directo en click
+              // loginSuccessSound.play(); // No se si quieres sonido aquí.
             }}
             className="text-teal-400 hover:underline font-semibold"
           >

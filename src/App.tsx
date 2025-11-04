@@ -16,6 +16,7 @@ import { navigation } from './constants/constants';
 import { variants } from './utils/framer-motion-utils';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 import GameMenu from 'menus/GameMenu';
+import TestLayoutPage from '@pages/TestLayoutPage';
 
 // Mapea las rutas a un índice para comparar la posición
 const pathIndexMap: Record<string, number> = navigation.reduce((map, item, index) => {
@@ -202,6 +203,22 @@ function App() {
                   className="w-full min-h-full"
                 >
                   <NotFoundPage />
+                </motion.div>
+              }
+            />
+            <Route
+              path="/testlayout"
+              element={
+                <motion.div
+                  key={location.pathname}
+                  variants={variants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  custom={direction}
+                  className="w-full min-h-full"
+                >
+                  <TestLayoutPage />
                 </motion.div>
               }
             />

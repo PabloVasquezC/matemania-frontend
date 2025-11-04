@@ -22,6 +22,8 @@ import { Terminal } from "@components/Terminal/Terminal";
 import { useUserStore } from "store/useUserStore";
 import type { IUserState } from "../../types/IUserState";
 import LogoutButton from "./LogoutButton";
+import { clickSound } from "../../soundsManager";
+
 
 const navigation = [
   { name: "Inicio", path: "/" },
@@ -39,6 +41,12 @@ function classNames(...classes: string[]) {
 
 export default function Navbar() {
   const user = useUserStore((state: IUserState) => state.user);
+
+  const playClickSound = () => {
+    console.log("➡️ Navbar: Se llamó a la función playClickSound.");
+    const soundId = clickSound.play();
+    console.log("🔊 Howler: Iniciando reproducción con ID:", soundId);
+  };
 
   // console.log("Token en Navbar:", localStorage.getItem("access_token")); // Verifica si el token está presente
   const location = useLocation();
@@ -149,6 +157,7 @@ export default function Navbar() {
                   key={item.name}
                   as={Link}
                   to={item.path}
+                  onClick={playClickSound}
                   aria-current={isActive ? "page" : undefined}
                   className={classNames(
                     isActive
