@@ -14,9 +14,6 @@ import type { IUser } from "types/IUser";
  */
 export const login: (data: ILoginData) => Promise<IAuthResponse> = async (data: ILoginData): Promise<IAuthResponse> => {
   try {
-    // NOTA: Si estás usando dj-rest-auth con JWT, la ruta de login DEBERÍA ser:
-    // `${API_URL}auth/login/` 
-    // Pero asumiendo que ya configuraste /token/ para el login, la dejo por ahora.
     const response = await axios.post(`${API_URL}token/`, {
       username: data.username,
       password: data.password,
@@ -38,26 +35,32 @@ export const login: (data: ILoginData) => Promise<IAuthResponse> = async (data: 
  */
 export const signup = async (data: SignUpData): Promise<IAuthResponse> => {
   try {
-    // 🚨 CORRECCIÓN 1: La URL debe ser el endpoint correcto de dj-rest-auth
     const SIGNUP_URL = `${API_URL}auth/registration/register/`; 
     
-    // 🚨 CORRECCIÓN 2: dj-rest-auth requiere que la confirmación de la contraseña 
-    // se envíe como 'password2' si usa el serializer por defecto.
-    const response = await axios.post(SIGNUP_URL, {
-      username: data.username,
-      password: data.password,
-      email: data.email,
-      // Se requiere el campo 'password2' para la validación del backend
-      password2: data.confirmPassword || data.password, 
-      // El avatar lo manejaremos en el front-end después del registro exitoso o en un paso posterior.
-      // Si el backend espera un campo 'avatar' al registrar, asegúrate de que esté permitido en el serializer de Django.
-    });
+    // 🚨 DEBUGGING CRUCIAL: Comprobar si algún campo es null/undefined/cadena vacía.
+    if (!data.username || !data.email || !data.password || !data.confirmPassword) {
+      console.error("DEBUG: Datos de registro incompletos:", data);
+      throw new Error("Por favor, rellena todos los campos requeridos para el registro.");
+    }
+
+    const payload = {
+        username: data.username,
+        password: data.password,
+        email: data.email,
+        // dj-rest-auth requiere 'password2' para la validación de la confirmación.
+        password2: data.confirmPassword, 
+    };
+    
+    // Muestra el JSON exacto que se enviará al servidor
+    console.log("DEBUG: Payload de registro enviado a Django:", payload);
+
+    const response = await axios.post(SIGNUP_URL, payload);
 
     // dj-rest-auth puede devolver el JWT si lo configuraste para ello, o solo un mensaje de éxito.
     return response.data; 
   } catch (err) {
     if (axios.isAxiosError(err) && err.response) {
-      console.log("Error de respuesta del servidor:", err.response.data);
+      console.error("Error de respuesta del servidor:", err.response.data);
 
       let errorMessage = "Error de registro desconocido.";
       const errorData = err.response.data;
@@ -68,6 +71,7 @@ export const signup = async (data: SignUpData): Promise<IAuthResponse> => {
       } else if (errorData.username) {
         errorMessage = `Usuario: ${errorData.username[0]}`;
       } else if (errorData.password || errorData.password2) {
+        // Mejorar la lectura del error de contraseña
         errorMessage = `Contraseña: ${errorData.password?.[0] || errorData.password2?.[0]}`;
       } else if (errorData.non_field_errors) {
         errorMessage = `Error: ${errorData.non_field_errors[0]}`;
@@ -80,6 +84,7 @@ export const signup = async (data: SignUpData): Promise<IAuthResponse> => {
       
       throw new Error(`Error en el registro: ${errorMessage}`);
     } else {
+      console.error("Error de conexión:", err);
       throw new Error("Error de conexión. Inténtalo de nuevo más tarde.");
     }
   }
