@@ -209,20 +209,20 @@ const handleEndTurn = useCallback(() => {
     <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
       <div
         className="
-  flex 
-  flex-col-reverse    
-  md:flex-row         
-  items-center 
-  justify-center 
-  min-h-screen 
-  bg-gray-900 
-  text-white 
-  font-sans 
-  p-6 
-  space-y-6 
-  md:space-y-0 
-  md:space-x-12
-"
+        flex 
+        flex-col-reverse    
+        md:flex-row         
+        items-center 
+        justify-center 
+        min-h-screen 
+        bg-gray-900 
+        text-white 
+        font-sans 
+        p-6 
+        space-y-6 
+        md:space-y-0 
+        md:space-x-12
+      "
       >
         {/* Rack del Jugador y Controles */}
         <PlayerRack player={player}>

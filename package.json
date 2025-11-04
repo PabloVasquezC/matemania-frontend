@@ -14,6 +14,7 @@
     "@dnd-kit/utilities": "^3.2.2",
     "@headlessui/react": "^2.2.7",
     "@heroicons/react": "^2.2.0",
+    "@react-oauth/google": "^0.12.2",
     "@tailwindcss/vite": "^4.1.12",
     "@tailwindplus/elements": "^1.0.9",
     "axios": "^1.11.0",

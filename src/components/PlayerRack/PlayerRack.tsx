@@ -55,11 +55,7 @@ function PlayerRack({
 
       <div className="w-full flex-grow">{children}</div>
 
-      <div className="w-full">
-        <h3 className="text-3xl font-extrabold text-white">
-          Puntuación: <span className="text-purple-400">{player.score}</span>
-        </h3>
-      </div>
+      
 
       <div className="w-full flex justify-center space-x-3 mt-4">
         {/* Botón de "Play": Azul Marino */}
