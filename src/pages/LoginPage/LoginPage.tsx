@@ -6,7 +6,7 @@ import ErrorIcon from "@utils/errorIcon";
 import handleGenerateRandomRobot from "@utils/handleGenerateRandomRobots";
 import { login, signup } from "@services/authService";
 import logo from "@assets/logo.png";
-import { loginSuccessSound, errorSound } from "../../soundsManager"; // <-- 1. Importar errorSound
+import { loginSuccessSound, errorSound } from "../../soundsManager"; 
 import { useUserStore } from "store/useUserStore";
 import { getProfile } from '@services/authService';
 import { unlockAudioContext } from "../../utils/unlockAudioContext";
@@ -22,7 +22,7 @@ function LoginPage() {
     password: "",
     email: "",
     confirmPassword: "",
-    avatar: "",
+    avatar: "", // Mantenemos el campo en el estado local, pero no lo enviamos al API
   });
   const [passwordStrength, setPasswordStrength] = useState<"weak" | "medium" | "strong" | "">("");
 
@@ -74,6 +74,8 @@ function LoginPage() {
     setMessage("");
 
     try {
+      // Nota: El endpoint de login debería ser /auth/login/ si usa dj-rest-auth.
+      // Aquí asumo que /token/ devuelve { access, refresh }
       const response = await login(formData);
       localStorage.setItem("access_token", response.access || "");
       localStorage.setItem("refresh_token", response.refresh || "");
@@ -82,11 +84,11 @@ function LoginPage() {
       setUser(userProfile);
 
       setMessage("Login exitoso. ¡Bienvenido!");
-      playLoginSuccess(); // <-- Sonido de éxito aquí
+      playLoginSuccess(); 
       setTimeout(() => navigate("/"), 150);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido.");
-      playErrorSound(); // <-- Sonido de error aquí
+      playErrorSound(); 
       console.error(err);
     }
   };
@@ -99,22 +101,33 @@ function LoginPage() {
 
     if (formData.password !== formData.confirmPassword) {
       setError("Las contraseñas no coinciden.");
-      playErrorSound(); // <-- Sonido de error aquí
+      playErrorSound(); 
       return;
     }
 
     try {
+      // 🚨 CAMBIO CRUCIAL: Solo enviamos los campos que el serializador de Django espera.
+      // Eliminamos el campo `avatar` de la petición de registro.
       const response = await signup({
-        ...formData,
+        username: formData.username,
+        password: formData.password,
+        email: formData.email,
         confirmPassword: formData.confirmPassword,
-        avatar: `https://robohash.org/${choosenRobot?.id}.png`,
+        // No enviamos `avatar` aquí
       });
+      
+      // Si el registro es exitoso, dj-rest-auth puede devolver el token o solo un mensaje.
+      // Aquí actualizamos el estado o enviamos al usuario a iniciar sesión.
       setMessage(response.message || "Registro exitoso. ¡Ahora puedes iniciar sesión!");
-      playLoginSuccess(); // <-- Sonido de éxito para registro exitoso
-      setIsLoginView(true);
+      
+      // NOTA: Si necesitas guardar la URL del avatar, lo harías AHORA
+      // enviando una segunda petición POST o PUT a un endpoint de perfil.
+      
+      playLoginSuccess(); 
+      setIsLoginView(true); // Cambiamos a la vista de login
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido.");
-      playErrorSound(); // <-- Sonido de error aquí
+      playErrorSound(); 
       console.error(err);
     }
   };
@@ -276,7 +289,7 @@ function LoginPage() {
               setFormData({ username: "", password: "", email: "", confirmPassword: "", avatar: "" });
               setError("");
               setPasswordStrength("");
-              // loginSuccessSound.play(); // No se si quieres sonido aquí.
+              // loginSuccessSound.play(); 
             }}
             className="text-teal-400 hover:underline font-semibold"
           >
