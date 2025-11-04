@@ -106,6 +106,7 @@ function LoginPage() {
     try {
       const response = await signup({
         ...formData,
+        confirmPassword: formData.confirmPassword,
         avatar: `https://robohash.org/${choosenRobot?.id}.png`,
       });
       setMessage(response.message || "Registro exitoso. ¡Ahora puedes iniciar sesión!");
