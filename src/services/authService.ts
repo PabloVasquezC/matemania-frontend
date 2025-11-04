@@ -35,7 +35,7 @@ export const login: (data: ILoginData) => Promise<IAuthResponse> = async (data: 
  */
 export const signup = async (data: SignUpData): Promise<IAuthResponse> => {
   try {
-    const SIGNUP_URL = `${API_URL}/api/auth/registration/register/`;
+    const SIGNUP_URL = `${API_URL}/auth/registration/register/`;
     
     // 🚨 DEBUGGING CRUCIAL: Comprobar si algún campo es null/undefined/cadena vacía.
     if (!data.username || !data.email || !data.password || !data.confirmPassword) {
