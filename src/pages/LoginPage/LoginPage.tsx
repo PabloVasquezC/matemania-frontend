@@ -9,7 +9,7 @@ import logo from "@assets/logo.png";
 import { loginSuccessSound, errorSound } from "../../soundsManager"; // <-- 1. Importar errorSound
 import { useUserStore } from "store/useUserStore";
 import { getProfile } from '@services/authService';
-
+import { unlockAudioContext } from "../../utils/unlockAudioContext";
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -69,6 +69,7 @@ function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    unlockAudioContext();
     setError("");
     setMessage("");
 
@@ -92,6 +93,7 @@ function LoginPage() {
 
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    unlockAudioContext(); 
     setError("");
     setMessage("");
 
@@ -266,8 +268,9 @@ function LoginPage() {
 
         <p className="text-center text-gray-400 mt-4">
           {isLoginView ? "¿No tienes una cuenta? " : "¿Ya tienes una cuenta? "}
-          <button
+          <button 
             onClick={() => {
+              unlockAudioContext();
               setIsLoginView(!isLoginView);
               setFormData({ username: "", password: "", email: "", confirmPassword: "", avatar: "" });
               setError("");

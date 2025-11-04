@@ -2,13 +2,16 @@ import { logout } from "@services/authService";
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "store/useUserStore";
 
-function LogoutButton() {
+function LogoutButton({ onClick }: { onClick?: () => void }) {
   const navigate = useNavigate();
   const { setUser } = useUserStore();
 
   const handleLogout = async () => {
     try {
       await logout();
+      if (onClick) {
+        onClick();
+      }
     } catch (err) {
       console.error("Error en logout:", err);
     } finally {
