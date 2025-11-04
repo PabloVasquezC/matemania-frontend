@@ -23,6 +23,7 @@ import { useUserStore } from "store/useUserStore";
 import type { IUserState } from "../../types/IUserState";
 import LogoutButton from "./LogoutButton";
 import { clickSound } from "../../soundsManager";
+import { unlockAudioContext } from "../../utils/unlockAudioContext"; // ⭐ NUEVA IMPORTACIÓN
 
 
 const navigation = [
@@ -43,18 +44,14 @@ export default function Navbar() {
   const user = useUserStore((state: IUserState) => state.user);
 
   const playClickSound = () => {
+    unlockAudioContext(); // ⭐ LLAMADA PARA DESBLOQUEAR EL CONTEXTO EN EL TOUCH
     console.log("➡️ Navbar: Se llamó a la función playClickSound.");
     const soundId = clickSound.play();
     console.log("🔊 Howler: Iniciando reproducción con ID:", soundId);
   };
 
-  // console.log("Token en Navbar:", localStorage.getItem("access_token")); // Verifica si el token está presente
   const location = useLocation();
   const [showTerminal, setShowTerminal] = useState(false);
-
-  // function handleIsLoggedInChange(loggedIn: boolean) {
-  //   setIsLoggedIn(!loggedIn);
-  // }
 
   return (
     <>
@@ -66,7 +63,7 @@ export default function Navbar() {
           <div className="relative flex h-16 items-center justify-between">
             {/* Contenedor del logo a la izquierda */}
             <div className="flex shrink-0 items-center">
-              <Link to="/">
+              <Link to="/" onClick={playClickSound}> {/* Opcional: Sonido al clickear el logo */}
                 <img
                   className="block h-12 w-auto"
                   src={logo}
@@ -80,13 +77,17 @@ export default function Navbar() {
               <button
                 type="button"
                 className="relative rounded-full p-1 text-gray-400 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500 transition-colors duration-200 transform hover:scale-110"
+                onClick={playClickSound} // ⭐ AÑADIDO: Sonido al clickear la campana
               >
                 <Link to="/notifications">
                   <BellIcon className="h-6 w-6" aria-hidden="true" />
                 </Link>
               </button>
               <Menu as="div" className=" relative ml-3">
-                <MenuButton className=" relative flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 transition-transform duration-200 transform hover:scale-110">
+                <MenuButton 
+                  className=" relative flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 transition-transform duration-200 transform hover:scale-110"
+                  onClick={playClickSound} // ⭐ AÑADIDO: Sonido al abrir/cerrar el menú de perfil
+                >
                   <div className=" rounded-full h-10 w-10 border-t-2 border-b-2 border-teal-400">
                     {user && user.avatar ? (
                       <img
@@ -106,6 +107,7 @@ export default function Navbar() {
                     <Link
                       to="/profile"
                       className="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5"
+                      onClick={playClickSound} // ⭐ AÑADIDO: Sonido al clickear el enlace
                     >
                       Tu perfil
                     </Link>
@@ -114,17 +116,19 @@ export default function Navbar() {
                     <Link
                       to="/settings"
                       className="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5"
+                      onClick={playClickSound} // ⭐ AÑADIDO: Sonido al clickear el enlace
                     >
                       Configuración
                     </Link>
                   </MenuItem>
                   <MenuItem>
                     {user ? (
-                      <LogoutButton />
+                      <LogoutButton onClick={playClickSound} /> // ⭐ Asegúrate de que LogoutButton acepta onClick
                     ) : (
                       <Link
                         to="/login"
                         className="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5"
+                        onClick={playClickSound} // ⭐ AÑADIDO: Sonido al clickear el enlace
                       >
                         Iniciar Sesión
                       </Link>
@@ -133,7 +137,10 @@ export default function Navbar() {
                 </MenuItems>
               </Menu>
               {/* Botón de hamburguesa a la derecha */}
-              <DisclosureButton className="cursor-pointer group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-white/5 hover:text-white focus:outline-2 focus:-outline-offset-1 focus:outline-indigo-500">
+              <DisclosureButton 
+                className="cursor-pointer group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-white/5 hover:text-white focus:outline-2 focus:-outline-offset-1 focus:outline-indigo-500"
+                onClick={playClickSound} // ⭐ AÑADIDO: Sonido al abrir/cerrar el menú
+              >
                 <Bars3Icon
                   aria-hidden="true"
                   className="block size-6 group-data-open:hidden"
@@ -157,7 +164,7 @@ export default function Navbar() {
                   key={item.name}
                   as={Link}
                   to={item.path}
-                  onClick={playClickSound}
+                  onClick={playClickSound} // YA ESTABA CORREGIDO
                   aria-current={isActive ? "page" : undefined}
                   className={classNames(
                     isActive
@@ -172,7 +179,10 @@ export default function Navbar() {
             })}
             <div className="flex space-x-4">
               <button
-                onClick={() => setShowTerminal(!showTerminal)}
+                onClick={() => {
+                    playClickSound(); // ⭐ YA ESTABA CORREGIDO, solo lo dejo para claridad
+                    setShowTerminal(!showTerminal);
+                }}
                 className={classNames(
                   "text-gray-300 hover:bg-white/5 hover:text-white",
                   "rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200"
