@@ -17,6 +17,9 @@ import { variants } from './utils/framer-motion-utils';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 import GameMenu from 'menus/GameMenu';
 import TestLayoutPage from '@pages/TestLayoutPage';
+import axios from 'axios';
+
+axios.defaults.withCredentials = true;
 
 // Mapea las rutas a un índice para comparar la posición
 const pathIndexMap: Record<string, number> = navigation.reduce((map, item, index) => {
