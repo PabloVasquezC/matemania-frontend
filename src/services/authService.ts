@@ -14,6 +14,9 @@ import type { IUser } from "types/IUser";
  */
 export const login: (data: ILoginData) => Promise<IAuthResponse> = async (data: ILoginData): Promise<IAuthResponse> => {
   try {
+    // NOTA: Si estás usando dj-rest-auth con JWT, la ruta de login DEBERÍA ser:
+    // `${API_URL}auth/login/` 
+    // Pero asumiendo que ya configuraste /token/ para el login, la dejo por ahora.
     const response = await axios.post(`${API_URL}token/`, {
       username: data.username,
       password: data.password,
@@ -35,20 +38,47 @@ export const login: (data: ILoginData) => Promise<IAuthResponse> = async (data: 
  */
 export const signup = async (data: SignUpData): Promise<IAuthResponse> => {
   try {
-    const response = await axios.post(`${API_URL}signup/`, {
+    // 🚨 CORRECCIÓN 1: La URL debe ser el endpoint correcto de dj-rest-auth
+    const SIGNUP_URL = `${API_URL}auth/registration/register/`; 
+    
+    // 🚨 CORRECCIÓN 2: dj-rest-auth requiere que la confirmación de la contraseña 
+    // se envíe como 'password2' si usa el serializer por defecto.
+    const response = await axios.post(SIGNUP_URL, {
       username: data.username,
       password: data.password,
       email: data.email,
-      avatar: data.avatar,
+      // Se requiere el campo 'password2' para la validación del backend
+      password2: data.confirmPassword || data.password, 
+      // El avatar lo manejaremos en el front-end después del registro exitoso o en un paso posterior.
+      // Si el backend espera un campo 'avatar' al registrar, asegúrate de que esté permitido en el serializer de Django.
     });
-    return response.data;
+
+    // dj-rest-auth puede devolver el JWT si lo configuraste para ello, o solo un mensaje de éxito.
+    return response.data; 
   } catch (err) {
     if (axios.isAxiosError(err) && err.response) {
-      const serverError = err.response.data.detail || Object.values(err.response.data)[0];
-      console.log("Estructura de error:", err.response.data);
-      throw new Error(`Error en el registro: ${serverError}`);
-      //eso me esta devolviendo un array y no se por que
-      // Podrías intentar hacer un console.log para ver la estructura de error
+      console.log("Error de respuesta del servidor:", err.response.data);
+
+      let errorMessage = "Error de registro desconocido.";
+      const errorData = err.response.data;
+
+      // Intenta extraer el error de los campos más comunes
+      if (errorData.email) {
+        errorMessage = `Email: ${errorData.email[0]}`;
+      } else if (errorData.username) {
+        errorMessage = `Usuario: ${errorData.username[0]}`;
+      } else if (errorData.password || errorData.password2) {
+        errorMessage = `Contraseña: ${errorData.password?.[0] || errorData.password2?.[0]}`;
+      } else if (errorData.non_field_errors) {
+        errorMessage = `Error: ${errorData.non_field_errors[0]}`;
+      } else if (errorData.detail) {
+        errorMessage = errorData.detail;
+      } else {
+        // En caso de estructura de error muy anidada o inesperada
+        errorMessage = JSON.stringify(errorData);
+      }
+      
+      throw new Error(`Error en el registro: ${errorMessage}`);
     } else {
       throw new Error("Error de conexión. Inténtalo de nuevo más tarde.");
     }
@@ -88,6 +118,8 @@ export const logout = async () => {
     return { message: "No hay token para invalidar" };
   }
 
+  // Si estás usando dj-rest-auth, la ruta de logout DEBERÍA ser:
+  // `${API_URL}auth/logout/`
   const response = await fetch(`${API_URL}logout/`, {
     method: "POST",
     headers: {
@@ -103,7 +135,3 @@ export const logout = async () => {
 
   return await response.json();
 };
-
-
-
-
