@@ -3,6 +3,10 @@
     {
       "source": "/api/(.*)",
       "destination": "https://matemania.cl/api/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
