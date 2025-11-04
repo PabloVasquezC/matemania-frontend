@@ -106,7 +106,7 @@ export const navigation = [
   { name: "Notificaciones", path: "/notifications" },
 ];
 
-const API_URL = "https://matemania.cl/api/";
+const API_URL = "https://api.matemania.cl";
 export { API_URL };
 
 // Definición básica de la interfaz ITile para que TypeScript no arroje errores
