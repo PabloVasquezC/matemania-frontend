@@ -291,7 +291,7 @@ function LoginPage() {
           </button>
         </form>
 
-        {/* --- NUEVO BOTÓN DE GOOGLE --- */}
+        {/* --- Separador y Botón de Google --- */}
         <div className="flex items-center my-4">
           <div className="flex-grow border-t border-gray-600"></div>
           <span className="mx-4 text-gray-400 text-sm">O</span>
@@ -309,9 +309,10 @@ function LoginPage() {
                 <path fill="#4CAF50" d="M6.306 14.691L1.517 9.357A19.92 19.92 0 000 25c0 4.191 1.054 8.169 2.924 11.536L8.038 31.52c-1.397-2.736-2.147-5.836-2.147-9.083z"/>
                 <path fill="#1976D2" d="M43.611 20.083h-1.611V20H24v8h11.303c-1.649 4.675-6.19 7.734-11.303 7.734c-5.113 0-9.654-3.059-11.303-7.734L2.924 36.536A19.92 19.92 0 0020 45c11.082 0 20-8.918 20-20c0-1.391-.144-2.75-.411-4.083h-5.978l-2.022-2.022z"/>
             </svg>
-            <span>Iniciar Sesión con Google</span>
+            {/* AQUÍ ESTÁ EL CAMBIO DINÁMICO */}
+            <span>{isLoginView ? "Iniciar Sesión con Google" : "Registrarse con Google"}</span>
         </button>
-        {/* --- FIN NUEVO BOTÓN --- */}
+        {/* --- FIN BOTÓN --- */}
 
 
         <p className="text-center text-gray-400 mt-4">
