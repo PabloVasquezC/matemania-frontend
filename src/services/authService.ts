@@ -14,7 +14,7 @@ import type { IUser } from "types/IUser";
  */
 export const login: (data: ILoginData) => Promise<IAuthResponse> = async (data: ILoginData): Promise<IAuthResponse> => {
   try {
-    // 🚨 CORREGIDO: Añadido '/' después de API_URL
+    // La ruta para obtener el token es /token/ (JWT simple)
     const response = await axios.post(`${API_URL}/token/`, {
       username: data.username,
       password: data.password,
@@ -36,7 +36,7 @@ export const login: (data: ILoginData) => Promise<IAuthResponse> = async (data: 
  */
 export const signup = async (data: SignUpData): Promise<IAuthResponse> => {
   try {
-    // 🚨 CORREGIDO: Añadido '/' después de API_URL
+    // La ruta de registro en dj-rest-auth es /auth/registration/
     const SIGNUP_URL = `${API_URL}/auth/registration/`;
     
     if (!data.username || !data.email || !data.password || !data.confirmPassword) {
@@ -86,6 +86,10 @@ export const signup = async (data: SignUpData): Promise<IAuthResponse> => {
 
 };
 
+/**
+ * Función que obtiene el perfil del usuario autenticado.
+ * @returns Una promesa con los datos del usuario.
+ */
 export const getProfile = async (): Promise<IUser> => {
   const accessToken = localStorage.getItem("access_token");
   if (!accessToken) {
@@ -93,7 +97,7 @@ export const getProfile = async (): Promise<IUser> => {
   }
 
   try {
-    // 🚨 CORREGIDO: Añadido '/' después de API_URL
+    // Ruta de ejemplo para obtener el perfil. Asegúrate que esta ruta exista en tu urls.py
     const response = await axios.get(`${API_URL}/profile/`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -114,26 +118,53 @@ export const getProfile = async (): Promise<IUser> => {
   }
 };
 
-export const logout = async () => {
-  const refresh = localStorage.getItem("refresh_token");
-  if (!refresh) {
-    return { message: "No hay token para invalidar" };
+/**
+ * Función que maneja el cierre de sesión, invalidando el token de refresco en el backend.
+ * También limpia los tokens del almacenamiento local.
+ */
+export const logout = async (): Promise<{ message: string }> => {
+  const refreshToken = localStorage.getItem("refresh_token");
+  const accessToken = localStorage.getItem("access_token");
+
+  // Limpieza inicial: Se asume que el token de refresh es lo único que hay que invalidar
+  if (refreshToken) {
+    try {
+      // Endpoint de logout de dj-rest-auth para invalidar el Refresh Token (espera POST)
+      const LOGOUT_URL = `${API_URL}/auth/logout/`; 
+
+      await axios.post(LOGOUT_URL, { 
+        refresh_token: refreshToken 
+      }, {
+        headers: {
+          "Content-Type": "application/json",
+          // Se recomienda enviar el Access Token también, aunque a veces no es estrictamente necesario 
+          // si el backend solo valida el refresh_token. Es una buena práctica.
+          ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+        },
+      });
+      
+      // Si el POST fue exitoso, el token fue invalidado en el backend
+      console.log("Logout exitoso en el backend (token invalidado).");
+
+    } catch (err) {
+        if (axios.isAxiosError(err) && err.response) {
+            // Un error 400 o 401 aquí generalmente significa que el token ya estaba invalidado o expiró.
+            // Si el token ya está muerto, podemos simplemente proceder a limpiar el frontend.
+            console.warn("Error al invalidar token de refresco (posiblemente ya expirado):", err.response.data);
+        } else {
+            // Error de conexión. Podríamos decidir no limpiar los tokens si falló la conexión, 
+            // pero para cerrar la sesión local, es mejor limpiar de todas formas.
+            console.error("Error de conexión durante el logout:", err);
+        }
+        // IMPORTANTE: Continuar con la limpieza de tokens en el frontend
+    }
+  } else {
+      console.log("No se encontró Refresh Token para invalidar en el backend.");
   }
 
-  // 🚨 CORREGIDO: Añadido '/' después de API_URL
-  // Y 🚨 NOTA: La ruta de logout de dj-rest-auth es /auth/logout/
-  const response = await fetch(`${API_URL}/auth/logout/`, { // <- URL corregida
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-    },
-    body: JSON.stringify({ refresh_token: refresh }), // dj-rest-auth espera 'refresh_token'
-  });
+  // PASO FINAL: Limpiar los tokens en el frontend, independientemente del éxito del POST.
+  localStorage.removeItem("access_token");
+  localStorage.removeItem("refresh_token");
 
-  if (!response.ok) {
-    throw new Error("Error cerrando sesión");
-  }
-
-  return await response.json();
+  return { message: "Sesión cerrada correctamente" };
 };
