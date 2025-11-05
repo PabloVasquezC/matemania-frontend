@@ -107,7 +107,7 @@ export const getProfile = async (): Promise<IUser> => {
   }
 
   try {
-    const response = await axios.get(`${API_URL}profile/`, {
+    const response = await axios.get(`${API_URL}/profile/`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
