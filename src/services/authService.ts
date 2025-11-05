@@ -14,7 +14,10 @@ import type { IUser } from "types/IUser";
  */
 export const login: (data: ILoginData) => Promise<IAuthResponse> = async (data: ILoginData): Promise<IAuthResponse> => {
   try {
-    const response = await axios.post(`${API_URL}token/`, {
+    // 🔴 NOTA: Esta ruta de login /token/ es para JWT simple.
+    // La ruta de dj-rest-auth es /auth/login/
+    // Si el login falla después, revisa esta URL.
+    const response = await axios.post(`${API_URL}/token/`, {
       username: data.username,
       password: data.password,
     });
@@ -35,28 +38,34 @@ export const login: (data: ILoginData) => Promise<IAuthResponse> = async (data: 
  */
 export const signup = async (data: SignUpData): Promise<IAuthResponse> => {
   try {
+    // Esta URL es la correcta (sin /register/ al final)
     const SIGNUP_URL = `${API_URL}/auth/registration/`;
     
-    // 🚨 DEBUGGING CRUCIAL: Comprobar si algún campo es null/undefined/cadena vacía.
+    // Comprobación de campos vacíos (buena práctica)
     if (!data.username || !data.email || !data.password || !data.confirmPassword) {
       console.error("DEBUG: Datos de registro incompletos:", data);
       throw new Error("Por favor, rellena todos los campos requeridos para el registro.");
     }
 
+    // 🚨 LA CORRECCIÓN ESTÁ AQUÍ 🚨
+    // El backend (dj-rest-auth) espera 'password1' y 'password2'
     const payload = {
         username: data.username,
-        password: data.password,
         email: data.email,
-        // dj-rest-auth requiere 'password2' para la validación de la confirmación.
+        password1: data.password, // <- Renombrado de 'password'
         password2: data.confirmPassword, 
     };
     
     // Muestra el JSON exacto que se enviará al servidor
     console.log("DEBUG: Payload de registro enviado a Django:", payload);
 
-    const response = await axios.post(SIGNUP_URL, payload);
+    // Aseguramos el Content-Type por si acaso
+    const response = await axios.post(SIGNUP_URL, payload, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
 
-    // dj-rest-auth puede devolver el JWT si lo configuraste para ello, o solo un mensaje de éxito.
     return response.data; 
   } catch (err) {
     if (axios.isAxiosError(err) && err.response) {
@@ -65,20 +74,19 @@ export const signup = async (data: SignUpData): Promise<IAuthResponse> => {
       let errorMessage = "Error de registro desconocido.";
       const errorData = err.response.data;
 
-      // Intenta extraer el error de los campos más comunes
+      // 🚨 CORRECCIÓN EN EL MANEJO DE ERRORES 🚨
+      // Actualizado para buscar 'password1' en los errores
       if (errorData.email) {
         errorMessage = `Email: ${errorData.email[0]}`;
       } else if (errorData.username) {
         errorMessage = `Usuario: ${errorData.username[0]}`;
-      } else if (errorData.password || errorData.password2) {
-        // Mejorar la lectura del error de contraseña
-        errorMessage = `Contraseña: ${errorData.password?.[0] || errorData.password2?.[0]}`;
+      } else if (errorData.password1 || errorData.password2) {
+        errorMessage = `Contraseña: ${errorData.password1?.[0] || errorData.password2?.[0]}`;
       } else if (errorData.non_field_errors) {
         errorMessage = `Error: ${errorData.non_field_errors[0]}`;
       } else if (errorData.detail) {
         errorMessage = errorData.detail;
       } else {
-        // En caso de estructura de error muy anidada o inesperada
         errorMessage = JSON.stringify(errorData);
       }
       
@@ -92,7 +100,6 @@ export const signup = async (data: SignUpData): Promise<IAuthResponse> => {
 };
 
 export const getProfile = async (): Promise<IUser> => {
-  // Obtén el token de acceso del localStorage
   const accessToken = localStorage.getItem("access_token");
 
   if (!accessToken) {
@@ -102,7 +109,6 @@ export const getProfile = async (): Promise<IUser> => {
   try {
     const response = await axios.get(`${API_URL}profile/`, {
       headers: {
-        // Incluye el token de acceso en el encabezado de autorización
         Authorization: `Bearer ${accessToken}`,
       },
     });
@@ -123,8 +129,8 @@ export const logout = async () => {
     return { message: "No hay token para invalidar" };
   }
 
-  // Si estás usando dj-rest-auth, la ruta de logout DEBERÍA ser:
-  // `${API_URL}auth/logout/`
+  // 🔴 NOTA: Esta ruta /logout/ probablemente falle si /token/
+  // está en core.urls. La ruta de dj-rest-auth es /auth/logout/
   const response = await fetch(`${API_URL}logout/`, {
     method: "POST",
     headers: {
