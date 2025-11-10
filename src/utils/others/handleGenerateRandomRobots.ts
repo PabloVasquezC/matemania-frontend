@@ -1,4 +1,4 @@
-import type { IRoboHash } from "../types/IRoboHash";
+import type { IRoboHash } from "types/IRoboHash";
 
 const handleGenerateRandomRobot = (stateSetter: React.Dispatch<React.SetStateAction<IRoboHash>>) => {
     const newRobot: IRoboHash = {

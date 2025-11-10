@@ -1,4 +1,4 @@
-import type { ITile } from '../types/ITile';
+import type { ITile } from 'types/ITile';
 
 
 
