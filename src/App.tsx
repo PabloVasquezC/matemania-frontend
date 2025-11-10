@@ -13,7 +13,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
 import NotificationsPage from './pages/NotifiationPage/NotificationsPages';
 import { navigation } from './constants/constants';
-import { variants } from './utils/framer-motion-utils';
+import { variants } from './utils/animations/framer-motion-utils';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 import GameMenu from 'menus/GameMenu';
 import TestLayoutPage from '@pages/TestLayoutPage';

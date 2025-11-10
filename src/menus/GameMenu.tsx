@@ -1,31 +1,58 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "@assets/logo.png";
+import playClickSound from "@utils/sounds/play_sound";
+// Importa el nuevo archivo TSX
+import CustomSelect from "./CustomSelect"; 
+
+// ⭐️ Interfaz de ayuda para tipar las opciones
+interface Option {
+  value: string;
+  label: string;
+}
+
+// ⭐️ TIPADO de las opciones
+const modeOptions: Option[] = [
+  { value: "matematico", label: "matemático 🎓" },
+  { value: "cientifico", label: "científico 🧪" },
+  { value: "visual", label: "visual (Color) 👁️" },
+  { value: "sonoro", label: "sonoro (BETA) 🎵" },
+];
+
+const difficultyOptions: Option[] = [
+  { value: "easy", label: "Fácil 🎉" },
+  { value: "medium", label: "Medio 🎯" },
+  { value: "hard", label: "Difícil 🚀" },
+];
 
 export default function GameMenu() {
-  const [userName, setUserName] = useState("");
-  const [difficulty, setDifficulty] = useState("medium");
-  // Inicializamos con "matematico" (el valor por defecto)
-  const [mode, setMode] = useState("matematico"); 
+  // ⭐️ Tipado explícito de useState no es estrictamente necesario aquí, 
+  // pero lo hacemos por claridad
+  const [userName, setUserName] = useState<string>("");
+  const [difficulty, setDifficulty] = useState<string>("medium");
+  const [mode, setMode] = useState<string>("matematico"); 
   const navigate = useNavigate();
+
+  // ... (useEffect y handleStartGame permanecen iguales)
 
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
     if (storedUsername) {
       setUserName(storedUsername);
     }
-    // Opcional: Cargar el último modo/dificultad usado
     const storedMode = localStorage.getItem("mode");
     if (storedMode) {
       setMode(storedMode);
     }
+    const storedDifficulty = localStorage.getItem("difficulty");
+    if (storedDifficulty) {
+      setDifficulty(storedDifficulty);
+    }
   }, []);
 
   const handleStartGame = () => {
-    // ⭐️ GUARDAMOS EL MODO EN localStorage
     localStorage.setItem("difficulty", difficulty);
     localStorage.setItem("mode", mode);
-
     navigate("/game");
   };
 
@@ -66,43 +93,26 @@ export default function GameMenu() {
             Configuración de Juego
           </h2>
 
-          {/* Tipo de juego */}
-          <div className="mb-6 text-left">
-            <label className="block mb-2 font-semibold text-gray-300">
-              Tipo de juego
-            </label>
-            <select
-              value={mode}
-              onChange={(e) => setMode(e.target.value)}
-              className="w-full p-3 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
-            >
-              <option value="matematico">matemático 🎓</option>
-              <option value="cientifico">científico 🧪</option>
-              <option value="visual">visual (Color) 👁️</option>
-              <option value="sonoro">sonoro (BETA) 🎵</option>
-            </select>
-          </div>
+          {/* USAMOS EL COMPONENTE CUSTOM SELECT */}
+          <CustomSelect
+            label="Tipo de juego"
+            value={mode}
+            onChange={setMode}
+            options={modeOptions}
+          />
 
-          {/* Nivel de dificultad agregar iconos */}
-          <div className="mb-6 text-left">
-            <label className="block mb-2 font-semibold text-gray-300">
-              Nivel de dificultad
-            </label>
-            <select
-              value={difficulty}
-              onChange={(e) => setDifficulty(e.target.value)}
-              className="w-full p-3 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-teal-400"
-            >
-              <option value="easy">Fácil 🎉</option>
-              <option value="medium">Medio 🎯</option>
-              <option value="hard">Difícil 🚀</option>
-            </select>
-          </div>
+          {/* USAMOS EL COMPONENTE CUSTOM SELECT */}
+          <CustomSelect
+            label="Nivel de dificultad"
+            value={difficulty}
+            onChange={setDifficulty}
+            options={difficultyOptions}
+          />
 
         </section>
 
         <button
-          onClick={handleStartGame}
+          onClick={() => { playClickSound(); handleStartGame(); }}
           className="
             bg-gradient-to-r 
             from-blue-500 

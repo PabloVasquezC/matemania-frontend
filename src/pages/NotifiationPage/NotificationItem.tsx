@@ -1,6 +1,6 @@
-import SuccessIcon from "@utils/successIcon";
+import SuccessIcon from "@utils/others/successIcon";
 import type { INotification } from "../../types/INotification";
-import ErrorIcon from "@utils/errorIcon";
+import ErrorIcon from "@utils/others/errorIcon";
 
 function NotificationItem({ notification }: { notification: INotification }) {
   const getIconForType = (type: INotification["type"]) => {

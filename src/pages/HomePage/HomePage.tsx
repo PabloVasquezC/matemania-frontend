@@ -3,6 +3,7 @@ import logo from "@assets/logo.png";
 import "./home-page.css";
 import { useUserStore } from "store/useUserStore";
 import type { IUserState } from "../../types/IUserState";
+import playClickSound from "@utils/sounds/play_sound";
 
 export default function HomePage() {
 
@@ -64,7 +65,7 @@ export default function HomePage() {
           </p>
         </section>
 
-        <Link to="/gamemenu" className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
+        <Link onClick={playClickSound} to="/gamemenu" className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
           ¡Jugar ahora!
         </Link>
       </main>
