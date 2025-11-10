@@ -18,6 +18,7 @@ import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 import GameMenu from 'menus/GameMenu';
 import TestLayoutPage from '@pages/TestLayoutPage';
 import axios from 'axios';
+// IMPORTACIÓN DE SHEPHERD PRO ELIMINADA
 
 axios.defaults.withCredentials = true;
 

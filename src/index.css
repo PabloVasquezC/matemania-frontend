@@ -1,4 +1,6 @@
+@import 'shepherd.js/dist/css/shepherd.css';
 @import "tailwindcss";
+
 
 /* body {
     cursor: none;
