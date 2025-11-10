@@ -1,0 +1,47 @@
+/* -------------------------------------------
+   Estilos base de Shepherd.js
+   Asegúrate de que los estilos por defecto se apliquen
+   ------------------------------------------- */
+@import 'shepherd.js/dist/css/shepherd.css';
+
+/* -------------------------------------------
+   CORRECCIÓN CRÍTICA: FORZAR Z-INDEX
+   Asegura que el modal y el tooltip estén por encima de todo.
+   ------------------------------------------- */
+
+/* El contenedor del modal (fondo oscuro) debe estar en la capa superior */
+.shepherd-modal-overlay-container {
+    z-index: 99999 !important; 
+}
+
+/* El elemento del paso (el cuadro de diálogo) debe estar por encima del modal */
+.shepherd-element {
+    z-index: 100000 !important;
+}
+
+/* -------------------------------------------
+   Estilos de Tailwind para la clase personalizada
+   ------------------------------------------- */
+.shepherd-theme-custom {
+  /* Estas clases se aplican al contenido del tooltip */
+}
+
+/* Opcional: Ajustar el botón de cierre */
+.shepherd-has-cancel .shepherd-cancel-icon {
+  color: #fff; /* Ícono blanco */
+  padding: 0.5rem;
+}
+
+/* Opcional: Estilo de los botones */
+.shepherd-button {
+  background-color: #2563EB; /* Color azul */
+  color: #fff;
+  border-radius: 0.5rem; /* rounded-lg */
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.shepherd-button:hover {
+  background-color: #3B82F6; /* Color azul más claro al pasar el ratón */
+}
