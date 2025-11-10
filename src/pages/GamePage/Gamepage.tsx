@@ -11,12 +11,12 @@ import { useState, useEffect, useCallback } from "react"; // 💡 Se agrega useC
 
 import type { ITile } from "../../types/ITile";
 import PlayerRack from "../../components/PlayerRack/PlayerRack";
-import generateRandomTiles from "../../utils/generate_random_tiles";
-import createHandleDragEnd from "../../utils/handle_drag_end";
+import generateRandomTiles from "../../utils/others/generate_random_tiles";
+import createHandleDragEnd from "../../utils/drag&drop/handle_drag_end";
 
 // 💡 IMPORTACIONES NECESARIAS PARA LA VALIDACIÓN FINAL
-import { getPlaySequences } from "../../utils/board_scanner"; 
-import playValidations from "../../utils/play_validations"; 
+import { getPlaySequences } from "../../utils/others/board_scanner"; 
+import playValidations from "../../utils/validations/play_validations"; 
 // ----------------------------------------------------
 
 

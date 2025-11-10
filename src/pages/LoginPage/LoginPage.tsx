@@ -2,9 +2,9 @@ import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import type { IRoboHash } from "../../types/IRoboHash";
 // Rutas corregidas de Alias (@utils) a relativas (../../utils)
-import SuccessIcon from "../../utils/successIcon"; 
-import ErrorIcon from "../../utils/errorIcon";
-import handleGenerateRandomRobot from "../../utils/handleGenerateRandomRobots";
+import SuccessIcon from "../../utils/others/successIcon"; 
+import ErrorIcon from "../../utils/others/errorIcon";
+import handleGenerateRandomRobot from "../../utils/others/handleGenerateRandomRobots";
 // Rutas corregidas de Alias (@services) a relativas (../../services)
 import { login, signup } from "../../services/authService";
 import { getProfile } from '../../services/authService';
@@ -14,7 +14,7 @@ import logo from "../../assets/logo.png";
 import { useUserStore } from "../../store/useUserStore";
 // Importaciones ya relativas o corregidas
 import { loginSuccessSound, errorSound } from "../../soundsManager"; 
-import { unlockAudioContext } from "../../utils/unlockAudioContext";
+import { unlockAudioContext } from "../../utils/sounds/unlockAudioContext";
 import { API_URL } from "../../constants/constants"; 
 
 function LoginPage() {
