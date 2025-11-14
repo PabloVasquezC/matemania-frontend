@@ -8,6 +8,17 @@ import type { IUser } from "types/IUser";
 
 
 /**
+ * Función que genera la URL del endpoint de Django para iniciar el flujo de autenticación de Google.
+ * Esta URL es a la que debe redirigir el botón "Login con Google" en el Frontend.
+ * @returns La URL completa del endpoint de Django.
+ */
+export const getGoogleLoginUrl = (): string => {
+  // Coincide con el path definido en cognitiles/urls.py: 'auth/google/login/'
+  return `${API_URL}/auth/google/login/`; 
+};
+
+
+/**
  * Función que maneja el inicio de sesión del usuario.
  * @param data Los datos de inicio de sesión (usuario y contraseña).
  * @returns Una promesa con la respuesta de la API.
