@@ -106,7 +106,13 @@ export const navigation = [
   { name: "Notificaciones", path: "/notifications" },
 ];
 
-const API_URL = "https://api.matemania.cl";
+const API_URL = import.meta.env.VITE_API_URL;
+
+// Verifica que la variable se haya cargado correctamente
+if (!API_URL) {
+  console.error("VITE_API_URL no está definido en tu entorno. Asegúrate de tener un archivo .env válido.");
+}
+
 export { API_URL };
 
 // Definición básica de la interfaz ITile para que TypeScript no arroje errores
