@@ -19,5 +19,12 @@ const errorSound = new Howl({
   preload: true,
 });
 
+const gamemusic = new Howl({
+  src: ["assets/sounds/gamesmusic.mp3"],
+  volume: 1,
+  preload: true,
+});
 
-export { loginSuccessSound, clickSound, errorSound };
+
+
+export { loginSuccessSound, clickSound, errorSound, gamemusic };
