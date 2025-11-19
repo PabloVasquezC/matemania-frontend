@@ -18,11 +18,11 @@ import playValidations from "../../utils/validations/play_validations";
 import { useState, useEffect, useCallback } from "react"; 
 import type { ITile } from "../../types/ITile";
 
-// Shepherd (Asumo que sigue disponible en tu entorno)
+// Shepherd
 import Shepherd, { type StepOptions } from 'shepherd.js';
 import './shepherd-custom.css'; 
 
-// ⭐️ INTERFACE para el sistema de mensajes (reemplazo de alert)
+// ⭐️ INTERFACE para el sistema de mensajes
 interface MessageState {
     visible: boolean;
     text: string;
@@ -82,12 +82,14 @@ function Gamepage() {
   const [tiles, setTiles] = useState<ITile[]>([]);
   const [tileLocations, setTileLocations] = useState<Record<string, string>>({});
 
-  // ⭐️ FIX: Inicializamos timeLeft a null para evitar que el timer se dispare a 0 antes de cargar.
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
+  
+  // 🆕 NUEVO ESTADO: Controla si el reloj debe correr o no
+  const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false);
+
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
   const [message, setMessage] = useState<MessageState>({ visible: false, text: '', type: 'info' });
 
-  // ⭐️ Función de reemplazo para alert()
   const showMessage = useCallback((text: string, type: MessageState['type'] = 'info') => {
     setMessage({ visible: true, text, type });
   }, []);
@@ -101,10 +103,15 @@ function Gamepage() {
       setPlayer((prev) => ({ ...prev, score: prev.score + points }));
   };
 
-  // ⭐️ LÓGICA DEL TOUR (se mantiene igual, asumiendo que Shepherd es accesible)
+  // ⭐️ LÓGICA DEL TOUR MODIFICADA
   useEffect(() => {
-    if (localStorage.getItem('matemania_game_tour_seen')) return;
+    // Si ya vio el tour, activamos el reloj INMEDIATAMENTE y salimos
+    if (localStorage.getItem('matemania_game_tour_seen')) {
+        setIsTimerRunning(true); 
+        return;
+    }
 
+    // Si no lo ha visto, el reloj sigue en false (pausado) por defecto
     const tour = new Shepherd.Tour({
         defaultStepOptions: {
             cancelIcon: { enabled: true },
@@ -148,24 +155,30 @@ function Gamepage() {
           attachTo: { element: '#end-turn-button', on: 'top' }, 
           buttons: [
             { text: 'Anterior', action: tour.back },
-            { text: '¡Entendido!', action: tour.complete }
+            { text: '¡Entendido!', action: tour.complete } // Al completar, se dispara el evento complete
           ]
         }
     ];
 
     tour.addSteps(steps);
 
-    const markAsSeen = () => localStorage.setItem('matemania_game_tour_seen', 'true');
-    tour.on('complete', markAsSeen);
-    tour.on('cancel', markAsSeen);
+    // 🆕 Función para marcar como visto Y arrancar el reloj
+    const finishTour = () => {
+        localStorage.setItem('matemania_game_tour_seen', 'true');
+        setIsTimerRunning(true); // <--- AQUÍ ARRANCA EL RELOJ
+    };
+
+    tour.on('complete', finishTour);
+    tour.on('cancel', finishTour); // Si lo cancela, también arranca
 
     const timer = setTimeout(() => {
         const rackElement = document.querySelector('#player-rack-area');
-        
         if (rackElement) {
             tour.start();
         } else {
-            console.warn("Shepherd: No se encontró el Rack, abortando tour para evitar errores.");
+            console.warn("Shepherd: No se encontró el Rack, abortando tour.");
+            // Si falla el tour por alguna razón, arrancamos el reloj por seguridad
+            setIsTimerRunning(true);
         }
     }, 1000);
 
@@ -175,22 +188,21 @@ function Gamepage() {
             tour.cancel();
         }
     };
-  }, []);
+  }, []); // Array vacío, solo al montar
 
   
-  // ⭐️ LÓGICA INICIAL DEL JUEGO Y TEMPORIZADOR
+  // ⭐️ LÓGICA INICIAL DEL JUEGO (Carga de datos)
   useEffect(() => {
     const gameMode = localStorage.getItem("mode") || "matematico"; 
     const storedUsername = localStorage.getItem("username");
     if (storedUsername) setPlayer((prev) => ({ ...prev, name: storedUsername }));
 
-    // Obtener y establecer el límite de tiempo desde localStorage
     const storedTimeLimit = localStorage.getItem("timeLimit");
     const initialTime = parseInt(storedTimeLimit || "180", 10); 
-    // FIX: SetTimeLeft aquí con el valor cargado. Ya no se dispara a 0 en el render inicial.
+    
     setTimeLeft(initialTime); 
+    // NOTA: Aquí NO activamos isTimerRunning. Esperamos al Tour.
 
-    // Inicializar fichas
     const initialTiles = generateRandomTiles(30, gameMode); 
     setTiles(initialTiles);
 
@@ -199,15 +211,15 @@ function Gamepage() {
     setTileLocations(initialLocations);
   }, []);
 
-  // ⭐️ LÓGICA DEL TEMPORIZADOR
+  // ⭐️ LÓGICA DEL TEMPORIZADOR MODIFICADA
   useEffect(() => {
-    // FIX: Si el tiempo es null, significa que aún se está cargando, salir.
     if (timeLeft === null) return;
 
-    // Ahora, solo si timeLeft es 0 (o menos) Y no se ha declarado game over, lo declaramos.
+    // 🆕 GUARDIA: Si el reloj no debe correr (ej: tour activo), no hacemos nada
+    if (!isTimerRunning) return; 
+
     if (isGameOver || timeLeft <= 0) {
         if (timeLeft === 0 && !isGameOver) {
-            // Se dispara el fin de juego cuando el tiempo llega a cero
             setIsGameOver(true);
             showMessage(`⏰ ¡Tiempo agotado! Tu puntuación final es: ${player.score}`, 'error');
         }
@@ -215,13 +227,11 @@ function Gamepage() {
     }
 
     const intervalId = setInterval(() => {
-        // Aseguramos que solo restamos si no es null
         setTimeLeft(prevTime => (prevTime !== null ? prevTime - 1 : 0));
     }, 1000);
 
-    // Función de limpieza para detener el intervalo
     return () => clearInterval(intervalId);
-  }, [timeLeft, isGameOver, showMessage, player.score]); // timeLeft sigue siendo una dependencia
+  }, [timeLeft, isGameOver, showMessage, player.score, isTimerRunning]); // Agregamos isTimerRunning a dependencias
 
   const handleEndTurn = useCallback(() => {
     if (isGameOver) {
@@ -278,7 +288,6 @@ function Gamepage() {
         });
         
         setCurrentPlayTiles([]);
-        // Reemplazo de alert()
         showMessage(`🎉 ¡Jugada Válida! Puntos: ${totalPlayPoints}`, 'success');
     } else {
         setTileLocations(prev => {
@@ -289,7 +298,6 @@ function Gamepage() {
             return revertedLocations;
         });
         setCurrentPlayTiles([]);
-        // Reemplazo de alert()
         showMessage("❌ Jugada Inválida. Revierte las fichas.", 'error');
     }
   }, [currentPlayTiles, tileLocations, tiles, updateScore, showMessage, isGameOver]); 
@@ -303,38 +311,37 @@ function Gamepage() {
     useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } })
   );
 
-  // Determinar el color del temporizador
   const timerColor = timeLeft !== null && timeLeft <= 30 && timeLeft > 0 
-    ? 'text-red-500 animate-pulse' // Rojo si quedan 30 segundos
+    ? 'text-red-500 animate-pulse'
     : timeLeft !== null && timeLeft <= 60 
-    ? 'text-yellow-500' // Amarillo si queda 1 minuto
-    : 'text-teal-400'; // Normal
+    ? 'text-yellow-500'
+    : 'text-teal-400'; 
 
-  // FIX: Mostrar 'Cargando...' si el tiempo aún no se ha cargado.
   const timeDisplay = timeLeft !== null ? formatTime(timeLeft) : 'Cargando...';
 
   return (
     <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
       <div className="flex flex-col-reverse md:flex-row items-center justify-center min-h-screen bg-gray-900 text-white font-sans p-6 space-y-6 md:space-y-0 md:space-x-12">
         
-        {/* ⭐️ TEMPORIZADOR EN LA PARTE SUPERIOR/CENTRAL */}
+        {/* TEMPORIZADOR */}
         <div className="absolute top-4 md:top-8 left-1/2 transform -translate-x-1/2 p-3 bg-gray-800/90 rounded-xl shadow-lg border border-gray-700">
             <h3 className="text-sm font-light text-gray-400">Tiempo restante:</h3>
             <p className={`text-4xl font-extrabold ${timerColor}`}>
                 {timeDisplay}
             </p>
+            {/* Indicador visual opcional si está pausado por el tour */}
+            {!isTimerRunning && timeLeft !== null && !isGameOver && (
+                 <span className="text-xs text-yellow-400 block mt-1">Pausado (Tutorial)</span>
+            )}
         </div>
 
 
         <PlayerRack player={player}>
-          {/* ID Score */}
           <p id="player-score" className="text-xl font-bold">Puntuación: {player.score}</p> 
           
-          {/* ID Botón Validar */}
           <button 
               id="end-turn-button"
               onClick={handleEndTurn}
-              // Desactivado si el juego termina o no hay fichas jugadas
               disabled={currentPlayTiles.length === 0 || isGameOver || timeLeft === null}
               className={`mt-4 p-3 rounded-lg font-semibold transition-colors w-full ${
                   isGameOver 
@@ -347,13 +354,11 @@ function Gamepage() {
               {isGameOver ? 'Juego Terminado 💀' : 'Terminar Turno'}
           </button>
           
-          {/* ID Rack (Contenedor) */}
           <div id="player-rack-area" className="mt-4">
              <Rack tiles={tiles} tileLocations={tileLocations} />
           </div>
         </PlayerRack>
 
-        {/* ID Tablero */}
         <div 
           id="game-board-area"
           className="my-16 bg-gradient-to-r from-blue-800 to-teal-400 p-2 md:p-6 backdrop-blur-md rounded-2xl shadow-2xl border border-gray-700/50"
@@ -361,7 +366,6 @@ function Gamepage() {
           <Board tiles={tiles} tileLocations={tileLocations} />
         </div>
         
-        {/* ⭐️ Renderiza el sistema de mensajes */}
         <MessageBox message={message} onClose={hideMessage} />
 
       </div>
