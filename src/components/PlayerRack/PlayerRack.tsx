@@ -7,7 +7,7 @@ import {
 } from "@heroicons/react/24/outline";
 
 function PlayerRack({
-  player,
+  
   children,
 }: {
   player: IPlayer;
@@ -57,53 +57,10 @@ function PlayerRack({
 
       
 
-      <div className="w-full flex justify-center space-x-3 mt-4">
-        {/* Botón de "Play": Azul Marino */}
-        <button
-          className="flex-1 font-medium py-2 px-4 rounded-full transition-all duration-200
-                           text-white 
-                           bg-gradient-to-r from-blue-900 to-slate-900
-                           hover:from-blue-800 hover:to-slate-800
-                           active:shadow-inner active:shadow-gray-950
-                           focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          Jugar
-        </button>
-        {/* Botón de "Pass": Gris Pizarra */}
-        <button
-          className="flex-1 font-medium py-2 px-4 rounded-full transition-all duration-200
-                           text-white
-                           bg-gradient-to-r from-slate-600 to-gray-700
-                           hover:from-slate-700 hover:to-gray-800
-                           active:shadow-inner active:shadow-gray-950
-                           focus:outline-none focus:ring-2 focus:ring-gray-500"
-        >
-          Pasar
-        </button>
-        {/* Botón de "Sort": Tono Dorado/Bronce */}
-        <button
-          className="flex-1 font-medium py-2 px-4 rounded-full transition-all duration-200
-                           text-black
-                           bg-gradient-to-r from-amber-400 to-yellow-500
-                           hover:from-amber-300 hover:to-yellow-400
-                           active:shadow-inner active:shadow-gray-950
-                           focus:outline-none focus:ring-2 focus:ring-amber-500"
-        >
-          Ordenar
-        </button>
-      </div>
-
-      <div className="w-full text-center mt-4">
-        {player.isActive ? (
-          <p className="text-yellow-400 font-semibold text-lg animate-pulse">
-            ¡Tu turno!
-          </p>
-        ) : (
-          <p className="text-gray-400 text-sm">Esperando...</p>
-        )}
-      </div>
+      
     </div>
   );
 }
 
 export default PlayerRack;
+

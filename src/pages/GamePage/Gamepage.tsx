@@ -7,18 +7,19 @@ import {
 } from "@dnd-kit/core";
 import Rack from "../../components/Rack/Rack";
 import Board from "../../components/Board/Board";
-import { useState, useEffect, useCallback } from "react"; // 💡 Se agrega useCallback para handleEndTurn
+import { useState, useEffect, useCallback } from "react"; 
 
 import type { ITile } from "../../types/ITile";
 import PlayerRack from "../../components/PlayerRack/PlayerRack";
 import generateRandomTiles from "../../utils/others/generate_random_tiles";
 import createHandleDragEnd from "../../utils/drag&drop/handle_drag_end";
 
-// 💡 IMPORTACIONES NECESARIAS PARA LA VALIDACIÓN FINAL
 import { getPlaySequences } from "../../utils/others/board_scanner"; 
 import playValidations from "../../utils/validations/play_validations"; 
-// ----------------------------------------------------
 
+// Shepherd
+import Shepherd, { type StepOptions } from 'shepherd.js';
+import './shepherd-custom.css'; 
 
 function Gamepage() {
   const [currentPlayTiles, setCurrentPlayTiles] = useState<string[]>([]);
@@ -30,80 +31,130 @@ function Gamepage() {
   }>({ name: "Player 1", isActive: true, id: "player-1", score: 0 });
   
   const [tiles, setTiles] = useState<ITile[]>([]);
-  const [tileLocations, setTileLocations] = useState<Record<string, string>>(
-    {}
-  );
+  const [tileLocations, setTileLocations] = useState<Record<string, string>>({});
 
   const updateScore = (points: number) => {
-      setPlayer((prev) => ({ 
-          ...prev, 
-          score: prev.score + points 
-      }));
+      setPlayer((prev) => ({ ...prev, score: prev.score + points }));
   };
 
-
-  // ⭐️ 1. Lógica de inicialización
+  // ⭐️ LÓGICA DEL TOUR CORREGIDA
   useEffect(() => {
-    // 1. Obtener el modo de juego y el nombre de usuario
+    // 1. Verificar si ya se vio el tour
+    if (localStorage.getItem('matemania_game_tour_seen')) return;
+
+    // 2. Crear la instancia PRIMERO para poder usarla en los botones
+    const tour = new Shepherd.Tour({
+        defaultStepOptions: {
+            cancelIcon: { enabled: true },
+            classes: 'shepherd-theme-custom', 
+            scrollTo: { behavior: 'smooth', block: 'center' },
+        },
+        useModalOverlay: true
+    });
+
+    
+
+    // 3. Definir los pasos DENTRO del useEffect usando la instancia 'tour' directamente
+    // Esto arregla el botón "Siguiente" que se quedaba pegado
+    const steps: StepOptions[] = [
+        {
+          id: 'rack-intro',
+          text: '1. TUS FICHAS: Aquí comienza todo. Estas son tus piezas disponibles. Arrástralas al tablero para jugar.',
+          attachTo: { element: '#player-rack-area', on: 'top' }, 
+          buttons: [
+            { text: 'Omitir', action: tour.cancel }, 
+            { text: 'Siguiente', action: tour.next } // Referencia directa, sin 'this'
+          ]
+        },
+        {
+          id: 'board-intro',
+          text: '2. EL TABLERO: Suelta las fichas aquí. Debes formar ecuaciones matemáticas válidas (ej: 2+2=4).',
+          attachTo: { element: '#game-board-area', on: 'left' }, 
+          buttons: [
+            { text: 'Anterior', action: tour.back },
+            { text: 'Siguiente', action: tour.next }
+          ]
+        },
+        {
+          id: 'score-intro',
+          text: '3. PUNTUACIÓN: Mantén un ojo en tus puntos acumulados aquí.',
+          attachTo: { element: '#player-score', on: 'bottom' }, 
+          buttons: [
+            { text: 'Anterior', action: tour.back },
+            { text: 'Siguiente', action: tour.next }
+          ]
+        },
+        {
+          id: 'validate-btn',
+          text: '4. VALIDAR: ¡Importante! Cuando termines tu ecuación, pulsa este botón para finalizar el turno.',
+          attachTo: { element: '#end-turn-button', on: 'top' }, 
+          buttons: [
+            { text: 'Anterior', action: tour.back },
+            { text: '¡Entendido!', action: tour.complete }
+          ]
+        }
+    ];
+
+    tour.addSteps(steps);
+
+    // 4. Eventos para guardar en localStorage
+    const markAsSeen = () => localStorage.setItem('matemania_game_tour_seen', 'true');
+    tour.on('complete', markAsSeen);
+    tour.on('cancel', markAsSeen);
+
+    // 5. Inicio retardado y seguro
+    // Esperamos 1 segundo completo para asegurar que React haya pintado el Rack y el Tablero
+    const timer = setTimeout(() => {
+        const rackElement = document.querySelector('#player-rack-area');
+        
+        if (rackElement) {
+            tour.start();
+        } else {
+            console.warn("Shepherd: No se encontró el Rack, abortando tour para evitar errores.");
+        }
+    }, 1000);
+
+    // Limpieza
+    return () => {
+        clearTimeout(timer);
+        if (tour.isActive()) {
+            tour.cancel(); // Usamos cancel en lugar de hide para limpiar mejor
+        }
+    };
+  }, []); // Array vacío: Solo al montar
+
+  
+  // LÓGICA DEL JUEGO (Sin cambios funcionales)
+  useEffect(() => {
     const gameMode = localStorage.getItem("mode") || "matematico"; 
     const storedUsername = localStorage.getItem("username");
-    
-    if (storedUsername) {
-        setPlayer((prev) => ({ ...prev, name: storedUsername }));
-    }
+    if (storedUsername) setPlayer((prev) => ({ ...prev, name: storedUsername }));
 
-    // 2. Generar fichas con el modo correcto
-    // Nota: Si el rack inicial no es de 7, ajusta este número (e.g., a 30 para el ejemplo)
     const initialTiles = generateRandomTiles(30, gameMode); 
-    
     setTiles(initialTiles);
 
     const initialLocations: Record<string, string> = {};
-    initialTiles.forEach((tile) => {
-      initialLocations[tile.id] = "pool";
-    });
+    initialTiles.forEach((tile) => initialLocations[tile.id] = "pool");
     setTileLocations(initialLocations);
   }, []);
 
-  
-  // ⭐️ 2. Función de Validación y Término de Turno (handleEndTurn)
-  // Usamos useCallback para que solo se defina una vez y no rompa dependencias
-  // Define esta función DENTRO de tu componente principal (Gamepage.tsx)
-// Asegúrate de que tienes estas dependencias importadas: getPlaySequences, playValidations, generateRandomTiles
-
-const handleEndTurn = useCallback(() => {
-    
-    // 1. CHEQUEO INICIAL: Mínimo de fichas jugadas
+  const handleEndTurn = useCallback(() => {
     if (currentPlayTiles.length < 3) {
-        alert("❌ Error: La jugada debe formar una ecuación válida de al menos 3 fichas (Ej: 1=1).");
+        alert("❌ Error: Mínimo 3 fichas.");
         return;
     }
-
-    // 2. DETERMINAR EL PUNTO DE ESCANEO
     const firstPlayedTileId = currentPlayTiles[0];
     const scanLocation = tileLocations[firstPlayedTileId]; 
-    
-    // ... (Chequeos de scanLocation) ...
-
-    // 3. ESCANEAR SECUENCIAS
-    const { horizontal, vertical } = getPlaySequences(
-        tiles, 
-        tileLocations, 
-        scanLocation 
-    );
+    const { horizontal, vertical } = getPlaySequences(tiles, tileLocations, scanLocation);
 
     let validPlay = false;
     let totalPlayPoints = 0;
     
-    // --- LÓGICA DE VALIDACIÓN (Debe estar aquí, usando playValidations) ---
-    
     const checkSequenceValidity = (sequence: ITile[]) => {
-        // ... (Tu lógica para verificar longitud, contención de currentPlayTiles, y llamar a playValidations) ...
         if (sequence.length > 2) {
              const allPlayedTilesAreContained = currentPlayTiles.every(
                 playedId => sequence.some(tile => tile.id === playedId)
             );
-
             if (allPlayedTilesAreContained) {
                 const validation = playValidations(sequence);
                 if (validation.isValid) {
@@ -115,138 +166,83 @@ const handleEndTurn = useCallback(() => {
         return false;
     };
 
-    if (checkSequenceValidity(horizontal)) {
-        validPlay = true;
-    }
-    // Lógica para vertical (si es una secuencia distinta y válida)
-    if (!validPlay && checkSequenceValidity(vertical)) { 
-         validPlay = true;
-    }
-
-
-    // 4. DECISIÓN FINAL: ACEPTAR O RECHAZAR
+    if (checkSequenceValidity(horizontal)) validPlay = true;
+    if (!validPlay && checkSequenceValidity(vertical)) validPlay = true;
 
     if (validPlay) {
-        // --- ACEPTAR JUGADA ---
-        
-        // a) Actualizar la puntuación
         updateScore(totalPlayPoints);
-
-        // b) Determinar cuántas fichas reponer (solo las que estaban en el rack al inicio del turno)
         const tilesToReplaceFromRack = tiles.filter(tile => 
              currentPlayTiles.includes(tile.id) && tileLocations[tile.id] === 'pool'
         );
-        const numTilesToReplace = tilesToReplaceFromRack.length;
-        const newRandomTiles = generateRandomTiles(numTilesToReplace);
+        const newRandomTiles = generateRandomTiles(tilesToReplaceFromRack.length);
 
-        
-        // 🛑 CORRECCIÓN CRUCIAL: MANTENER FICHAS JUGADAS Y REEMPLAZAR SOLO LAS QUE ERAN DEL RACK
         setTiles(prevTiles => {
-            // 1. Fichas a mantener: todas las que no fueron jugadas O las que fueron jugadas y ya están en el tablero.
             const tilesToKeep = prevTiles.filter(tile => !tilesToReplaceFromRack.some(t => t.id === tile.id));
-            
-            // 2. Retornar las fichas que se quedan + las nuevas fichas para el rack.
             return [...tilesToKeep, ...newRandomTiles]; 
         });
 
-
-        // c) Actualizar `tileLocations` para asignar las nuevas fichas al "pool"
         setTileLocations(prevLocations => {
             const newLocations = {...prevLocations};
-            newRandomTiles.forEach(newTile => {
-                newLocations[newTile.id] = "pool";
-            });
-            // Las ubicaciones de las fichas jugadas (square-R-C) NO se tocan, por lo que permanecen fijas.
+            newRandomTiles.forEach(newTile => newLocations[newTile.id] = "pool");
             return newLocations;
         });
-        // ------------------- FIN DE CORRECCIÓN -------------------
         
         setCurrentPlayTiles([]);
-        alert(`🎉 ¡Jugada válida! Ganaste ${totalPlayPoints} puntos.`);
-
+        alert(`🎉 Puntos: ${totalPlayPoints}`);
     } else {
-        // --- RECHAZAR JUGADA (Lógica de reversión que ya estaba bien) ---
-        
         setTileLocations(prev => {
             const revertedLocations = {...prev};
             currentPlayTiles.forEach(id => {
-                if (revertedLocations[id].startsWith('square-')) {
-                    revertedLocations[id] = "pool"; // Devuelve la ficha al rack
-                }
+                if (revertedLocations[id].startsWith('square-')) revertedLocations[id] = "pool"; 
             });
             return revertedLocations;
         });
-
         setCurrentPlayTiles([]);
-        alert("❌ Jugada Inválida: Fichas devueltas al Rack.");
+        alert("❌ Inválida");
     }
-}, [currentPlayTiles, tileLocations, tiles, updateScore]); // Dependencias
+  }, [currentPlayTiles, tileLocations, tiles, updateScore]); 
 
-  
-  // ⭐️ 3. Crear el handler de arrastre (usa el estado actual de tiles)
-  // Este handler solo mueve las fichas y registra el drop en currentPlayTiles
   const handleDragEnd = createHandleDragEnd({
-      tileLocations,
-      setTiles,
-      setTileLocations,
-      tiles, 
-      updateScore, 
-      setCurrentPlayTiles 
+      tileLocations, setTiles, setTileLocations, tiles, updateScore, setCurrentPlayTiles 
   });
   
-
   const sensors = useSensors(
     useSensor(MouseSensor),
-    useSensor(TouchSensor, {
-      activationConstraint: {
-        delay: 250,
-        tolerance: 5,
-      },
-    })
+    useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } })
   );
 
   return (
     <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
-      <div
-        className="
-        flex 
-        flex-col-reverse    
-        md:flex-row         
-        items-center 
-        justify-center 
-        min-h-screen 
-        bg-gray-900 
-        text-white 
-        font-sans 
-        p-6 
-        space-y-6 
-        md:space-y-0 
-        md:space-x-12
-      "
-      >
-        {/* Rack del Jugador y Controles */}
+      <div className="flex flex-col-reverse md:flex-row items-center justify-center min-h-screen bg-gray-900 text-white font-sans p-6 space-y-6 md:space-y-0 md:space-x-12">
+        
         <PlayerRack player={player}>
-          <p className="text-xl font-bold">Puntuación: {player.score}</p> 
+          {/* ID Score */}
+          <p id="player-score" className="text-xl font-bold">Puntuación: {player.score}</p> 
           
-          {/* Botón de Validación del Turno */}
+          {/* ID Botón Validar */}
           <button 
+              id="end-turn-button"
               onClick={handleEndTurn}
               disabled={currentPlayTiles.length === 0}
-              className={`
-                mt-4 p-3 rounded-lg font-semibold transition-colors 
-                ${currentPlayTiles.length > 0 ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-600 cursor-not-allowed'}
-              `}
+              className={`mt-4 p-3 rounded-lg font-semibold transition-colors ${currentPlayTiles.length > 0 ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-600 cursor-not-allowed'}`}
           >
-              Terminar Turno y Validar ({currentPlayTiles.length} fichas)
+              Terminar Turno
           </button>
           
-          <Rack tiles={tiles} tileLocations={tileLocations} />
+          {/* ID Rack (Contenedor) */}
+          <div id="player-rack-area" className="mt-4">
+             <Rack tiles={tiles} tileLocations={tileLocations} />
+          </div>
         </PlayerRack>
 
-        {/* Tablero */}
-        <div className="my-16 bg-gradient-to-r from-blue-800 to-teal-400 p-2 md:p-6 backdrop-blur-md rounded-2xl shadow-2xl border border-gray-700/50">
+        {/* ID Tablero */}
+        <div 
+          id="game-board-area"
+          className="my-16 bg-gradient-to-r from-blue-800 to-teal-400 p-2 md:p-6 backdrop-blur-md rounded-2xl shadow-2xl border border-gray-700/50"
+        >
           <Board tiles={tiles} tileLocations={tileLocations} />
         </div>
+
       </div>
     </DndContext>
   );
