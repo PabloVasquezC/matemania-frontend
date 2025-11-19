@@ -19,6 +19,7 @@ import { useState, useEffect, useCallback } from "react";
 import type { ITile } from "../../types/ITile";
 import Shepherd, { type StepOptions } from 'shepherd.js';
 import './shepherd-custom.css'; 
+import { gamemusic } from "soundsManager";
 
 // ⭐️ INTERFACE para el sistema de mensajes
 interface MessageState {
@@ -159,6 +160,24 @@ function Gamepage() {
         if (tour.isActive()) tour.cancel();
     };
   }, []);
+
+  // 🎵 EFECTO DE MÚSICA DE FONDO 🎵
+  useEffect(() => {
+    // Solo reproducimos si el reloj está corriendo y el juego NO ha terminado
+    if (isTimerRunning && !isGameOver) {
+        // El id nos sirve para controlar esta instancia específica
+        const soundId = gamemusic.play();
+        gamemusic.fade(0, 0.5, 2000, soundId); // Efecto "Fade In" suave de 2 segundos
+    } else {
+        // Si el juego termina o se pausa el reloj, paramos la música
+        gamemusic.stop();
+    }
+
+    // LIMPIEZA: Si el usuario sale de la página (desmonta el componente), cortar la música
+    return () => {
+        gamemusic.stop();
+    };
+  }, [isTimerRunning, isGameOver]); // Se ejecuta cuando cambia el estado del timer o game over
 
   // --- LÓGICA DE INICIO ---
   useEffect(() => {
