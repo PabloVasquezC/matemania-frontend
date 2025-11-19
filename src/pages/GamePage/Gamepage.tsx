@@ -82,8 +82,8 @@ function Gamepage() {
   const [tiles, setTiles] = useState<ITile[]>([]);
   const [tileLocations, setTileLocations] = useState<Record<string, string>>({});
 
-  // ⭐️ Estados para el temporizador y mensajes
-  const [timeLeft, setTimeLeft] = useState<number>(0);
+  // ⭐️ FIX: Inicializamos timeLeft a null para evitar que el timer se dispare a 0 antes de cargar.
+  const [timeLeft, setTimeLeft] = useState<number | null>(null);
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
   const [message, setMessage] = useState<MessageState>({ visible: false, text: '', type: 'info' });
 
@@ -186,9 +186,9 @@ function Gamepage() {
 
     // Obtener y establecer el límite de tiempo desde localStorage
     const storedTimeLimit = localStorage.getItem("timeLimit");
-    // El valor se almacena como string de segundos ("60", "180", "300")
     const initialTime = parseInt(storedTimeLimit || "180", 10); 
-    setTimeLeft(initialTime);
+    // FIX: SetTimeLeft aquí con el valor cargado. Ya no se dispara a 0 en el render inicial.
+    setTimeLeft(initialTime); 
 
     // Inicializar fichas
     const initialTiles = generateRandomTiles(30, gameMode); 
@@ -201,7 +201,10 @@ function Gamepage() {
 
   // ⭐️ LÓGICA DEL TEMPORIZADOR
   useEffect(() => {
-    // Si el juego ha terminado, no hacemos nada
+    // FIX: Si el tiempo es null, significa que aún se está cargando, salir.
+    if (timeLeft === null) return;
+
+    // Ahora, solo si timeLeft es 0 (o menos) Y no se ha declarado game over, lo declaramos.
     if (isGameOver || timeLeft <= 0) {
         if (timeLeft === 0 && !isGameOver) {
             // Se dispara el fin de juego cuando el tiempo llega a cero
@@ -212,12 +215,13 @@ function Gamepage() {
     }
 
     const intervalId = setInterval(() => {
-        setTimeLeft(prevTime => prevTime - 1);
+        // Aseguramos que solo restamos si no es null
+        setTimeLeft(prevTime => (prevTime !== null ? prevTime - 1 : 0));
     }, 1000);
 
     // Función de limpieza para detener el intervalo
     return () => clearInterval(intervalId);
-  }, [timeLeft, isGameOver, showMessage, player.score]);
+  }, [timeLeft, isGameOver, showMessage, player.score]); // timeLeft sigue siendo una dependencia
 
   const handleEndTurn = useCallback(() => {
     if (isGameOver) {
@@ -300,11 +304,14 @@ function Gamepage() {
   );
 
   // Determinar el color del temporizador
-  const timerColor = timeLeft <= 30 && timeLeft > 0 
+  const timerColor = timeLeft !== null && timeLeft <= 30 && timeLeft > 0 
     ? 'text-red-500 animate-pulse' // Rojo si quedan 30 segundos
-    : timeLeft <= 60 
+    : timeLeft !== null && timeLeft <= 60 
     ? 'text-yellow-500' // Amarillo si queda 1 minuto
     : 'text-teal-400'; // Normal
+
+  // FIX: Mostrar 'Cargando...' si el tiempo aún no se ha cargado.
+  const timeDisplay = timeLeft !== null ? formatTime(timeLeft) : 'Cargando...';
 
   return (
     <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
@@ -314,7 +321,7 @@ function Gamepage() {
         <div className="absolute top-4 md:top-8 left-1/2 transform -translate-x-1/2 p-3 bg-gray-800/90 rounded-xl shadow-lg border border-gray-700">
             <h3 className="text-sm font-light text-gray-400">Tiempo restante:</h3>
             <p className={`text-4xl font-extrabold ${timerColor}`}>
-                {formatTime(timeLeft)}
+                {timeDisplay}
             </p>
         </div>
 
@@ -328,7 +335,7 @@ function Gamepage() {
               id="end-turn-button"
               onClick={handleEndTurn}
               // Desactivado si el juego termina o no hay fichas jugadas
-              disabled={currentPlayTiles.length === 0 || isGameOver}
+              disabled={currentPlayTiles.length === 0 || isGameOver || timeLeft === null}
               className={`mt-4 p-3 rounded-lg font-semibold transition-colors w-full ${
                   isGameOver 
                     ? 'bg-red-800 cursor-not-allowed' 
