@@ -19,7 +19,7 @@ import { useState, useEffect, useCallback } from "react";
 import type { ITile } from "../../types/ITile";
 import Shepherd, { type StepOptions } from 'shepherd.js';
 import './shepherd-custom.css'; 
-import { gamemusic } from "soundsManager";
+import { gamemusic } from "../../soundsManager";
 
 // ⭐️ INTERFACE para el sistema de mensajes
 interface MessageState {
