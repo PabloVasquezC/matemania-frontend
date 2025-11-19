@@ -19,5 +19,14 @@ const errorSound = new Howl({
   preload: true,
 });
 
+const gamemusic = new Howl({
+  src: ["assets/sounds/gamesmusic.mp3"],
+  volume: 0.5, // 🔉 Recomendado: Bajarlo un poco para que no moleste
+  loop: true,  // 🔁 Importante: Para que no se detenga al acabar la canción
+  preload: true,
+  html5: true // Recomendado para archivos de música largos
+});
 
-export { loginSuccessSound, clickSound, errorSound };
+
+
+export { loginSuccessSound, clickSound, errorSound, gamemusic };
