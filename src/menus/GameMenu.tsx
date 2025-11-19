@@ -25,15 +25,21 @@ const difficultyOptions: Option[] = [
   { value: "hard", label: "Difícil 🚀" },
 ];
 
+// ⭐️ NUEVO: Opciones de tiempo en minutos (almacenamos el valor en segundos)
+const timeOptions: Option[] = [
+  { value: "60", label: "1 minuto (60s)" },
+  { value: "180", label: "3 minutos (180s)" },
+  { value: "300", label: "5 minutos (300s)" },
+];
+
+
 export default function GameMenu() {
-  // ⭐️ Tipado explícito de useState no es estrictamente necesario aquí, 
-  // pero lo hacemos por claridad
   const [userName, setUserName] = useState<string>("");
   const [difficulty, setDifficulty] = useState<string>("medium");
   const [mode, setMode] = useState<string>("matematico"); 
+  // ⭐️ NUEVO: Estado para el límite de tiempo (por defecto 3 minutos = 180 segundos)
+  const [timeLimit, setTimeLimit] = useState<string>("180"); 
   const navigate = useNavigate();
-
-  // ... (useEffect y handleStartGame permanecen iguales)
 
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
@@ -48,11 +54,18 @@ export default function GameMenu() {
     if (storedDifficulty) {
       setDifficulty(storedDifficulty);
     }
+    // ⭐️ NUEVO: Cargar límite de tiempo
+    const storedTimeLimit = localStorage.getItem("timeLimit");
+    if (storedTimeLimit) {
+      setTimeLimit(storedTimeLimit);
+    }
   }, []);
 
   const handleStartGame = () => {
     localStorage.setItem("difficulty", difficulty);
     localStorage.setItem("mode", mode);
+    // ⭐️ NUEVO: Guardar límite de tiempo
+    localStorage.setItem("timeLimit", timeLimit);
     navigate("/game");
   };
 
@@ -88,12 +101,12 @@ export default function GameMenu() {
           hover:scale-[1.01]
         "
       >
-        <section className="mb-6">
+        <section className="mb-6 space-y-4">
           <h2 className="text-3xl md:text-4xl font-bold text-teal-400 mb-6 animate-slideIn">
             Configuración de Juego
           </h2>
 
-          {/* USAMOS EL COMPONENTE CUSTOM SELECT */}
+          {/* USAMOS EL COMPONENTE CUSTOM SELECT - Tipo de juego */}
           <CustomSelect
             label="Tipo de juego"
             value={mode}
@@ -101,12 +114,21 @@ export default function GameMenu() {
             options={modeOptions}
           />
 
-          {/* USAMOS EL COMPONENTE CUSTOM SELECT */}
+          {/* USAMOS EL COMPONENTE CUSTOM SELECT - Dificultad */}
           <CustomSelect
             label="Nivel de dificultad"
             value={difficulty}
             onChange={setDifficulty}
             options={difficultyOptions}
+          />
+          
+          {/* ⭐️ NUEVO: USAMOS EL COMPONENTE CUSTOM SELECT - Límite de tiempo */}
+          <CustomSelect
+            label="Límite de tiempo"
+            value={timeLimit}
+            // Asegúrate de que el valor sea un string
+            onChange={setTimeLimit} 
+            options={timeOptions}
           />
 
         </section>

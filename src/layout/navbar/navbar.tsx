@@ -27,7 +27,7 @@ import playClickSound from "@utils/sounds/play_sound";
 
 const navigation = [
   { name: "Inicio", path: "/" },
-  { name: "Jugar", path: "/game" },
+  { name: "Jugar", path: "/gamemenu" },
   { name: "Acerca de", path: "/about" },
   { name: "Configuraciones", path: "/settings" },
   { name: "Perfil", path: "/profile" },

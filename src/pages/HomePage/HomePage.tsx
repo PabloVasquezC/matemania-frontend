@@ -175,7 +175,7 @@ export default function HomePage() {
 
                 <Link 
                   onClick={playClickSound} 
-                  to="/game" 
+                  to="/gamemenu" 
                   // ⭐️ ID necesario para el tour (Tercer paso)
                   id="start-game-button"
                   className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
