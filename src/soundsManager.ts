@@ -20,7 +20,7 @@ const errorSound = new Howl({
 });
 
 const gamemusic = new Howl({
-  src: ["assets/sounds/gamesmusic.mp3"],
+  src: ["assets/sounds/gamemusic.mp3"],
   volume: 0.5, // 🔉 Recomendado: Bajarlo un poco para que no moleste
   loop: true,  // 🔁 Importante: Para que no se detenga al acabar la canción
   preload: true,
