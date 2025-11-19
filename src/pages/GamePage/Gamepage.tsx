@@ -21,6 +21,8 @@ import Shepherd, { type StepOptions } from 'shepherd.js';
 import './shepherd-custom.css'; 
 import { gamemusic } from "../../soundsManager";
 
+//nothing to compare!?
+
 // ⭐️ INTERFACE para el sistema de mensajes
 interface MessageState {
     visible: boolean;
