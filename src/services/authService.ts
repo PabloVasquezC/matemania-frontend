@@ -61,6 +61,7 @@ export const signup = async (data: SignUpData): Promise<IAuthResponse> => {
         email: data.email,
         password1: data.password,
         password2: data.confirmPassword, 
+        avatar: data.avatar // <--- ¡ESTO FALTABA!
     };
     
     console.log("DEBUG: Payload de registro enviado a Django:", payload);
