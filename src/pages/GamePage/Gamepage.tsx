@@ -34,31 +34,54 @@ interface MessageState {
 const MessageBox = ({ message, onClose }: { message: MessageState, onClose: () => void }) => {
     if (!message.visible) return null;
 
-    const baseClasses = "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 p-6 rounded-xl shadow-2xl transition-opacity duration-300 max-w-sm w-11/12 text-center font-bold text-white transform scale-100";
+    const baseClasses = "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 p-6 md:p-8 rounded-2xl shadow-2xl transition-all duration-300 max-w-sm w-11/12 text-center font-bold text-white transform animate-scale-in backdrop-blur-md";
     let colorClasses = "";
     
     switch (message.type) {
         case 'success':
-            colorClasses = "bg-green-600/90 border-4 border-green-400";
+            colorClasses = "bg-gradient-to-br from-green-600/95 to-teal-600/95 border-4 border-green-400 shadow-green-500/50";
             break;
         case 'error': // Usamos rojo para el Game Over
-            colorClasses = "bg-red-600/90 border-4 border-red-400";
+            colorClasses = "bg-gradient-to-br from-red-600/95 to-rose-600/95 border-4 border-red-400 shadow-red-500/50";
             break;
         case 'info':
-            colorClasses = "bg-blue-600/90 border-4 border-blue-400";
+            colorClasses = "bg-gradient-to-br from-blue-600/95 to-indigo-600/95 border-4 border-blue-400 shadow-blue-500/50";
             break;
     }
 
     return (
-        <div className={`${baseClasses} ${colorClasses} animate-bounceIn`}>
-            <p className="text-lg mb-4">{message.text}</p>
-            <button 
+        <>
+            {/* Backdrop overlay */}
+            <div 
+                className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 animate-fade-in"
                 onClick={onClose}
-                className="bg-white text-gray-800 font-semibold py-1 px-4 rounded-full hover:bg-gray-200 transition"
-            >
-                Aceptar
-            </button>
-        </div>
+            />
+            <div className={`${baseClasses} ${colorClasses}`}>
+                <p className="text-lg md:text-xl mb-4 md:mb-6 leading-relaxed whitespace-pre-line">{message.text}</p>
+                <button 
+                    onClick={onClose}
+                    className="
+                        bg-white 
+                        text-gray-800 
+                        font-semibold 
+                        py-2 
+                        px-6
+                        md:py-3
+                        md:px-8
+                        rounded-full 
+                        hover:bg-gray-100
+                        transition-all
+                        duration-200
+                        transform
+                        hover:scale-110
+                        active:scale-95
+                        shadow-lg
+                    "
+                >
+                    Aceptar
+                </button>
+            </div>
+        </>
     );
 }
 
@@ -299,45 +322,117 @@ const turnPoints = tilesPlayedObjects.reduce((total, tile) => total + (Number(ti
 
   return (
     <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
-      <div className="flex flex-col-reverse md:flex-row items-center justify-center min-h-screen bg-gray-900 text-white font-sans p-6 space-y-6 md:space-y-0 md:space-x-12">
+      <div className="
+        flex 
+        flex-col-reverse 
+        lg:flex-row 
+        items-center 
+        justify-center 
+        min-h-screen 
+        bg-gray-900 
+        text-white 
+        font-sans 
+        p-4
+        sm:p-6 
+        md:p-8
+        gap-6
+        md:gap-8
+        lg:gap-12
+      ">
         
         {/* TEMPORIZADOR */}
-        <div className="absolute top-4 md:top-8 left-1/2 transform -translate-x-1/2 p-3 bg-gray-800/90 rounded-xl shadow-lg border border-gray-700">
-            <h3 className="text-sm font-light text-gray-400">Tiempo restante:</h3>
-            <p className={`text-4xl font-extrabold ${timerColor}`}>
+        <div className="
+          fixed 
+          top-20
+          sm:top-24
+          md:top-28
+          left-1/2 
+          transform 
+          -translate-x-1/2 
+          p-4
+          md:p-5
+          glass-effect
+          rounded-2xl 
+          shadow-2xl 
+          border-2
+          border-gray-700/80
+          z-10
+          animate-scale-in
+        ">
+            <h3 className="text-xs sm:text-sm font-light text-gray-400 text-center mb-1">Tiempo restante</h3>
+            <p className={`text-3xl sm:text-4xl md:text-5xl font-extrabold text-center ${timerColor}`}>
                 {timeDisplay}
             </p>
             {!isTimerRunning && timeLeft !== null && !isGameOver && (
-                 <span className="text-xs text-yellow-400 block mt-1">Pausado (Tutorial)</span>
+                 <span className="text-xs text-yellow-400 block mt-1 text-center">Pausado (Tutorial)</span>
             )}
         </div>
 
         <PlayerRack player={player}>
-          <p id="player-score" className="text-xl font-bold">Puntuación: {player.score}</p> 
+          <p id="player-score" className="
+            text-xl 
+            md:text-2xl
+            font-bold
+            text-teal-400
+            mb-2
+          ">Puntuación: {player.score}</p> 
           
           <button 
               id="end-turn-button"
               onClick={handleEndTurn}
               disabled={currentPlayTiles.length === 0 || isGameOver || timeLeft === null}
-              className={`mt-4 p-3 rounded-lg font-semibold transition-colors w-full ${
+              className={`
+                mt-4 
+                p-3
+                md:p-4
+                rounded-xl 
+                font-semibold 
+                transition-all
+                duration-200
+                w-full
+                text-base
+                md:text-lg
+                transform
+                hover:scale-105
+                active:scale-95
+                shadow-lg
+                ${
                   isGameOver 
-                    ? 'bg-red-800 cursor-not-allowed' 
+                    ? 'bg-red-800 cursor-not-allowed opacity-60' 
                     : currentPlayTiles.length > 0 
-                      ? 'bg-green-600 hover:bg-green-700' 
-                      : 'bg-gray-600 cursor-not-allowed'
+                      ? 'bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600 hover:shadow-teal-500/50' 
+                      : 'bg-gray-600 cursor-not-allowed opacity-60'
               }`}
           >
               {isGameOver ? 'Juego Terminado 💀' : 'Terminar Turno'}
           </button>
           
-          <div id="player-rack-area" className="mt-4">
+          <div id="player-rack-area" className="mt-4 md:mt-6">
              <Rack tiles={tiles} tileLocations={tileLocations} />
           </div>
         </PlayerRack>
 
         <div 
           id="game-board-area"
-          className="my-16 bg-gradient-to-r from-blue-800 to-teal-400 p-2 md:p-6 backdrop-blur-md rounded-2xl shadow-2xl border border-gray-700/50"
+          className="
+            my-8
+            lg:my-0
+            bg-gradient-to-br 
+            from-blue-800/80
+            via-teal-600/60
+            to-teal-400/80
+            p-3
+            sm:p-4
+            md:p-6 
+            backdrop-blur-md 
+            rounded-3xl 
+            shadow-2xl 
+            border-2
+            border-gray-700/50
+            hover:border-teal-500/50
+            transition-all
+            duration-300
+          "
         >
           <Board tiles={tiles} tileLocations={tileLocations} />
         </div>

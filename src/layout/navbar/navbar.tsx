@@ -67,7 +67,7 @@ export default function Navbar() {
             <div className="flex items-center space-x-2">
               <button
                 type="button"
-                className="relative rounded-full p-1 text-gray-400 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500 transition-colors duration-200 transform hover:scale-110"
+                className="notification-bell relative rounded-full p-1 text-gray-400 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500 transition-all duration-200 transform hover:scale-110"
                 onClick={playClickSound}
               >
                 <Link to="/notifications">
@@ -76,7 +76,7 @@ export default function Navbar() {
               </button>
               <Menu as="div" className=" relative ml-3">
                 <MenuButton 
-                  className=" relative flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 transition-transform duration-200 transform hover:scale-110"
+                  className="avatar-container relative flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 transition-all duration-200 transform hover:scale-110"
                   onClick={playClickSound}
                 >
                   <div className=" rounded-full h-10 w-10 border-t-2 border-b-2 border-teal-400">

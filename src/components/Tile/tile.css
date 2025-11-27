@@ -1,0 +1,81 @@
+/* ===================================
+   TILE ANIMATIONS & EFFECTS
+   =================================== */
+
+/* Shimmer effect on hover */
+.tile-component::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.3) 50%,
+            transparent 100%);
+    transition: left 0.5s ease;
+}
+
+.tile-component:hover::before {
+    left: 100%;
+}
+
+/* Pulsing animation for newly generated tiles */
+@keyframes tileSpawn {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) rotate(-10deg);
+    }
+
+    50% {
+        transform: scale(1.1) rotate(5deg);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+.tile-spawn {
+    animation: tileSpawn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Enhanced dragging feedback */
+.tile-component:active {
+    cursor: grabbing;
+    filter: brightness(1.2);
+}
+
+/* Glow effect for special tiles */
+.tile-special {
+    position: relative;
+    animation: tileGlow 2s ease-in-out infinite;
+}
+
+@keyframes tileGlow {
+
+    0%,
+    100% {
+        box-shadow:
+            0 0 5px rgba(45, 212, 191, 0.5),
+            0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    50% {
+        box-shadow:
+            0 0 15px rgba(45, 212, 191, 0.8),
+            0 0 25px rgba(45, 212, 191, 0.4),
+            0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+    .tile-component {
+        /* Slightly larger touch targets on mobile */
+        min-width: 2.5rem;
+        min-height: 2.5rem;
+    }
+}

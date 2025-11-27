@@ -116,21 +116,47 @@ export default function HomePage() {
 
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4 font-sans">
-            <img src={logo} alt="Logo" className="w-100 h-100 mb-4 animate-fadeIn" />
-            <header className="mb-10 text-center animate-fadeIn">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4 sm:p-6 md:p-8 font-sans">
+            <img 
+                src={logo} 
+                alt="Logo" 
+                className="
+                    w-24 h-24
+                    sm:w-32 sm:h-32
+                    md:w-40 md:h-40
+                    mb-6 md:mb-8
+                    animate-fadeIn
+                    animate-float
+                    drop-shadow-2xl
+                " 
+            />
+            <header className="mb-8 md:mb-12 text-center animate-fadeIn stagger-delay-1">
                 <h1 
-                    // ⭐️ ID aplicado al título para el primer paso
                     id="app-title"
-                    className="text-5xl md:text-6xl font-extrabold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500 animate-pulse">
+                    className="
+                        text-4xl
+                        sm:text-5xl
+                        md:text-6xl
+                        lg:text-7xl
+                        font-extrabold 
+                        mb-3 md:mb-4
+                        text-transparent 
+                        bg-clip-text 
+                        bg-gradient-to-r 
+                        from-teal-400 
+                        via-blue-500
+                        to-indigo-500
+                        gradient-animate
+                        drop-shadow-lg
+                    ">
                     Matemanía
                 </h1>
                 {user ? (
-                    <p className="text-lg md:text-xl text-gray-400">
-                        <span className="font-bold text-teal-300">¡Hola {user.username}!</span> Bienvenido a Matemania,
+                    <p className="text-base sm:text-lg md:text-xl text-gray-300 px-4">
+                        <span className="font-bold text-teal-300 animate-shimmer">¡Hola {user.username}!</span> Bienvenido a Matemania
                     </p>
                 ) : (
-                    <p className="text-lg md:text-xl text-gray-400">
+                    <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-2xl mx-auto px-4">
                         Donde las letras se convierten en números y el ingenio matemático es tu mejor jugada.
                     </p>
                 )}
@@ -139,31 +165,53 @@ export default function HomePage() {
             <main 
                 className="
                   w-full 
-                  max-w-2xl 
-                  bg-gray-800 
-                  rounded-2xl 
+                  max-w-3xl
+                  glass-effect
+                  rounded-3xl 
                   shadow-2xl 
-                  p-8 md:p-12 
+                  p-6
+                  sm:p-8
+                  md:p-12
+                  lg:p-16
                   text-center 
                   transform 
                   transition-all 
                   duration-500 
-                  hover:scale-[1.01]
+                  hover:scale-[1.02]
+                  hover:shadow-teal-500/20
+                  animate-fadeIn
+                  stagger-delay-2
+                  border
+                  border-gray-700/50
                 "
             >
-                <section className="mb-6">
+                <section className="mb-8 md:mb-10">
                     <h2 className="
-                        text-3xl 
-                        md:text-4xl 
+                        text-2xl
+                        sm:text-3xl
+                        md:text-4xl
+                        lg:text-5xl
                         font-bold 
-                        text-teal-400 
-                        mb-4 
-                        animate-slideIn">
+                        gradient-text
+                        mb-4 md:mb-6
+                        animate-slideIn
+                        stagger-delay-3
+                    ">
                         Pon a prueba tu mente
                     </h2>
-                    {/* ⭐️ ID necesario para el tour (Segundo paso) */}
                     <p 
-                      className="text-base md:text-lg text-gray-300 leading-relaxed animate-slideIn"
+                      className="
+                        text-sm
+                        sm:text-base
+                        md:text-lg
+                        text-gray-300 
+                        leading-relaxed 
+                        md:leading-loose
+                        animate-slideIn
+                        stagger-delay-3
+                        max-w-2xl
+                        mx-auto
+                      "
                       id="game-explanation-text"
                     >
                         Bienvenido a una nueva dimensión de Scrabble. En lugar de formar palabras, crearás ecuaciones. 
@@ -176,9 +224,42 @@ export default function HomePage() {
                 <Link 
                   onClick={playClickSound} 
                   to="/gamemenu" 
-                  // ⭐️ ID necesario para el tour (Tercer paso)
                   id="start-game-button"
-                  className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
+                  className="
+                    inline-block
+                    bg-gradient-to-r 
+                    from-teal-500 
+                    via-blue-500
+                    to-indigo-600 
+                    hover:from-teal-600 
+                    hover:via-blue-600
+                    hover:to-indigo-700 
+                    text-white 
+                    font-bold 
+                    text-base
+                    sm:text-lg
+                    md:text-xl
+                    py-3 
+                    px-8
+                    md:py-4
+                    md:px-12
+                    rounded-xl
+                    transition-all
+                    duration-300 
+                    ease-out
+                    transform 
+                    hover:scale-110
+                    hover:shadow-2xl
+                    hover:shadow-teal-500/50
+                    active:scale-95
+                    shadow-lg
+                    animate-scale-in
+                    stagger-delay-3
+                    hover:-translate-y-1
+                    border-2
+                    border-teal-400/20
+                    hover:border-teal-400/60
+                  ">
                     ¡Jugar ahora!
                 </Link>
             </main>
