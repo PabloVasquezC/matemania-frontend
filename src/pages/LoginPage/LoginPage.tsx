@@ -134,7 +134,7 @@ function LoginPage() {
       setMessage("");
 
       // La URL completa a la que redirige Django allauth para Google
-      const googleLoginUrl = `${API_URL}/auth/google/login/`;
+      const googleLoginUrl = `${API_URL}accounts/auth/google/login/`;
       
       console.log("Redirigiendo a Google OAuth:", googleLoginUrl);
       
