@@ -89,7 +89,7 @@ function LoginPage() {
 
       setMessage("Login exitoso. ¡Bienvenido!");
       playLoginSuccess(); 
-      setTimeout(() => navigate("/"), 150);
+      setTimeout(() => navigate("/"), 250);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido.");
       playErrorSound(); 
