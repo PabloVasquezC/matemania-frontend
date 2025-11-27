@@ -1,0 +1,54 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - navigation [ref=e4]:
+      - generic [ref=e6]:
+        - link "Matemanía Logo" [ref=e8]:
+          - /url: /
+          - img "Matemanía Logo" [ref=e9]
+        - generic [ref=e10]:
+          - button [ref=e11]:
+            - link [ref=e12]:
+              - /url: /notifications
+              - img [ref=e13]
+          - button [ref=e16]:
+            - img [ref=e19]
+          - button [ref=e21] [cursor=pointer]:
+            - img [ref=e22]
+    - generic [ref=e26]:
+      - img "Logo" [ref=e27]
+      - banner [ref=e28]:
+        - heading "Matemanía" [level=1] [ref=e29]
+        - paragraph [ref=e30]: Donde las letras se convierten en números y el ingenio matemático es tu mejor jugada.
+      - main [ref=e31]:
+        - generic [ref=e32]:
+          - heading "Pon a prueba tu mente" [level=2] [ref=e33]
+          - paragraph [ref=e34]: Bienvenido a una nueva dimensión de Scrabble. En lugar de formar palabras, crearás ecuaciones. Utiliza las fichas numéricas y operadores (+, -, *, /) para construir expresiones matemáticas válidas y obtener la puntuación más alta. Piensa estratégicamente, bloquea a tu oponente y demuestra que eres el maestro de los números.
+        - link "¡Jugar ahora!" [ref=e35]:
+          - /url: /gamemenu
+    - contentinfo [ref=e36]:
+      - paragraph [ref=e38]:
+        - generic [ref=e39]:
+          - emphasis [ref=e40]: Matemanía
+          - generic [ref=e41]: fue hecho con
+        - generic [ref=e42]:
+          - generic [ref=e43]: ❤️
+          - generic [ref=e44]: "&"
+          - generic [ref=e45]: ☕
+          - generic [ref=e46]: por Pablo Vásquez
+        - link "GitHub Profile" [ref=e47]:
+          - /url: https://github.com/PabloVasquezC
+          - img [ref=e48]
+  - img
+  - img
+  - dialog [active] [ref=e51]:
+    - generic [ref=e53]:
+      - banner [ref=e54]:
+        - button "Close Tour" [ref=e55] [cursor=pointer]: ×
+      - generic [ref=e56]: ¡Bienvenido a Matemanía! Empecemos un tour rápido. Haz clic en Siguiente.
+      - contentinfo [ref=e57]:
+        - button "Omitir" [ref=e58] [cursor=pointer]
+        - button "Siguiente" [ref=e59] [cursor=pointer]
+```
