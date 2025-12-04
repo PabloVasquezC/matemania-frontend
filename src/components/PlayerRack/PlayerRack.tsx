@@ -2,24 +2,14 @@ import type { IUserState } from "types/IUserState";
 import type { IPlayer } from "../../types/IPlayer";
 import type { ReactNode } from "react";
 import { useUserStore } from "store/useUserStore";
-import {
-  UserIcon,
-} from "@heroicons/react/24/outline";
+import { UserIcon } from "@heroicons/react/24/outline";
 
-function PlayerRack({
-  
-  children,
-}: {
-  player: IPlayer;
-  children?: ReactNode;
-}) {
+function PlayerRack({ children }: { player: IPlayer; children?: ReactNode }) {
   const user = useUserStore((state: IUserState) => state.user);
 
   return (
     <div
       className="
-      max-w-96
-      h-170
       bg-gray-800/50
       rounded-xl 
       shadow-2xl 
@@ -29,7 +19,10 @@ function PlayerRack({
       flex-col 
       items-center 
       text-center 
-      space-y-4"
+      space-y-4
+      mt-20
+      "
+      
     >
       <div className="flex flex-col items-center">
         {user && user.avatar ? (
@@ -49,18 +42,15 @@ function PlayerRack({
             <UserIcon className="h-6 w-6 text-white" />
           </div>
         )}
-        
+
         <h2 className="text-xl md:text-2xl font-bold text-gray-200 mt-2">{}</h2>
       </div>
 
-      <div className="w-full flex-grow">{children}</div>
-
-      
-
-      
+      <div className="w-full flex-grow">
+        {children}
+        </div>
     </div>
   );
 }
 
 export default PlayerRack;
-
