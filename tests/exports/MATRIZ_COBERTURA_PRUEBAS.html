@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Matriz de Cobertura de Pruebas - Matemanía</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5.5.0/github-markdown.min.css" />
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Matriz de Cobertura de Pruebas - Matemanía</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#matriz-de-cobertura-de-pruebas---matemanía">Matriz de Cobertura de Pruebas - Matemanía</a>
+<ul>
+<li><a href="#propósito">Propósito</a></li>
+<li><a href="#características">Características</a></li>
+<li><a href="#matriz-de-cobertura">Matriz de Cobertura</a></li>
+<li><a href="#leyenda-de-estados">Leyenda de Estados</a></li>
+<li><a href="#resumen-de-cobertura">Resumen de Cobertura</a></li>
+<li><a href="#distribución-por-tipo-de-prueba">Distribución por Tipo de Prueba</a></li>
+<li><a href="#distribución-por-técnica-de-prueba">Distribución por Técnica de Prueba</a></li>
+<li><a href="#análisis-de-cobertura-por-historia-de-usuario">Análisis de Cobertura por Historia de Usuario</a>
+<ul>
+<li><a href="#hu-015-gestión-de-perfil-y-onboarding">HU-015: Gestión de Perfil y Onboarding</a></li>
+<li><a href="#hu-018-autenticación-de-usuario">HU-018: Autenticación de Usuario</a></li>
+</ul></li>
+<li><a href="#defectos-identificados">Defectos Identificados</a></li>
+<li><a href="#recomendaciones">Recomendaciones</a>
+<ul>
+<li><a href="#prioridad-alta">Prioridad Alta</a></li>
+<li><a href="#prioridad-media">Prioridad Media</a></li>
+<li><a href="#cobertura-completa">Cobertura Completa</a></li>
+</ul></li>
+<li><a href="#notas-técnicas">Notas Técnicas</a>
+<ul>
+<li><a href="#pruebas-automatizadas-e2e">Pruebas Automatizadas E2E</a></li>
+<li><a href="#pruebas-backend-pendientes">Pruebas Backend (Pendientes)</a></li>
+<li><a href="#documentación">Documentación</a></li>
+</ul></li>
+<li><a href="#historial-de-actualizaciones">Historial de Actualizaciones</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="matriz-de-cobertura-de-pruebas---matemanía">Matriz de Cobertura de Pruebas - Matemanía</h1>
+<h2 id="propósito">Propósito</h2>
+<p>Vista de alto nivel para gestión y trazabilidad<br />
+Responde: “¿Qué estamos probando y cuánto hemos cubierto?”</p>
+<h2 id="características">Características</h2>
+<p>✅ Mapea requisitos (HU) con casos de prueba<br />
+✅ Muestra tipos y técnicas de testing utilizadas<br />
+✅ Enfoque en cobertura y estado general<br />
+✅ Ideal para reportes a stakeholders y gestión<br />
+✅ Vista consolidada y estratégica</p>
+<hr />
+<h2 id="matriz-de-cobertura">Matriz de Cobertura</h2>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Historia de Usuario (HU)</th>
+<th>Caso de Prueba</th>
+<th>Tipo de Prueba</th>
+<th>Técnica de Casos de Prueba</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>TC-001</strong></td>
+<td><strong>HU-015:</strong> Como usuario, quiero tener la facultad de editar mi perfil</td>
+<td>Validar navegación al módulo de perfil</td>
+<td>Funcional</td>
+<td>Caja negra - Navegación</td>
+<td>✅ Aprobado</td>
+</tr>
+<tr class="even">
+<td><strong>TC-001-A</strong></td>
+<td><strong>HU-015:</strong> Como usuario, quiero tener la facultad de editar mi perfil</td>
+<td>Verificar visualización de información del usuario</td>
+<td>Funcional</td>
+<td>Caja negra - Validación de datos</td>
+<td>✅ Aprobado</td>
+</tr>
+<tr class="odd">
+<td><strong>TC-001-B</strong></td>
+<td><strong>HU-015:</strong> Como usuario, quiero tener la facultad de editar mi perfil</td>
+<td>Validar existencia de botón “Editar Perfil”</td>
+<td>Funcional</td>
+<td>Caja negra - Validación de UI</td>
+<td>❌ Fallido</td>
+</tr>
+<tr class="even">
+<td><strong>TC-001-C</strong></td>
+<td><strong>HU-015:</strong> Como usuario, quiero tener la facultad de editar mi perfil</td>
+<td>Verificar campos editables de perfil (username)</td>
+<td>Funcional</td>
+<td>Partición de equivalencia - Clase inválida</td>
+<td>❌ Fallido</td>
+</tr>
+<tr class="odd">
+<td><strong>TC-001-D</strong></td>
+<td><strong>HU-015:</strong> Como usuario, quiero tener la facultad de editar mi perfil</td>
+<td>Validar funcionalidad de cambio de avatar</td>
+<td>Funcional</td>
+<td>Caja negra - Validación de carga de archivos</td>
+<td>❌ Fallido</td>
+</tr>
+<tr class="even">
+<td><strong>TC-001-E</strong></td>
+<td><strong>HU-015:</strong> Como usuario, quiero tener la facultad de editar mi perfil</td>
+<td>Verificar botón “Guardar cambios”</td>
+<td>Funcional</td>
+<td>Caja negra - Validación de UI</td>
+<td>❌ Fallido</td>
+</tr>
+<tr class="odd">
+<td><strong>TC-002</strong></td>
+<td><strong>HU-018:</strong> Como usuario, quiero ingresar a mi cuenta mediante mi nombre de usuario y contraseña</td>
+<td>Validar inicio de sesión exitoso con credenciales válidas</td>
+<td>Funcional</td>
+<td>Caja negra - Flujo positivo</td>
+<td>✅ Aprobado</td>
+</tr>
+<tr class="even">
+<td><strong>TC-002-A</strong></td>
+<td><strong>HU-018:</strong> Como usuario, quiero ingresar a mi cuenta mediante mi nombre de usuario y contraseña</td>
+<td>Verificar rechazo de inicio de sesión con credenciales inválidas</td>
+<td>Funcional</td>
+<td>Partición de equivalencia - Clase inválida</td>
+<td>✅ Aprobado</td>
+</tr>
+<tr class="odd">
+<td><strong>TC-002-B</strong></td>
+<td><strong>HU-018:</strong> Como usuario, quiero ingresar a mi cuenta mediante mi nombre de usuario y contraseña</td>
+<td>Validar prevención de login con campos vacíos</td>
+<td>Funcional</td>
+<td>Análisis de valores límite</td>
+<td>✅ Aprobado</td>
+</tr>
+<tr class="even">
+<td><strong>TC-002-C</strong></td>
+<td><strong>HU-018:</strong> Como usuario, quiero ingresar a mi cuenta mediante mi nombre de usuario y contraseña</td>
+<td>Verificar redirección a HomePage tras login exitoso</td>
+<td>Integración</td>
+<td>End-to-end - Flujo completo</td>
+<td>✅ Aprobado</td>
+</tr>
+<tr class="odd">
+<td><strong>TC-003</strong></td>
+<td><strong>HU-015:</strong> Como administrador, quiero enviar correo de bienvenida a la plataforma tras la creación de un perfil</td>
+<td>Validar envío automático de email de bienvenida</td>
+<td>Integración</td>
+<td>Caja negra - Prueba de backend</td>
+<td>🔄 Pendiente</td>
+</tr>
+<tr class="even">
+<td><strong>TC-004</strong></td>
+<td><strong>HU-015:</strong> Como administrador, necesito que todas las contraseñas de los usuarios sean cifradas a la hora de ser almacenadas en DB</td>
+<td>Verificar cifrado de contraseñas en base de datos</td>
+<td>Seguridad</td>
+<td>Caja blanca - Análisis de código y BD</td>
+<td>✅ Aprobado</td>
+</tr>
+<tr class="odd">
+<td><strong>TC-004-A</strong></td>
+<td><strong>HU-015:</strong> Como administrador, necesito que todas las contraseñas de los usuarios sean cifradas a la hora de ser almacenadas en DB</td>
+<td>Validar uso de algoritmo de hash seguro (PBKDF2-SHA256)</td>
+<td>Seguridad</td>
+<td>Caja blanca - Análisis estático</td>
+<td>✅ Aprobado</td>
+</tr>
+<tr class="even">
+<td><strong>TC-004-B</strong></td>
+<td><strong>HU-015:</strong> Como administrador, necesito que todas las contraseñas de los usuarios sean cifradas a la hora de ser almacenadas en DB</td>
+<td>Verificar que contraseñas no se almacenan en texto plano</td>
+<td>Seguridad</td>
+<td>Prueba de penetración - Inspección de BD</td>
+<td>✅ Aprobado</td>
+</tr>
+<tr class="odd">
+<td><strong>TC-005</strong></td>
+<td><strong>HU-015:</strong> Como usuario, necesito que se me oriente de buena manera el funcionamiento de la aplicación</td>
+<td>Validar aparición automática del tour en primera visita</td>
+<td>Funcional</td>
+<td>Caja negra - Flujo de usuario</td>
+<td>✅ Aprobado</td>
+</tr>
+<tr class="even">
+<td><strong>TC-005-A</strong></td>
+<td><strong>HU-015:</strong> Como usuario, necesito que se me oriente de buena manera el funcionamiento de la aplicación</td>
+<td>Verificar navegación entre pasos del tour con “Siguiente”</td>
+<td>Funcional</td>
+<td>Caja negra - Navegación secuencial</td>
+<td>✅ Aprobado</td>
+</tr>
+<tr class="odd">
+<td><strong>TC-005-B</strong></td>
+<td><strong>HU-015:</strong> Como usuario, necesito que se me oriente de buena manera el funcionamiento de la aplicación</td>
+<td>Validar funcionalidad de omitir tour con botón “Omitir”</td>
+<td>Funcional</td>
+<td>Caja negra - Flujo alternativo</td>
+<td>✅ Aprobado</td>
+</tr>
+<tr class="even">
+<td><strong>TC-005-C</strong></td>
+<td><strong>HU-015:</strong> Como usuario, necesito que se me oriente de buena manera el funcionamiento de la aplicación</td>
+<td>Verificar finalización completa del tour</td>
+<td>Funcional</td>
+<td>End-to-end - Flujo completo</td>
+<td>✅ Aprobado</td>
+</tr>
+<tr class="odd">
+<td><strong>TC-005-D</strong></td>
+<td><strong>HU-015:</strong> Como usuario, necesito que se me oriente de buena manera el funcionamiento de la aplicación</td>
+<td>Validar que tour no aparece en visitas subsecuentes</td>
+<td>Funcional</td>
+<td>Caja negra - Persistencia de estado</td>
+<td>✅ Aprobado</td>
+</tr>
+<tr class="even">
+<td><strong>TC-005-E</strong></td>
+<td><strong>HU-015:</strong> Como usuario, necesito que se me oriente de buena manera el funcionamiento de la aplicación</td>
+<td>Verificar navegación hacia atrás con botón “Anterior”</td>
+<td>Funcional</td>
+<td>Caja negra - Navegación bidireccional</td>
+<td>✅ Aprobado</td>
+</tr>
+<tr class="odd">
+<td><strong>TC-005-F</strong></td>
+<td><strong>HU-015:</strong> Como usuario, necesito que se me oriente de buena manera el funcionamiento de la aplicación</td>
+<td>Validar integración con localStorage</td>
+<td>Integración</td>
+<td>Caja blanca - Prueba de almacenamiento</td>
+<td>✅ Aprobado</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="leyenda-de-estados">Leyenda de Estados</h2>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Estado</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>✅ <strong>Aprobado</strong></td>
+<td>Caso de prueba ejecutado exitosamente</td>
+</tr>
+<tr class="even">
+<td>❌ <strong>Fallido</strong></td>
+<td>Caso de prueba con defectos identificados (esperado - funcionalidad no implementada)</td>
+</tr>
+<tr class="odd">
+<td>⚠ <strong>En ejecución</strong></td>
+<td>Caso de prueba en proceso</td>
+</tr>
+<tr class="even">
+<td>🔄 <strong>Pendiente</strong></td>
+<td>Caso de prueba no iniciado (requiere prueba de backend)</td>
+</tr>
+<tr class="odd">
+<td>⏸ <strong>Bloqueado</strong></td>
+<td>Caso de prueba con dependencias pendientes</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="resumen-de-cobertura">Resumen de Cobertura</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Métrica</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Total de HU</strong></td>
+<td>2 (HU-015, HU-018)</td>
+</tr>
+<tr class="even">
+<td><strong>Total de Casos de Prueba</strong></td>
+<td>21</td>
+</tr>
+<tr class="odd">
+<td><strong>Cobertura de HU</strong></td>
+<td>100% (2/2)</td>
+</tr>
+<tr class="even">
+<td><strong>Casos Aprobados</strong></td>
+<td>16 (76.2%)</td>
+</tr>
+<tr class="odd">
+<td><strong>Casos Fallidos</strong></td>
+<td>4 (19.0%)</td>
+</tr>
+<tr class="even">
+<td><strong>Casos Pendientes</strong></td>
+<td>1 (4.8%)</td>
+</tr>
+<tr class="odd">
+<td><strong>Casos En Progreso</strong></td>
+<td>0 (0%)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="distribución-por-tipo-de-prueba">Distribución por Tipo de Prueba</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Tipo de Prueba</th>
+<th>Cantidad</th>
+<th>Porcentaje</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Funcional</strong></td>
+<td>15</td>
+<td>71.4%</td>
+</tr>
+<tr class="even">
+<td><strong>Seguridad</strong></td>
+<td>3</td>
+<td>14.3%</td>
+</tr>
+<tr class="odd">
+<td><strong>Integración</strong></td>
+<td>3</td>
+<td>14.3%</td>
+</tr>
+<tr class="even">
+<td><strong>Rendimiento</strong></td>
+<td>0</td>
+<td>0%</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="distribución-por-técnica-de-prueba">Distribución por Técnica de Prueba</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Técnica</th>
+<th>Cantidad</th>
+<th>Porcentaje</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Caja negra</strong></td>
+<td>13</td>
+<td>61.9%</td>
+</tr>
+<tr class="even">
+<td><strong>Caja blanca</strong></td>
+<td>3</td>
+<td>14.3%</td>
+</tr>
+<tr class="odd">
+<td><strong>Partición de equivalencia</strong></td>
+<td>2</td>
+<td>9.5%</td>
+</tr>
+<tr class="even">
+<td><strong>Análisis de valores límite</strong></td>
+<td>1</td>
+<td>4.8%</td>
+</tr>
+<tr class="odd">
+<td><strong>End-to-end</strong></td>
+<td>2</td>
+<td>9.5%</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="análisis-de-cobertura-por-historia-de-usuario">Análisis de Cobertura por Historia de Usuario</h2>
+<h3 id="hu-015-gestión-de-perfil-y-onboarding">HU-015: Gestión de Perfil y Onboarding</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Aspecto</th>
+<th>Casos de Prueba</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Edición de perfil</td>
+<td>6</td>
+<td>❌ 4 Fallidos, ✅ 2 Aprobados</td>
+</tr>
+<tr class="even">
+<td>Email de bienvenida</td>
+<td>1</td>
+<td>🔄 Pendiente (backend)</td>
+</tr>
+<tr class="odd">
+<td>Cifrado de contraseñas</td>
+<td>3</td>
+<td>✅ 3 Aprobados</td>
+</tr>
+<tr class="even">
+<td>Tour de orientación</td>
+<td>7</td>
+<td>✅ 7 Aprobados</td>
+</tr>
+<tr class="odd">
+<td><strong>Total HU-015</strong></td>
+<td><strong>17</strong></td>
+<td><strong>10 Aprobados, 4 Fallidos, 1 Pendiente</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="hu-018-autenticación-de-usuario">HU-018: Autenticación de Usuario</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Aspecto</th>
+<th>Casos de Prueba</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Login exitoso</td>
+<td>1</td>
+<td>✅ Aprobado</td>
+</tr>
+<tr class="even">
+<td>Validación de credenciales</td>
+<td>1</td>
+<td>✅ Aprobado</td>
+</tr>
+<tr class="odd">
+<td>Validación de campos</td>
+<td>1</td>
+<td>✅ Aprobado</td>
+</tr>
+<tr class="even">
+<td>Redirección post-login</td>
+<td>1</td>
+<td>✅ Aprobado</td>
+</tr>
+<tr class="odd">
+<td><strong>Total HU-018</strong></td>
+<td><strong>4</strong></td>
+<td><strong>4 Aprobados</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="defectos-identificados">Defectos Identificados</h2>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 22%" />
+<col style="width: 15%" />
+<col style="width: 18%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID Defecto</th>
+<th>Caso de Prueba</th>
+<th>Severidad</th>
+<th>Descripción</th>
+<th>Acción Requerida</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>DEF-001</strong></td>
+<td>TC-001-B</td>
+<td>Media</td>
+<td>Botón “Editar Perfil” no existe en módulo de perfil</td>
+<td>Implementar funcionalidad de edición de perfil</td>
+</tr>
+<tr class="even">
+<td><strong>DEF-002</strong></td>
+<td>TC-001-C</td>
+<td>Media</td>
+<td>Campos de perfil no son editables</td>
+<td>Implementar campos editables en perfil</td>
+</tr>
+<tr class="odd">
+<td><strong>DEF-003</strong></td>
+<td>TC-001-D</td>
+<td>Media</td>
+<td>Funcionalidad de cambio de avatar no disponible</td>
+<td>Implementar carga y cambio de avatar</td>
+</tr>
+<tr class="even">
+<td><strong>DEF-004</strong></td>
+<td>TC-001-E</td>
+<td>Media</td>
+<td>Botón “Guardar cambios” no existe</td>
+<td>Implementar botón de guardado de cambios</td>
+</tr>
+<tr class="odd">
+<td><strong>DEF-005</strong></td>
+<td>TC-003</td>
+<td>Baja</td>
+<td>Email de bienvenida no se envía tras registro</td>
+<td>Implementar servicio de email en backend</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="recomendaciones">Recomendaciones</h2>
+<h3 id="prioridad-alta">Prioridad Alta</h3>
+<ol type="1">
+<li><strong>Implementar funcionalidad de edición de perfil</strong> (DEF-001 a DEF-004)
+<ul>
+<li>Impacta 4 casos de prueba</li>
+<li>Severidad: Media</li>
+<li>Funcionalidad esperada por usuarios</li>
+</ul></li>
+</ol>
+<h3 id="prioridad-media">Prioridad Media</h3>
+<ol start="2" type="1">
+<li><strong>Configurar servicio de email</strong> (DEF-005)
+<ul>
+<li>Impacta 1 caso de prueba</li>
+<li>Severidad: Baja</li>
+<li>Mejora experiencia de usuario</li>
+</ul></li>
+</ol>
+<h3 id="cobertura-completa">Cobertura Completa</h3>
+<ol start="3" type="1">
+<li><strong>Mantener cobertura actual</strong>
+<ul>
+<li>100% de HU cubiertas</li>
+<li>76.2% de casos aprobados</li>
+<li>Buena distribución de técnicas de prueba</li>
+</ul></li>
+</ol>
+<hr />
+<h2 id="notas-técnicas">Notas Técnicas</h2>
+<h3 id="pruebas-automatizadas-e2e">Pruebas Automatizadas E2E</h3>
+<ul>
+<li>Framework: Playwright</li>
+<li>Navegadores: Chromium, Firefox, WebKit</li>
+<li>Ubicación: <code>/tests/e2e/</code></li>
+<li>Helpers: <code>auth.helper.ts</code>, <code>tour.helper.ts</code></li>
+</ul>
+<h3 id="pruebas-backend-pendientes">Pruebas Backend (Pendientes)</h3>
+<ul>
+<li>TC-003: Requiere prueba de servicio de email</li>
+<li>TC-004: Requiere inspección de base de datos</li>
+</ul>
+<h3 id="documentación">Documentación</h3>
+<ul>
+<li>Casos de prueba detallados: <code>/tests/e2e/tc-*.spec.ts</code></li>
+<li>README: <code>/tests/e2e/README.md</code></li>
+<li>Configuración: <code>/tests/e2e/TEST_USER_SETUP.md</code></li>
+</ul>
+<hr />
+<h2 id="historial-de-actualizaciones">Historial de Actualizaciones</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Fecha</th>
+<th>Versión</th>
+<th>Cambios</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2025-11-27</td>
+<td>1.0</td>
+<td>Creación inicial de matriz de cobertura</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>Preparado por:</strong> Equipo de QA - Matemanía<br />
+<strong>Última actualización:</strong> 2025-11-27<br />
+<strong>Próxima revisión:</strong> Tras implementación de edición de perfil</p>
+</body>
+</html>
