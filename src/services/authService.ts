@@ -4,7 +4,6 @@ import type { SignUpData } from "../types/ISignUpData";
 import type { ILoginData } from "../types/ILoginData";
 import type { IAuthResponse } from "../types/IAuthResponse";
 import type { IUser } from "types/IUser";
-import { enviarProcesoAn8n } from "./n8n";
 // Definimos los tipos de datos para las funciones
 
 
@@ -104,7 +103,6 @@ export const signup = async (data: SignUpData): Promise<IAuthResponse> => {
  * @returns Una promesa con los datos del usuario.
  */
 export const getProfile = async (): Promise<IUser> => {
-  enviarProcesoAn8n();
   const accessToken = localStorage.getItem("access_token");
   if (!accessToken) {
     throw new Error("No se encontró el token de acceso.");

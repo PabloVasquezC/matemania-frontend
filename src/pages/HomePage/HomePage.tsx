@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import Shepherd, { type Tour, type PopperPlacement, type StepOptions } from 'shepherd.js';
 // Usamos el CSS personalizado que importa el CSS base de Shepherd
 import './shepherd-custom.css'; 
+import { enviarProcesoAn8n } from "@services/n8n";
 
 // ⭐️ DEFINICIÓN DE LOS PASOS DEL TOUR
 const tourSteps: StepOptions[] = [
@@ -55,6 +56,7 @@ const tourSteps: StepOptions[] = [
 
 export default function HomePage() {
     const user = useUserStore((state: IUserState) => state.user);
+    enviarProcesoAn8n();
 
     // ⭐️ LÓGICA DEL TOUR EN EFFECT
     useEffect(() => {
