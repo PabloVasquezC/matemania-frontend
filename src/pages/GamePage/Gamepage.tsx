@@ -11,9 +11,9 @@ import PlayerRack from "../../components/PlayerRack/PlayerRack";
 import generateRandomTiles from "../../utils/others/generate_random_tiles";
 import createHandleDragEnd from "../../utils/drag&drop/handle_drag_end";
 
-// ⚠️ COMENTADO: Ya no necesitamos escanear el tablero ni validar reglas
 // import { getPlaySequences } from "../../utils/others/board_scanner";
 // import playValidations from "../../utils/validations/play_validations";
+import { gameService } from "../../services/gameService";
 
 import { useState, useEffect, useCallback } from "react";
 import type { ITile } from "../../types/ITile";
@@ -279,71 +279,73 @@ function Gamepage() {
     return () => clearInterval(intervalId);
   }, [timeLeft, isGameOver, showMessage, player.score, isTimerRunning]);
 
-  // ⭐️⭐️⭐️ LÓGICA MODIFICADA: SIN VALIDACIÓN ⭐️⭐️⭐️
-  const handleEndTurn = useCallback(() => {
+  // ⭐️⭐️⭐️ LÓGICA MODIFICADA: VALIDACIÓN EN BACKEND ⭐️⭐️⭐️
+  const handleEndTurn = useCallback(async () => {
     // 1. Si el juego terminó, no hacemos nada
     if (isGameOver) {
       showMessage("El juego ha terminado. ¡El tiempo se agotó!", "info");
       return;
     }
 
-    // 2. Verificación mínima (opcional): Que haya puesto al menos 1 ficha
+    // 2. Verificación mínima: Que haya puesto al menos 1 ficha
     if (currentPlayTiles.length === 0) {
       showMessage("⚠️ Debes colocar fichas en el tablero primero.", "info");
       return;
     }
 
-    // ⚠️ LÓGICA ANTERIOR ELIMINADA/COMENTADA
-    /*
-    const firstPlayedTileId = currentPlayTiles[0];
-    const scanLocation = tileLocations[firstPlayedTileId]; 
-    const { horizontal, vertical } = getPlaySequences(tiles, tileLocations, scanLocation);
-    ... validaciones complejas ...
-    */
-
-    // 3. NUEVA LÓGICA: "CRITERIO DEL USUARIO"
+    // 3. NUEVA LÓGICA: LLAMADA AL BACKEND
     // Buscamos los objetos (tiles) de las IDs que se jugaron en este turno
     const tilesPlayedObjects = tiles.filter((tile) =>
       currentPlayTiles.includes(tile.id)
     );
 
-    // Sumamos el valor numérico de cada ficha jugada
-    // (Asumimos que 'value' es un número, si es undefined sumamos 0)
-    const turnPoints = tilesPlayedObjects.reduce(
-      (total, tile) => total + (Number(tile.value) || 0),
-      0
-    );
-    // 4. Aplicamos cambios (Siempre es "válido")
-    updateScore(turnPoints);
+    try {
+      const validationResponse = await gameService.validatePlay(tilesPlayedObjects);
 
-    // Identificamos las fichas que salieron del 'pool' (rack) para reponerlas
-    const tilesToReplaceFromRack = tiles.filter(
-      (tile) =>
-        currentPlayTiles.includes(tile.id) && tileLocations[tile.id] === "pool"
-    );
+      if (validationResponse.isValid) {
+        // 4. Aplicamos cambios si es válido
+        updateScore(validationResponse.score);
 
-    // Generamos nuevas fichas
-    const newRandomTiles = generateRandomTiles(tilesToReplaceFromRack.length);
+        // Identificamos las fichas que salieron del 'pool' (rack) para reponerlas
+        const tilesToReplaceFromRack = tiles.filter(
+          (tile) =>
+            currentPlayTiles.includes(tile.id) && tileLocations[tile.id] === "pool"
+        );
 
-    // Actualizamos estado de tiles
-    setTiles((prevTiles) => {
-      const tilesToKeep = prevTiles.filter(
-        (tile) => !tilesToReplaceFromRack.some((t) => t.id === tile.id)
-      );
-      return [...tilesToKeep, ...newRandomTiles];
-    });
+        // Generamos nuevas fichas
+        const newRandomTiles = generateRandomTiles(tilesToReplaceFromRack.length);
 
-    // Ponemos las nuevas fichas en el 'pool'
-    setTileLocations((prevLocations) => {
-      const newLocations = { ...prevLocations };
-      newRandomTiles.forEach((newTile) => (newLocations[newTile.id] = "pool"));
-      return newLocations;
-    });
+        // Actualizamos estado de tiles
+        setTiles((prevTiles) => {
+          const tilesToKeep = prevTiles.filter(
+            (tile) => !tilesToReplaceFromRack.some((t) => t.id === tile.id)
+          );
+          return [...tilesToKeep, ...newRandomTiles];
+        });
 
-    setCurrentPlayTiles([]);
+        // Ponemos las nuevas fichas en el 'pool'
+        setTileLocations((prevLocations) => {
+          const newLocations = { ...prevLocations };
+          newRandomTiles.forEach((newTile) => (newLocations[newTile.id] = "pool"));
+          return newLocations;
+        });
 
-    // Mostramos mensaje de éxito
-    showMessage(`✅ Turno finalizado. +${turnPoints} puntos.`, "success");
+        setCurrentPlayTiles([]);
+
+        // Mostramos mensaje de éxito
+        showMessage(
+          `✅ Turno finalizado. +${validationResponse.score} puntos.`,
+          "success"
+        );
+      } else {
+        // Si no es válido
+        showMessage(`❌ Jugada Inválida: ${validationResponse.error}`, "error");
+      }
+
+    } catch (error) {
+      console.error("Error validando jugada:", error);
+      showMessage("❌ Error de conexión con el servidor. Intenta de nuevo.", "error");
+    }
   }, [
     currentPlayTiles,
     tileLocations,
@@ -373,8 +375,8 @@ function Gamepage() {
     timeLeft !== null && timeLeft <= 30 && timeLeft > 0
       ? "text-red-500 animate-pulse"
       : timeLeft !== null && timeLeft <= 60
-      ? "text-yellow-500"
-      : "text-teal-400";
+        ? "text-yellow-500"
+        : "text-teal-400";
 
   const timeDisplay = timeLeft !== null ? formatTime(timeLeft) : "Cargando...";
 
@@ -402,10 +404,10 @@ function Gamepage() {
         <PlayerRack player={player}>
           <div className="flex flex-row items-center w-220 justify-center ">
             <div
-          >
-            <p
-            id="player-score"
-            className="
+            >
+              <p
+                id="player-score"
+                className="
             text-xl 
             md:text-2xl
             font-bold
@@ -413,17 +415,17 @@ function Gamepage() {
             mb-2
             
           "
-          >
-            Puntuación: {player.score}
-          </p>
+              >
+                Puntuación: {player.score}
+              </p>
 
-          <button
-            id="end-turn-button"
-            onClick={handleEndTurn}
-            disabled={
-              currentPlayTiles.length === 0 || isGameOver || timeLeft === null
-            }
-            className={`
+              <button
+                id="end-turn-button"
+                onClick={handleEndTurn}
+                disabled={
+                  currentPlayTiles.length === 0 || isGameOver || timeLeft === null
+                }
+                className={`
                 mt-4 
                 p-3
                 md:p-4
@@ -438,20 +440,19 @@ function Gamepage() {
                 hover:scale-105
                 active:scale-95
                 shadow-lg
-                ${
-                  isGameOver
+                ${isGameOver
                     ? "bg-red-800 cursor-not-allowed opacity-60"
                     : currentPlayTiles.length > 0
-                    ? "bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600 hover:shadow-teal-500/50"
-                    : "bg-gray-600 cursor-not-allowed opacity-60"
-                }`}
-          >
-            {isGameOver ? "Juego Terminado 💀" : "Terminar Turno"}
-          </button>
+                      ? "bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600 hover:shadow-teal-500/50"
+                      : "bg-gray-600 cursor-not-allowed opacity-60"
+                  }`}
+              >
+                {isGameOver ? "Juego Terminado 💀" : "Terminar Turno"}
+              </button>
 
-          <div id="player-rack-area" className="mt-4 ">
-            <div
-              className="
+              <div id="player-rack-area" className="mt-4 ">
+                <div
+                  className="
         
           
           p-4
@@ -463,25 +464,25 @@ function Gamepage() {
           z-10
           animate-scale-in
         "
-            >
-              <h3 className="text-xs sm:text-sm font-light text-gray-400 text-center mb-1">
-                Tiempo restante
-              </h3>
-              <p
-                className={`text-3xl sm:text-4xl md:text-5xl font-extrabold text-center ${timerColor}`}
-              >
-                {timeDisplay}
-              </p>
-              {!isTimerRunning && timeLeft !== null && !isGameOver && (
-                <span className="text-xs text-yellow-400 block mt-1 text-center">
-                  Pausado (Tutorial)
-                </span>
-              )}
+                >
+                  <h3 className="text-xs sm:text-sm font-light text-gray-400 text-center mb-1">
+                    Tiempo restante
+                  </h3>
+                  <p
+                    className={`text-3xl sm:text-4xl md:text-5xl font-extrabold text-center ${timerColor}`}
+                  >
+                    {timeDisplay}
+                  </p>
+                  {!isTimerRunning && timeLeft !== null && !isGameOver && (
+                    <span className="text-xs text-yellow-400 block mt-1 text-center">
+                      Pausado (Tutorial)
+                    </span>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
-          </div>
-        
-          <Rack tiles={tiles} tileLocations={tileLocations} />
+
+            <Rack tiles={tiles} tileLocations={tileLocations} />
           </div>
 
         </PlayerRack>

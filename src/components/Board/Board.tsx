@@ -26,19 +26,7 @@ export default function Board(props: IBoardProps) {
         </BoardSquare>
       );
     }
-    //mostrar un log de los que ya estan en el tablero ademas de su coordenadas
-    console.log(
-      "Tiles on board:",
-      props.tiles.filter((t) =>
-        Object.keys(props.tileLocations).includes(t.id) &&
-        props.tileLocations[t.id].startsWith("square-")
-      ).map((t) => ({
-        id: t.id,
-        location: props.tileLocations[t.id]
-      }))
-    );
 
-      
     return squares;
   };
 
